@@ -1,9 +1,6 @@
 import 'package:clean_arch/provider/impl/signin_provider_impl.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:clean_arch/common/constants/secure_storage.dart';
-
 import 'package:clean_arch/common/constants/text_style.dart';
 import 'package:provider/provider.dart';
 
@@ -32,12 +29,11 @@ class _LogoutButtonState extends State<LogoutButton> {
             right: MediaQuery.of(context).size.width * 0.031),
         child: ElevatedButton(
           child: Text(
-            "로그아웃",
             style: currentWidth < 1920
                 ? loginButtonTextStyleLapTop
                 : loginButtonTextStyle,
+            "로그아웃",
           ),
-          style: ElevatedButton.styleFrom(padding: EdgeInsets.all(0)),
           onPressed: () async {
             int? statusCode = await providerRead.loadSignOut();
             if (statusCode == 200) {
@@ -49,6 +45,7 @@ class _LogoutButtonState extends State<LogoutButton> {
                   backgroundColor: Colors.blueAccent,
                   textColor: Colors.white,
                   fontSize: 16.0);
+
               Navigator.pushNamedAndRemoveUntil(
                   context, '/login', (route) => false);
             } else {

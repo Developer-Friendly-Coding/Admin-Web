@@ -33,14 +33,10 @@ class Customer implements Base {
     return Customer(
       id: data['id'],
       name: data['name'],
-      type: data['type'] == null
-          ? null
-          : BusinessType.values.byName(data['type']),
+      type: BusinessType.values.byName(data['type']),
       registrationNumber: data['registrationNumber'],
       companyRegistrationNumber: data['companyRegistrationNumber'],
-      status: data['status'] == null
-          ? null
-          : CustomerStatus.values.byName(data['status']),
+      status: CustomerStatus.values.byName(data['status']),
       description: data['description'],
     );
   }
@@ -48,13 +44,12 @@ class Customer implements Base {
   @override
   Customer fromTEC(List<TextEditingController> list) {
     return Customer(
-      id: (list[0].text == "") ? -1 : int.parse(list[0].text),
+      id: list[0].text == "" ? -1 : int.parse(list[0].text),
       name: list[1].text,
-      type: list[2].text == "" ? null : BusinessType.fromString(list[2].text),
+      type: BusinessType.fromString(list[2].text),
       registrationNumber: list[3].text,
       companyRegistrationNumber: list[4].text,
-      status:
-          list[5].text == "" ? null : CustomerStatus.fromString(list[5].text),
+      status: CustomerStatus.fromString(list[5].text),
       description: list[6].text,
     );
   }
@@ -63,10 +58,10 @@ class Customer implements Base {
   Map<String, dynamic> toJson(Customer customer) {
     Map<String, dynamic> json = {
       'name': customer._name,
-      'type': customer._type?.name,
+      'type': customer._type!.name,
       'registrationNumber': customer._registrationNumber,
       'companyRegistrationNumber': customer._companyRegistrationNumber,
-      'status': customer._status?.name,
+      'status': customer._status!.name,
       'description': customer._description,
     };
 

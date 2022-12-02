@@ -1,6 +1,6 @@
 enum BusinessType {
   PERSONAL("개인사업자"),
-  COPORATION("법인사업자"),
+  CORPORATION("법인사업자"),
   INDIVIDUAL("개인이용");
 
   final String desc;

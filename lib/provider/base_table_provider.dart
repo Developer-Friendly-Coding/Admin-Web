@@ -11,6 +11,7 @@ abstract class IBaseTableProvider<M extends Base> extends ChangeNotifier {
   List<TextEditingController> get addButtonTECList;
   Search get searched;
 
+  void resetFilterQueryParameters();
   Future<M?> getDetailRowDataById(int id);
   Future<List<M>?> getTableData();
   Future<List<M>?> getDetailTableDataById(String modelName, int id);

@@ -1,5 +1,6 @@
 import 'package:clean_arch/common/constants/table/detail_table_mapper.dart';
 import 'package:clean_arch/model(DTO)/impl/contract.dart';
+import 'package:clean_arch/model(DTO)/impl/tax_bill.dart';
 import 'package:clean_arch/provider/impl/signin_provider_impl.dart';
 import 'package:clean_arch/view/widget/table/base_table_search/base_table_container.dart';
 import 'package:provider/provider.dart';
@@ -10,14 +11,14 @@ import 'package:clean_arch/view/widget/table/base_table_view/base_table_view.dar
 import 'package:clean_arch/view/widget/table/base_table_crud_button/base_table_delete_button.dart';
 import 'package:clean_arch/view/widget/table/base_table_crud_button/base_table_create_button.dart';
 
-class ContractPage extends StatefulWidget {
-  const ContractPage({Key? key}) : super(key: key);
+class TaxBillPage extends StatefulWidget {
+  const TaxBillPage({Key? key}) : super(key: key);
 
   @override
-  State<ContractPage> createState() => _ContractPageState();
+  State<TaxBillPage> createState() => _TaxBillPageState();
 }
 
-class _ContractPageState extends State<ContractPage> {
+class _TaxBillPageState extends State<TaxBillPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -67,7 +68,7 @@ class _ContractPageState extends State<ContractPage> {
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child:
-                                          BaseTableSearchContainer<Contract>(),
+                                          BaseTableSearchContainer<TaxBill>(),
                                     ),
                                     const SizedBox(height: 30),
                                     Row(
@@ -75,15 +76,13 @@ class _ContractPageState extends State<ContractPage> {
                                             MainAxisAlignment.end,
                                         children: [
                                           const SizedBox(width: 15),
-                                          BaseTableCreateButton<Contract>(),
+                                          BaseTableCreateButton<TaxBill>(),
                                           const SizedBox(width: 15),
                                           const BaseTableDeleteButton<
-                                              Contract>(),
+                                              TaxBill>(),
                                         ]),
                                     const SizedBox(height: 20),
-                                    BaseTableView<Contract>(
-                                      widthRate: 0.7,
-                                    ),
+                                    BaseTableView<TaxBill>(),
                                     const SizedBox(height: 50)
                                   ],
                                 ),

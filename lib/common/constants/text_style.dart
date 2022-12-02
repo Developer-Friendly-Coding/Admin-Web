@@ -124,3 +124,35 @@ const TextStyle tableCrudDialogStyle = TextStyle(
     fontFamily: 'Source_Sans_Pro',
     fontWeight: FontWeight.w700,
     color: Color(0xff809FB8));
+
+const TextStyle detailPageInfoStyle = TextStyle(
+    fontSize: 20,
+    fontFamily: 'Source_Sans_Pro',
+    fontWeight: FontWeight.w700,
+    color: Color(0xff809FB8));
+
+const TextStyle leftEntityBannerStyle = TextStyle(
+  fontSize: 15,
+  fontFamily: 'Source_Sans_Pro',
+  fontWeight: FontWeight.w700,
+);
+
+const TextStyle idInfoStyle = TextStyle(
+  fontSize: 17,
+  fontFamily: 'Source_Sans_Pro',
+  color: Color(0xff809FB8),
+  fontWeight: FontWeight.w700,
+);
+const TextStyle searchNameStyle = TextStyle(
+  fontSize: 14,
+  fontFamily: 'Source_Sans_Pro',
+  color: Color(0xff809FB8),
+  fontWeight: FontWeight.w700,
+);
+
+const TextStyle detailContainierIsNullStyle = TextStyle(
+  fontSize: 40,
+  fontFamily: 'Source_Sans_Pro',
+  color: Color(0xff809FB8),
+  fontWeight: FontWeight.w700,
+);

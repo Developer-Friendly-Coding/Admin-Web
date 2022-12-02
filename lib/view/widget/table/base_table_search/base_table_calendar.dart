@@ -1,6 +1,7 @@
 import 'package:clean_arch/model(DTO)/base_model.dart';
 import 'package:clean_arch/provider/impl/base_table_provider_impl.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:web_date_picker/web_date_picker.dart';
 import 'package:month_picker_dialog_2/month_picker_dialog_2.dart';
@@ -34,9 +35,9 @@ class _BaseTableCalendarState<M extends Base>
   final TextEditingController controller = TextEditingController();
   DateTime? selectedDate;
 
-  DateTime starDate = DateTime(0);
+  DateTime startDate = DateTime(0001);
 
-  DateTime endDate = DateTime(0);
+  DateTime endDate = DateTime(9999);
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +51,7 @@ class _BaseTableCalendarState<M extends Base>
             width: widget.width,
             height: widget.height,
             onChange: (value) {
-              starDate = value!;
+              startDate = value!;
             },
           ),
           const Text("~"),
@@ -68,10 +69,11 @@ class _BaseTableCalendarState<M extends Base>
               child: ElevatedButton(
                   onPressed: () {
                     providerRead.getTableDateByRange(
-                        widget.startMemberName,
-                        starDate.toString(),
-                        widget.endMemberName,
-                        starDate.toString());
+                      widget.startMemberName,
+                      DateFormat("yyyy-MM-dd hh:mm:ss").format(startDate),
+                      widget.endMemberName,
+                      DateFormat("yyyy-MM-dd hh:mm:ss").format(endDate),
+                    );
                   },
                   child: const Text("확인"))),
         ],

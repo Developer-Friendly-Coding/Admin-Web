@@ -1,4 +1,4 @@
-import 'package:clean_arch/common/constants/table_column_attributes_mapper.dart';
+import 'package:clean_arch/common/constants/table/table_column_attributes_mapper.dart';
 import 'package:clean_arch/view/widget/table/base_table_view/base_table_attributes.dart';
 import 'package:flutter/material.dart';
 import 'package:clean_arch/model(DTO)/base_model.dart';
@@ -47,7 +47,7 @@ class BaseTableUpdateButton<M extends Base> extends StatelessWidget {
               width: componentWidth,
               child: TextFormField(
                 autovalidateMode: AutovalidateMode.always,
-                validator: columnAttributesList[i].validator,
+                // validator: columnAttributesList[i].validator,
                 controller: providerRead.updateButtonTECList[i],
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -110,46 +110,45 @@ class BaseTableUpdateButton<M extends Base> extends StatelessWidget {
                   actions: [
                     TextButton(
                       onPressed: () async {
-                        if (_formKey.currentState?.validate() ?? false) {
-                          try {
-                            int? statusCode =
-                                await providerRead.updateTableRow();
-                            if (statusCode == 200) {
-                              await providerRead.getTableData();
-                              Fluttertoast.showToast(
-                                  msg: "수정 성공!",
-                                  toastLength: Toast.LENGTH_LONG,
-                                  gravity: ToastGravity.CENTER,
-                                  timeInSecForIosWeb: 1,
-                                  backgroundColor: Colors.red,
-                                  textColor: Colors.white,
-                                  fontSize: 35.0);
-                            } else {
-                              Fluttertoast.showToast(
-                                  msg: "수정 실페...",
-                                  toastLength: Toast.LENGTH_LONG,
-                                  gravity: ToastGravity.CENTER,
-                                  timeInSecForIosWeb: 1,
-                                  backgroundColor: Colors.red,
-                                  textColor: Colors.white,
-                                  fontSize: 35.0);
-                            }
-                          } catch (e) {
-                            debugPrint(e.toString());
-                            return null;
+                        // if (_formKey.currentState?.validate() ?? false) {
+                        try {
+                          int? statusCode = await providerRead.updateTableRow();
+                          if (statusCode == 200) {
+                            await providerRead.getTableData();
+                            Fluttertoast.showToast(
+                                msg: "수정 성공!",
+                                toastLength: Toast.LENGTH_LONG,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 35.0);
+                          } else {
+                            Fluttertoast.showToast(
+                                msg: "수정 실페...",
+                                toastLength: Toast.LENGTH_LONG,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 35.0);
                           }
-
-                          Navigator.of(context).pop();
-                        } else {
-                          Fluttertoast.showToast(
-                              msg: "모든 유효성을 통과하세요",
-                              toastLength: Toast.LENGTH_LONG,
-                              gravity: ToastGravity.CENTER,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.red,
-                              textColor: Colors.white,
-                              fontSize: 35.0);
+                        } catch (e) {
+                          debugPrint(e.toString());
+                          return null;
                         }
+
+                        Navigator.of(context).pop();
+                        // } else {
+                        //   Fluttertoast.showToast(
+                        //       msg: "모든 유효성을 통과하세요",
+                        //       toastLength: Toast.LENGTH_LONG,
+                        //       gravity: ToastGravity.CENTER,
+                        //       timeInSecForIosWeb: 1,
+                        //       backgroundColor: Colors.red,
+                        //       textColor: Colors.white,
+                        //       fontSize: 35.0);
+                        // }
                       },
                       child: const Text(
                         '확인',

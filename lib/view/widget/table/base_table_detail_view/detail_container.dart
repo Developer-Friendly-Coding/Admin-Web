@@ -1,4 +1,4 @@
-import 'package:clean_arch/common/constants/detail_table_mapper.dart';
+import 'package:clean_arch/common/constants/table/detail_table_mapper.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
 import 'package:clean_arch/model(DTO)/base_model.dart';
 import 'package:clean_arch/provider/impl/base_table_provider_impl.dart';
@@ -17,7 +17,8 @@ class DetailContainer<M extends Base> extends StatefulWidget {
   final double height;
   Color color;
   int idx = 0;
-  List<String> buttonTextList = detailTableNameMapper[M.toString()]!;
+  List<String> buttonTextList = detailTableNameListMapper[M.toString()]!;
+  bool isNothing = false;
   DetailContainer(
       {required this.selectedId,
       required this.detailTableViewList,
@@ -35,6 +36,9 @@ class _DetailContainerState<M> extends State<DetailContainer> {
 
   void setTabDate() {
     int length = widget.buttonTextList.length;
+    if (length == 0) {
+      widget.isNothing = true;
+    }
     List<TabData> tabs = [];
     for (int i = 0; i < length; i++) {
       tabs.add(TabData(
@@ -54,9 +58,17 @@ class _DetailContainerState<M> extends State<DetailContainer> {
     Widget tabbedViewContainer =
         TabbedViewTheme(child: tabbedView, data: TabbedViewThemeData.classic());
     return Container(
+      color: widget.isNothing ? Colors.white : null,
       height: widget.height,
       width: MediaQuery.of(context).size.width * widget.widthRate,
-      child: tabbedViewContainer,
+      child: widget.isNothing
+          ? Center(
+              child: Text(
+                "관련 테이블 없음",
+                style: detailContainierIsNullStyle,
+              ),
+            )
+          : tabbedViewContainer,
     );
   }
 }

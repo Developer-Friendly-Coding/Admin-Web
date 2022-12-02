@@ -16,6 +16,11 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
   BaseTableRepository({Client? client}) : _client = client ?? Client();
 
   @override
+  void resetFilterQueryParameters() {
+    _filterQueryParameters = {"size": "100"};
+  }
+
+  @override
   Future<List<M>?> getTableData() async {
     Map<String, String> headers = {
       'Accept': 'application/json',
@@ -39,9 +44,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
         Map<String, dynamic> data = body['data'];
         List<Map<String, dynamic>> rows =
             data['rows'].cast<Map<String, dynamic>>();
-        if (rows.isEmpty) {
-          return null;
-        }
+
         return rows.map((el) => _model.fromJson(el)).cast<M>().toList();
       }
     } catch (e) {
@@ -74,9 +77,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
         Map<String, dynamic> data = body['data'];
         List<Map<String, dynamic>> rows =
             data['rows'].cast<Map<String, dynamic>>();
-        if (rows.isEmpty) {
-          return null;
-        }
+
         return rows.map((el) => _model.fromJson(el)).cast<M>().toList();
       }
     } catch (e) {

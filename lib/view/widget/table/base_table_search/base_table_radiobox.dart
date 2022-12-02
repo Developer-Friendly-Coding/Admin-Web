@@ -32,7 +32,10 @@ class BaseTableRadioBox<M extends Base> extends StatefulWidget {
 class _BaseTableRadioBoxState<M extends Base>
     extends State<BaseTableRadioBox<M>> {
   Enum? enumValue;
-  List<Widget> radioListTile(BaseTableProvider<M> providerWatch) {
+  List<Widget> radioListTile(BuildContext context) {
+    BaseTableProvider<M> providerRead =
+        Provider.of<BaseTableProvider<M>>(context, listen: false);
+
     List<Widget> result = [];
 
     for (int i = 0; i < widget.enumList.length; i++) {
@@ -55,7 +58,7 @@ class _BaseTableRadioBoxState<M extends Base>
                       setState(() {
                         enumValue = value;
                       });
-                      providerWatch.getTableDataByRadioBox(
+                      providerRead.getTableDataByRadioBox(
                           widget.memberName, enumValue!);
                     },
                   ),
@@ -78,14 +81,11 @@ class _BaseTableRadioBoxState<M extends Base>
 
   @override
   Widget build(BuildContext context) {
-    BaseTableProvider<M> providerRead =
-        Provider.of<BaseTableProvider<M>>(context, listen: false);
-
     return Container(
       color: widget.color,
       child: Wrap(
         direction: Axis.horizontal,
-        children: radioListTile(providerRead),
+        children: radioListTile(context),
       ),
 
       //

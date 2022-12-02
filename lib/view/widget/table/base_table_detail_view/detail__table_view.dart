@@ -1,4 +1,4 @@
-import 'package:clean_arch/common/constants/table_column_attributes_mapper.dart';
+import 'package:clean_arch/common/constants/table/table_column_attributes_mapper.dart';
 import 'package:clean_arch/view/page/detail_page.dart';
 
 import 'package:flutter/material.dart';
@@ -37,8 +37,7 @@ class DetailTableView<M extends Base> extends StatelessWidget {
   Widget build(BuildContext context) {
     BaseTableProvider<M> providerRead =
         Provider.of<BaseTableProvider<M>>(context, listen: false);
-    BaseTableProvider<M> providerWatch =
-        Provider.of<BaseTableProvider<M>>(context);
+
     return FutureBuilder(
         future: providerRead.getDetailTableDataById(modelName, id),
         builder: (context, snapshot) {
@@ -65,15 +64,16 @@ class DetailTableView<M extends Base> extends StatelessWidget {
               child: Column(
                 children: [
                   const SizedBox(height: 24),
-                  BaseTableViewColumn<M>(
-                      columnStyle: columnStyle, provider: providerRead),
+                  BaseTableViewColumn<M>(columnStyle: columnStyle),
                   const SizedBox(height: 30),
 
                   Expanded(
                     child: ListView.separated(
                         controller: ScrollController(),
                         //itemcount는 rebuild되면서 변해야하므로 listen 에 true가 맞다.
-                        itemCount: providerWatch.dataList!.length,
+                        itemCount: Provider.of<BaseTableProvider<M>>(context)
+                            .dataList!
+                            .length,
                         separatorBuilder: (context, index) => const Divider(
                               thickness: 1,
                             ),
@@ -102,7 +102,6 @@ class DetailTableView<M extends Base> extends StatelessWidget {
                               child: BaseTableViewRow<M>(
                                 rowStyle: rowStyle,
                                 index: index,
-                                provider: providerRead,
                                 test: test,
                               ),
                             ),

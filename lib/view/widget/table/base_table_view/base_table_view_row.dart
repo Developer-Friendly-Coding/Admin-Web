@@ -1,12 +1,12 @@
-import 'package:clean_arch/common/constants/table_column_attributes_mapper.dart';
+import 'package:clean_arch/common/constants/table/table_column_attributes_mapper.dart';
 import 'package:clean_arch/model(DTO)/base_model.dart';
 import 'package:clean_arch/provider/impl/base_table_provider_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
 import 'package:clean_arch/view/widget/table/base_table_view/base_table_attributes.dart';
+import 'package:provider/provider.dart';
 
 class BaseTableViewRow<M extends Base> extends StatelessWidget {
-  final BaseTableProvider<M> provider;
   final int index;
   final bool test;
   final TextStyle? rowStyle;
@@ -14,16 +14,12 @@ class BaseTableViewRow<M extends Base> extends StatelessWidget {
       columnAttributesMapper[M.toString()]!;
 
   BaseTableViewRow(
-      {required this.provider,
-      required this.index,
-      this.test = false,
-      this.rowStyle,
-      Key? key})
+      {required this.index, this.test = false, this.rowStyle, Key? key})
       : super(key: key);
 
-  List<Widget> alignElementsWidget(BaseTableProvider<M> provider, int index,
-      List<ColumnAttributes> columnAttributesList, BuildContext context) {
-    List<String?> elements = provider.dataList![index].toRow();
+  List<Widget> alignElementsWidget(
+      BaseTableProvider<M> providerWatch, int index, BuildContext context) {
+    List<String?> elements = providerWatch.dataList![index].toRow();
 
     List<Widget> result = [];
     for (int i = 0; i < elements.length; i++) {
@@ -52,9 +48,11 @@ class BaseTableViewRow<M extends Base> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BaseTableProvider<M> providerWatch =
+        Provider.of<BaseTableProvider<M>>(context);
+
     return Stack(
-      children:
-          alignElementsWidget(provider, index, columnAttributesList, context),
+      children: alignElementsWidget(providerWatch, index, context),
     );
   }
 }

@@ -1,5 +1,7 @@
-import 'package:clean_arch/common/constants/table/detail_table_mapper.dart';
 import 'package:clean_arch/model(DTO)/impl/contract.dart';
+import 'package:clean_arch/model(DTO)/impl/customer.dart';
+import 'package:clean_arch/model(DTO)/impl/manager.dart';
+import 'package:clean_arch/model(DTO)/impl/office_branch.dart';
 import 'package:clean_arch/provider/impl/signin_provider_impl.dart';
 import 'package:clean_arch/view/widget/table/base_table_search/base_table_container.dart';
 import 'package:provider/provider.dart';
@@ -7,17 +9,18 @@ import 'package:flutter/material.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
 import 'package:clean_arch/view/widget/sidebar_menu.dart';
 import 'package:clean_arch/view/widget/table/base_table_view/base_table_view.dart';
+import 'package:clean_arch/view/widget/table/base_table_crud_button/base_table_update_button.dart';
 import 'package:clean_arch/view/widget/table/base_table_crud_button/base_table_delete_button.dart';
 import 'package:clean_arch/view/widget/table/base_table_crud_button/base_table_create_button.dart';
 
-class ContractPage extends StatefulWidget {
-  const ContractPage({Key? key}) : super(key: key);
+class OfficeBranchPage extends StatefulWidget {
+  const OfficeBranchPage({Key? key}) : super(key: key);
 
   @override
-  State<ContractPage> createState() => _ContractPageState();
+  State<OfficeBranchPage> createState() => _OfficeBranchPageState();
 }
 
-class _ContractPageState extends State<ContractPage> {
+class _OfficeBranchPageState extends State<OfficeBranchPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -66,8 +69,8 @@ class _ContractPageState extends State<ContractPage> {
                                     const SizedBox(height: 50),
                                     Align(
                                       alignment: Alignment.centerLeft,
-                                      child:
-                                          BaseTableSearchContainer<Contract>(),
+                                      child: BaseTableSearchContainer<
+                                          OfficeBranch>(),
                                     ),
                                     const SizedBox(height: 30),
                                     Row(
@@ -75,15 +78,13 @@ class _ContractPageState extends State<ContractPage> {
                                             MainAxisAlignment.end,
                                         children: [
                                           const SizedBox(width: 15),
-                                          BaseTableCreateButton<Contract>(),
+                                          BaseTableCreateButton<OfficeBranch>(),
                                           const SizedBox(width: 15),
                                           const BaseTableDeleteButton<
-                                              Contract>(),
+                                              OfficeBranch>(),
                                         ]),
                                     const SizedBox(height: 20),
-                                    BaseTableView<Contract>(
-                                      widthRate: 0.7,
-                                    ),
+                                    BaseTableView<OfficeBranch>(),
                                     const SizedBox(height: 50)
                                   ],
                                 ),

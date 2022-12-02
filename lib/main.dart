@@ -2,12 +2,27 @@ import 'package:clean_arch/common/constants/uri_provider.dart';
 import 'package:clean_arch/common/util/class_builder.dart';
 import 'package:clean_arch/model(DTO)/impl/contract.dart';
 import 'package:clean_arch/model(DTO)/impl/customer.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:clean_arch/view/page/validator_page.dart';
+import 'package:clean_arch/model(DTO)/impl/customer_memeber.dart';
+import 'package:clean_arch/model(DTO)/impl/gate.dart';
+import 'package:clean_arch/model(DTO)/impl/gate_credential.dart';
+import 'package:clean_arch/model(DTO)/impl/manager.dart';
+import 'package:clean_arch/model(DTO)/impl/office.dart';
+import 'package:clean_arch/model(DTO)/impl/office_branch.dart';
+import 'package:clean_arch/model(DTO)/impl/sensor.dart';
+import 'package:clean_arch/model(DTO)/impl/service_provider.dart';
+import 'package:clean_arch/model(DTO)/impl/tax_bill.dart';
+import 'package:clean_arch/view/page/customer_member_page.dart';
+import 'package:clean_arch/view/page/customer_page.dart';
+import 'package:clean_arch/view/page/gate_credential_page.dart';
+import 'package:clean_arch/view/page/gate_page.dart';
+import 'package:clean_arch/view/page/manager_page.dart';
+import 'package:clean_arch/view/page/office_branch_page.dart';
+import 'package:clean_arch/view/page/office_page.dart';
+import 'package:clean_arch/view/page/sensor_page.dart';
+import 'package:clean_arch/view/page/service_provider_page.dart';
+import 'package:clean_arch/view/page/tax_bill_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:clean_arch/common/constants/secure_storage.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:clean_arch/view/widget/logout_button.dart';
@@ -20,16 +35,35 @@ import 'package:clean_arch/view/page/contract_page.dart';
 Future main() async {
   await dotenv.load(fileName: ".env");
   UriProvider.init();
-  ClassBuilder.register<Customer>(Customer());
   ClassBuilder.register<Contract>(Contract());
-  // ClassBuilder.register<ServiceProvider>(ServiceProvider());
+  ClassBuilder.register<CustomerMember>(CustomerMember());
+  ClassBuilder.register<Customer>(Customer());
+  ClassBuilder.register<Manager>(Manager());
+  ClassBuilder.register<OfficeBranch>(OfficeBranch());
+  ClassBuilder.register<Office>(Office());
+  ClassBuilder.register<ServiceProvider>(ServiceProvider());
+  ClassBuilder.register<TaxBill>(TaxBill());
+  ClassBuilder.register<Sensor>(Sensor());
+  ClassBuilder.register<GateCredential>(GateCredential());
+  ClassBuilder.register<Gate>(Gate());
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => SignInProvider()),
     ChangeNotifierProvider(create: (_) => (BaseTableProvider())),
-    ChangeNotifierProvider(create: (_) => (BaseTableProvider<Customer>())),
     ChangeNotifierProvider(create: (_) => (BaseTableProvider<Contract>())),
-    // ChangeNotifierProvider(create: (_) => (BaseTableProvider<Customer>())),
+    ChangeNotifierProvider(
+        create: (_) => (BaseTableProvider<CustomerMember>())),
+    ChangeNotifierProvider(create: (_) => (BaseTableProvider<Customer>())),
+    ChangeNotifierProvider(create: (_) => (BaseTableProvider<Manager>())),
+    ChangeNotifierProvider(create: (_) => (BaseTableProvider<OfficeBranch>())),
+    ChangeNotifierProvider(create: (_) => (BaseTableProvider<Office>())),
+    ChangeNotifierProvider(
+        create: (_) => (BaseTableProvider<ServiceProvider>())),
+    ChangeNotifierProvider(create: (_) => (BaseTableProvider<TaxBill>())),
+    ChangeNotifierProvider(create: (_) => (BaseTableProvider<Sensor>())),
+    ChangeNotifierProvider(
+        create: (_) => (BaseTableProvider<GateCredential>())),
+    ChangeNotifierProvider(create: (_) => (BaseTableProvider<Gate>())),
   ], child: const PfAdmin()));
 }
 
@@ -42,25 +76,25 @@ class PfAdmin extends StatelessWidget {
     final routes = {
       '/login': (BuildContext context) => const LoginPage(),
       '/main': (BuildContext context) => const DashBoard(),
-      '/test': (BuildContext context) => const TestPage(),
-      '/test2': (BuildContext context) => const ValidatorPage(),
+      '/contract': (BuildContext context) => const ContractPage(),
+      '/customerMember': (BuildContext context) => const CustomerMemberPage(),
+      '/customer': (BuildContext context) => const CustomerPage(),
+      '/manager': (BuildContext context) => const ManagerPage(),
+      '/officeBranch': (BuildContext context) => const OfficeBranchPage(),
+      '/office': (BuildContext context) => const OfficePage(),
+      '/serviceProvider': (BuildContext context) => const ServiceProviderPage(),
+      '/taxBill': (BuildContext context) => const TaxBillPage(),
+      '/sensor': (BuildContext context) => const SensorPage(),
+      '/gateCredential': (BuildContext context) => const GateCredentialPage(),
+      '/gate': (BuildContext context) => const GatePage(),
     };
     return MaterialApp(
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: [
-        Locale('en'),
-        Locale("ko"),
-      ],
       title: 'Pathfinder Admin',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       routes: routes,
-      initialRoute: '/test',
+      initialRoute: '/contract',
     );
   }
 }
@@ -83,16 +117,11 @@ class _DashBoardState extends State<DashBoard> {
 
   @override
   Widget build(BuildContext context) {
-    isLogined() async {
-      bool isLogin = false;
-      FlutterSecureStorage storage = SecureStorage.storage;
-      String? value = await storage.read(key: 'admin');
-      isLogin = (value != null);
-      return isLogin;
-    }
+    SignInProvider providerRead =
+        Provider.of<SignInProvider>(context, listen: false);
 
     return FutureBuilder(
-        future: isLogined(),
+        future: providerRead.isLogined(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
           if (snapshot.hasData == false) {

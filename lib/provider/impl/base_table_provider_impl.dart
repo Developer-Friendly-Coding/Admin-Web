@@ -41,16 +41,15 @@ class BaseTableProvider<M extends Base> extends ChangeNotifier
   List<TextEditingController> get addButtonTECList => _addButtonTECList;
 
   @override
+  void resetFilterQueryParameters() {
+    _repo.resetFilterQueryParameters();
+  }
+
+  @override
   Future<List<M>?> getTableData() async {
     try {
-      _searched = Search.Loading;
       _dataList = await _repo.getTableData();
-      if (_dataList == null) {
-        _searched = Search.Fail;
-        return null;
-      }
 
-      _searched = Search.Finish;
       return dataList;
     } catch (e) {
       debugPrint(e.toString());
@@ -92,11 +91,7 @@ class BaseTableProvider<M extends Base> extends ChangeNotifier
       String memberName, String queryValue) async {
     try {
       _dataList = await _repo.getTableDataBySearchBar(memberName, queryValue);
-      if (_dataList == null) {
-        _searched = Search.Fail;
-        return null;
-      }
-      _searched = Search.Finish;
+
       return dataList;
     } catch (e) {
       debugPrint(e.toString());
@@ -180,6 +175,7 @@ class BaseTableProvider<M extends Base> extends ChangeNotifier
     _addButtonTECList = [];
     for (int i = 0; i < modelMemberList.length; i++) {
       addButtonTECList.add(TextEditingController());
+      addButtonTECList[i].text = "";
     }
   }
 

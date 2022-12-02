@@ -17,6 +17,7 @@ class BaseTableDeleteButton<M extends Base> extends StatelessWidget {
         Provider.of<BaseTableProvider<M>>(context, listen: false);
 
     return ElevatedButton(
+        style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
         onPressed: () {
           providerRead.selectedIndex == -1
               ? Fluttertoast.showToast(

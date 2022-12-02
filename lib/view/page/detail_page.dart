@@ -1,5 +1,5 @@
-import 'package:clean_arch/common/constants/detail_table_mapper.dart';
-import 'package:clean_arch/common/constants/table_column_attributes_mapper.dart';
+import 'package:clean_arch/common/constants/table/detail_table_mapper.dart';
+import 'package:clean_arch/common/constants/table/table_column_attributes_mapper.dart';
 import 'package:clean_arch/model(DTO)/base_model.dart';
 import 'package:clean_arch/provider/impl/signin_provider_impl.dart';
 import 'package:clean_arch/view/widget/table/base_table_detail_view/detail__table_view.dart';
@@ -22,6 +22,8 @@ class DetailPage<M extends Base> extends StatelessWidget {
       detailTableMapper(M.toString(), selectedId)!;
   final List<ColumnAttributes> columnAttributesList =
       columnAttributesMapper[M.toString()]!;
+  final String tableName = tableNameMapper[M.toString()]!;
+
   Color infoColor;
   Color containerTableColor;
 
@@ -79,6 +81,28 @@ class DetailPage<M extends Base> extends StatelessWidget {
                           child: Column(
                             children: [
                               const SizedBox(height: 30),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  margin: EdgeInsets.only(
+                                      left: MediaQuery.of(context).size.width *
+                                          (0.8197916667 - 0.65) /
+                                          2),
+                                  width: 280,
+                                  height: 50,
+                                  child: Center(
+                                    child: Text(
+                                      "${tableName} 상세",
+                                      style: detailPageInfoStyle,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 20),
                               DetailInfo<M>(
                                 selectedId: selectedId,
                                 widthRate: infoWidthRate,
@@ -114,4 +138,6 @@ class DetailPage<M extends Base> extends StatelessWidget {
           }
         });
   }
+
+  //
 }
