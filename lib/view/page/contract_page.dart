@@ -1,6 +1,7 @@
 import 'package:clean_arch/common/constants/table/detail_table_mapper.dart';
-import 'package:clean_arch/model(DTO)/impl/contract.dart';
+import 'package:clean_arch/model/impl/contract.dart';
 import 'package:clean_arch/provider/impl/signin_provider_impl.dart';
+import 'package:clean_arch/responsive.dart';
 import 'package:clean_arch/view/widget/table/base_table_search/base_table_container.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -52,44 +53,38 @@ class _ContractPageState extends State<ContractPage> {
                   color: const Color.fromARGB(255, 232, 237, 246),
                   child: Row(
                     children: [
-                      const SideBarMenu(),
-                      SingleChildScrollView(
-                        child: SizedBox(
-                          width:
-                              MediaQuery.of(context).size.width * 0.8197916667,
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.65,
-                                child: Column(
-                                  children: [
-                                    const SizedBox(height: 50),
-                                    Align(
+                      if (Responsive.isDesktop(context))
+                        const Expanded(flex: 1, child: SideBarMenu()),
+                      Expanded(
+                        flex: 5,
+                        child: SingleChildScrollView(
+                          padding: EdgeInsets.all(18),
+                          child: Column(children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.65,
+                              child: Column(
+                                children: [
+                                  Align(
                                       alignment: Alignment.centerLeft,
                                       child:
-                                          BaseTableSearchContainer<Contract>(),
-                                    ),
-                                    const SizedBox(height: 30),
-                                    Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          const SizedBox(width: 15),
-                                          BaseTableCreateButton<Contract>(),
-                                          const SizedBox(width: 15),
-                                          const BaseTableDeleteButton<
-                                              Contract>(),
-                                        ]),
-                                    const SizedBox(height: 20),
-                                    BaseTableView<Contract>(
-                                      widthRate: 0.7,
-                                    ),
-                                    const SizedBox(height: 50)
-                                  ],
-                                ),
+                                          BaseTableSearchContainer<Contract>()),
+                                  const SizedBox(height: 30),
+                                  Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        BaseTableCreateButton<Contract>(),
+                                        const SizedBox(width: 15),
+                                        const BaseTableDeleteButton<Contract>(),
+                                      ]),
+                                  const SizedBox(height: 20),
+                                  BaseTableView<Contract>(
+                                      // widthRate: 0.7,
+                                      ),
+                                  const SizedBox(height: 50)
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ]),
                         ),
                       ),
                     ],

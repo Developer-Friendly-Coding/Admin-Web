@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:clean_arch/common/util/class_builder.dart';
 import 'dart:convert';
 import 'package:http/http.dart';
-import 'package:clean_arch/model(DTO)/base_model.dart';
+import 'package:clean_arch/model/base_model.dart';
 import 'package:clean_arch/repo/base_table_repo.dart';
 import 'package:recase/recase.dart';
 
@@ -16,11 +16,6 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
   BaseTableRepository({Client? client}) : _client = client ?? Client();
 
   @override
-  void resetFilterQueryParameters() {
-    _filterQueryParameters = {"size": "100"};
-  }
-
-  @override
   Future<List<M>?> getTableData() async {
     Map<String, String> headers = {
       'Accept': 'application/json',
@@ -28,7 +23,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
     };
 
     UriProvider.setGetTablePath<M>();
-    UriProvider.setFilterTableQuery(_queryParameters);
+    UriProvider.setQuery(_queryParameters);
     UriProvider.setUri();
     Uri url = UriProvider.getUri();
 
@@ -62,7 +57,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
     };
     _filterQueryParameters[memberName] = queryValue;
 
-    UriProvider.setFilterTableQuery(_filterQueryParameters);
+    UriProvider.setQuery(_filterQueryParameters);
     UriProvider.setUri();
     Uri url = UriProvider.getUri();
 
@@ -96,7 +91,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
     Map<String, dynamic> detailQueryParameters = {};
     detailQueryParameters["id"] = "${id}";
     UriProvider.setGetTablePath<M>();
-    UriProvider.setFilterTableQuery(detailQueryParameters);
+    UriProvider.setQuery(detailQueryParameters);
     UriProvider.setUri();
     Uri url = UriProvider.getUri();
 
@@ -130,7 +125,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
     Map<String, dynamic> detailQueryParameters = {"size": "100"};
     detailQueryParameters[ReCase(modelName).camelCase + "Id"] = "${id}";
     UriProvider.setGetTablePath<M>();
-    UriProvider.setFilterTableQuery(detailQueryParameters);
+    UriProvider.setQuery(detailQueryParameters);
     UriProvider.setUri();
     Uri url = UriProvider.getUri();
 
@@ -164,7 +159,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
     };
     _filterQueryParameters[memberName] = queryValue.name;
 
-    UriProvider.setFilterTableQuery(_filterQueryParameters);
+    UriProvider.setQuery(_filterQueryParameters);
     UriProvider.setUri();
     Uri url = UriProvider.getUri();
 
@@ -207,7 +202,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
 
     _filterQueryParameters[startMemberName] = startQueryValue;
     _filterQueryParameters[endMemberName] = endQueryValue;
-    UriProvider.setFilterTableQuery(_filterQueryParameters);
+    UriProvider.setQuery(_filterQueryParameters);
     UriProvider.setUri();
     Uri url = UriProvider.getUri();
 
@@ -250,7 +245,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
     Map<String, dynamic> updateQueryParameters = {
       "id": selectedTableRow.getId().toString()
     };
-    UriProvider.setFilterTableQuery(updateQueryParameters);
+    UriProvider.setQuery(updateQueryParameters);
     UriProvider.setUri();
     Uri url = UriProvider.getUri();
 
@@ -285,7 +280,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
     Map<String, dynamic> deleteQueryParameters = {
       "id": selectedTableRow.getId().toString()
     };
-    UriProvider.setFilterTableQuery(deleteQueryParameters);
+    UriProvider.setQuery(deleteQueryParameters);
     UriProvider.setUri();
     Uri url = UriProvider.getUri();
 
@@ -320,7 +315,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
 
     UriProvider.setCreateTablePath<M>();
     Map<String, dynamic>? addQueryParameters;
-    UriProvider.setFilterTableQuery(addQueryParameters);
+    UriProvider.setQuery(addQueryParameters);
     UriProvider.setUri();
     Uri url = UriProvider.getUri();
 

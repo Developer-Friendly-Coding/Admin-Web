@@ -1,6 +1,6 @@
 import 'package:clean_arch/common/constants/enum/measure_unit.dart';
 import 'package:clean_arch/common/constants/enum/sensor_type.dart';
-import 'package:clean_arch/model(DTO)/base_model.dart';
+import 'package:clean_arch/model/base_model.dart';
 import 'package:flutter/widgets.dart';
 
 class Sensor implements Base {

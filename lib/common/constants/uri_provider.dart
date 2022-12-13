@@ -32,6 +32,10 @@ class UriProvider {
     UriProvider();
   }
 
+  static void setDashBoardSensorPath<M>() {
+    _path = "/api/sensor/dash-board";
+  }
+
   static void setGetTablePath<M>() {
     _path = "/api/${ReCase(M.toString()).camelCase}/list";
   }
@@ -48,7 +52,7 @@ class UriProvider {
     _path = "/api/${ReCase(M.toString()).camelCase}";
   }
 
-  static void setFilterTableQuery<M>(Map<String, dynamic>? queryParameters) {
+  static void setQuery(Map<String, dynamic>? queryParameters) {
     _queryParameters = queryParameters;
   }
 

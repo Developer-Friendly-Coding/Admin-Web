@@ -1,7 +1,7 @@
 import 'package:clean_arch/common/constants/table/detail_table_mapper.dart';
 import 'package:clean_arch/common/constants/table/table_search_child_mapper.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
-import 'package:clean_arch/model(DTO)/base_model.dart';
+import 'package:clean_arch/model/base_model.dart';
 import 'package:clean_arch/view/widget/table/base_table_search/base_table_search_child.dart';
 import 'package:flutter/material.dart';
 
@@ -28,21 +28,18 @@ class BaseTableSearchContainer<M extends Base> extends StatelessWidget {
     resultChildren.add(const SizedBox(height: 15));
     for (int i = 0; i < searchContainerChildList.length; i++) {
       // print(getSize(globalKeyList[i])!.height);
-      Container child = Container(
-        color: color,
-        child: Row(
-          children: [
-            Container(
-              width: nameWidth,
-              margin: EdgeInsets.only(left: nameLeftMargin),
-              child: Text(
-                searchContainerChildList[i].columnName,
-                style: searchNameStyle,
-              ),
+      Row child = Row(
+        children: [
+          Container(
+            width: nameWidth,
+            margin: EdgeInsets.only(left: nameLeftMargin),
+            child: Text(
+              searchContainerChildList[i].columnName,
+              style: searchNameStyle,
             ),
-            Container(child: searchContainerChildList[i].child),
-          ],
-        ),
+          ),
+          Container(child: searchContainerChildList[i].child),
+        ],
       );
 
       resultChildren.add(child);

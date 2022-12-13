@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:clean_arch/model(DTO)/base_model.dart';
+import 'package:clean_arch/model/base_model.dart';
 
 //ignore: must_be_immutable
 class BaseTableCheckBox<M extends Base> extends StatefulWidget {

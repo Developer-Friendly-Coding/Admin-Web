@@ -1,17 +1,15 @@
 import 'package:clean_arch/common/constants/enum/search.dart';
-import 'package:clean_arch/model(DTO)/base_model.dart';
+import 'package:clean_arch/model/base_model.dart';
 import 'package:clean_arch/view/widget/table/base_table_view/base_table_attributes.dart';
 import 'package:flutter/material.dart';
 
 abstract class IBaseTableProvider<M extends Base> extends ChangeNotifier {
-  List<M>? get dataList;
+  List<M> get dataList;
   int get selectedIndex;
-  M? get selectedRow;
+  M get selectedRow;
   List<TextEditingController> get updateButtonTECList;
   List<TextEditingController> get addButtonTECList;
-  Search get searched;
 
-  void resetFilterQueryParameters();
   Future<M?> getDetailRowDataById(int id);
   Future<List<M>?> getTableData();
   Future<List<M>?> getDetailTableDataById(String modelName, int id);
@@ -26,9 +24,9 @@ abstract class IBaseTableProvider<M extends Base> extends ChangeNotifier {
   );
 
   void changeSelectedIndex(index);
-  void setDetailUpdateButtonTECList();
-  void setUpdateButtonTECList();
-  void setAddButtonTECList();
+  void initDetailUpdateButtonTECList();
+  void initUpdateButtonTECList();
+  void initAddButtonTECList();
   void clearAddButtonTECList();
 
   Future<int?> updateTableRow();

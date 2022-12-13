@@ -1,6 +1,6 @@
 import 'package:clean_arch/common/constants/table/detail_table_mapper.dart';
-import 'package:clean_arch/model(DTO)/impl/contract.dart';
-import 'package:clean_arch/model(DTO)/impl/tax_bill.dart';
+import 'package:clean_arch/model/impl/contract.dart';
+import 'package:clean_arch/model/impl/tax_bill.dart';
 import 'package:clean_arch/provider/impl/signin_provider_impl.dart';
 import 'package:clean_arch/view/widget/table/base_table_search/base_table_container.dart';
 import 'package:provider/provider.dart';

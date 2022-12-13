@@ -1,6 +1,6 @@
 import 'package:clean_arch/common/constants/table/detail_table_mapper.dart';
 import 'package:clean_arch/common/constants/table/table_column_attributes_mapper.dart';
-import 'package:clean_arch/model(DTO)/base_model.dart';
+import 'package:clean_arch/model/base_model.dart';
 import 'package:clean_arch/provider/impl/signin_provider_impl.dart';
 import 'package:clean_arch/view/widget/table/base_table_detail_view/detail__table_view.dart';
 import 'package:clean_arch/view/widget/table/base_table_detail_view/detail_container.dart';
@@ -29,8 +29,8 @@ class DetailPage<M extends Base> extends StatelessWidget {
 
   DetailPage(
       {required this.selectedId,
-      this.infoWidthRate = 0.65,
-      this.infoHeight = 260,
+      this.infoWidthRate = 0.75,
+      this.infoHeight = 200,
       this.infoColor = Colors.white,
       this.containerTableWidthRate = 0.75,
       this.containerTableHeight = 500,

@@ -1,5 +1,5 @@
 import 'package:clean_arch/common/constants/table/table_column_attributes_mapper.dart';
-import 'package:clean_arch/model(DTO)/base_model.dart';
+import 'package:clean_arch/model/base_model.dart';
 import 'package:clean_arch/provider/impl/base_table_provider_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
@@ -18,8 +18,8 @@ class BaseTableViewRow<M extends Base> extends StatelessWidget {
       : super(key: key);
 
   List<Widget> alignElementsWidget(
-      BaseTableProvider<M> providerWatch, int index, BuildContext context) {
-    List<String?> elements = providerWatch.dataList![index].toRow();
+      BaseTableProvider<M> providerRead, int index, BuildContext context) {
+    List<String?> elements = providerRead.dataList[index].toRow();
 
     List<Widget> result = [];
     for (int i = 0; i < elements.length; i++) {
@@ -48,11 +48,11 @@ class BaseTableViewRow<M extends Base> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BaseTableProvider<M> providerWatch =
-        Provider.of<BaseTableProvider<M>>(context);
+    BaseTableProvider<M> providerRead =
+        Provider.of<BaseTableProvider<M>>(context, listen: false);
 
     return Stack(
-      children: alignElementsWidget(providerWatch, index, context),
+      children: alignElementsWidget(providerRead, index, context),
     );
   }
 }

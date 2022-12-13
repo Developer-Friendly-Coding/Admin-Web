@@ -1,5 +1,25 @@
 import 'package:flutter/material.dart';
 
+const TextStyle sensorOfficeBranchStyle = TextStyle(
+    decoration: TextDecoration.none,
+    fontFamily: 'Source_Sans_Pro',
+    fontWeight: FontWeight.w700,
+    color: Color.fromARGB(255, 122, 126, 133));
+
+const TextStyle sensorStyle = TextStyle(
+    fontSize: 15,
+    decoration: TextDecoration.none,
+    fontFamily: 'Source_Sans_Pro',
+    fontWeight: FontWeight.w700,
+    color: Color.fromARGB(255, 156, 162, 175));
+
+const TextStyle snapShotSensorStyle = TextStyle(
+    fontSize: 60,
+    decoration: TextDecoration.none,
+    fontFamily: 'Source_Sans_Pro',
+    fontWeight: FontWeight.w700,
+    color: Color.fromARGB(255, 183, 190, 206));
+
 const TextStyle snapShotStyle = TextStyle(
     fontSize: 60,
     decoration: TextDecoration.none,
@@ -60,7 +80,7 @@ const TextStyle accordionElementTextStyle = TextStyle(
     color: Color(0xff0090FF));
 
 const TextStyle accordionElementTextStyleLapTop = TextStyle(
-    fontSize: 12,
+    fontSize: 14,
     fontFamily: 'SpoqaHanSansNeo_TTF_subset',
     fontWeight: FontWeight.w700,
     color: Color(0xff0090FF));
@@ -151,7 +171,7 @@ const TextStyle searchNameStyle = TextStyle(
 );
 
 const TextStyle detailContainierIsNullStyle = TextStyle(
-  fontSize: 40,
+  fontSize: 50,
   fontFamily: 'Source_Sans_Pro',
   color: Color(0xff809FB8),
   fontWeight: FontWeight.w700,

@@ -1,9 +1,7 @@
 import 'package:clean_arch/common/constants/table/detail_table_mapper.dart';
-import 'package:clean_arch/provider/impl/base_table_provider_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
 import 'package:accordion/accordion.dart';
-import 'package:provider/provider.dart';
 import 'package:recase/recase.dart';
 
 class SideBarMenu extends StatefulWidget {
@@ -18,154 +16,44 @@ class _SideBarMenuState extends State<SideBarMenu> {
   Widget build(BuildContext context) {
     double currentWidth = MediaQuery.of(context).size.width;
 
-    // var temp1 = AccordionSection(
-    //   isOpen: false,
-    //   leftIcon: const Icon(Icons.home_work, color: Color(0xff0090FF)),
-    //   header: Text('입주사 관리',
-    //       style: currentWidth >= 1920 ? accordionStyle : accordionStyleLapTop),
-    //   content: TextButton(
-    //     onPressed: () {
-    //       Navigator.pushNamedAndRemoveUntil(
-    //           context, "/customer", (route) => false);
-    //     },
-    //     child: SizedBox(
-    //       width: MediaQuery.of(context).size.width * 0.15,
-    //       height: MediaQuery.of(context).size.width * 0.026,
-    //       child: Align(
-    //         alignment: Alignment.centerLeft,
-    //         child: Text("입주사",
-    //             style: currentWidth >= 1920
-    //                 ? accordionElementTextStyle
-    //                 : accordionElementTextStyleLapTop),
-    //       ),
-    //     ),
-    //   ),
-    // );
+    AccordionSection accordionSection(
+        IconData icon, String header, List<String> tableNameList) {
+      String getKeyByValue(String value) {
+        return tableNameMapper.keys
+            .firstWhere((k) => tableNameMapper[k] == value);
+      }
 
-    // var temp2 = AccordionSection(
-    //   isOpen: false,
-    //   leftIcon: const Icon(Icons.content_paste, color: Color(0xff0090FF)),
-    //   header: Text('매니저 관리',
-    //       style: currentWidth >= 1920 ? accordionStyle : accordionStyleLapTop),
-    //   content: Column(
-    //     children: [
-    //       TextButton(
-    //         onPressed: () {
-    //           Navigator.pushNamedAndRemoveUntil(
-    //               context, "/office", (route) => false);
-    //         },
-    //         child: SizedBox(
-    //           width: MediaQuery.of(context).size.width * 0.15,
-    //           height: MediaQuery.of(context).size.width * 0.026,
-    //           child: Align(
-    //             alignment: Alignment.centerLeft,
-    //             child: Text("사무실",
-    //                 style: currentWidth >= 1920
-    //                     ? accordionElementTextStyle
-    //                     : accordionElementTextStyleLapTop),
-    //           ),
-    //         ),
-    //       ),
-    //       TextButton(
-    //         onPressed: () {
-    //           Navigator.pushNamedAndRemoveUntil(
-    //               context, "/manager", (route) => false);
-    //         },
-    //         child: SizedBox(
-    //           width: MediaQuery.of(context).size.width * 0.15,
-    //           height: MediaQuery.of(context).size.width * 0.026,
-    //           child: Align(
-    //             alignment: Alignment.centerLeft,
-    //             child: Text("매니저",
-    //                 style: currentWidth >= 1920
-    //                     ? accordionElementTextStyle
-    //                     : accordionElementTextStyleLapTop),
-    //           ),
-    //         ),
-    //       ),
-    //       TextButton(
-    //         onPressed: () {
-    //           Navigator.pushNamedAndRemoveUntil(
-    //               context, "/contract", (route) => false);
-    //         },
-    //         child: SizedBox(
-    //           width: MediaQuery.of(context).size.width * 0.15,
-    //           height: MediaQuery.of(context).size.width * 0.026,
-    //           child: Align(
-    //             alignment: Alignment.centerLeft,
-    //             child: Text("계약",
-    //                 style: currentWidth >= 1920
-    //                     ? accordionElementTextStyle
-    //                     : accordionElementTextStyleLapTop),
-    //           ),
-    //         ),
-    //       ),
-    //       TextButton(
-    //         onPressed: () {
-    //           Navigator.pushNamedAndRemoveUntil(
-    //               context, "/officeBranch", (route) => false);
-    //         },
-    //         child: SizedBox(
-    //           width: MediaQuery.of(context).size.width * 0.15,
-    //           height: MediaQuery.of(context).size.width * 0.026,
-    //           child: Align(
-    //             alignment: Alignment.centerLeft,
-    //             child: Text("지점",
-    //                 style: currentWidth >= 1920
-    //                     ? accordionElementTextStyle
-    //                     : accordionElementTextStyleLapTop),
-    //           ),
-    //         ),
-    //       ),
-    //       TextButton(
-    //         onPressed: () {
-    //           Navigator.pushNamedAndRemoveUntil(
-    //               context, "/serviceProvider", (route) => false);
-    //         },
-    //         child: SizedBox(
-    //           width: MediaQuery.of(context).size.width * 0.15,
-    //           height: MediaQuery.of(context).size.width * 0.026,
-    //           child: Align(
-    //             alignment: Alignment.centerLeft,
-    //             child: Text("운영사",
-    //                 style: currentWidth >= 1920
-    //                     ? accordionElementTextStyle
-    //                     : accordionElementTextStyleLapTop),
-    //           ),
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
-
-    // BaseTableProvider<M> providerRead =
-    //     Provider.of<BaseTableProvider<M>>(context, listen: false);
-
-    List<Widget> entityList() {
-      List<Widget> result = [];
-      List<String> tableNameList = tableNameMapper.values.toList();
-      List<String> tableClassNameList = tableNameMapper.keys.toList();
-      int length = tableNameList.length;
-      for (int i = 0; i < length; i++) {
-        TextButton textButton = TextButton(
+      List<TextButton> textButtonList = [];
+      for (int i = 0; i < tableNameList.length; i++) {
+        TextButton temp = TextButton(
           onPressed: () {
             Navigator.pushNamedAndRemoveUntil(
                 context,
-                "/${ReCase(tableClassNameList[i]).camelCase}",
+                "/${ReCase(getKeyByValue(tableNameList[i])).camelCase}",
                 (route) => false);
           },
           child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.15,
-            height: MediaQuery.of(context).size.width * 0.026,
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(tableNameList[i], style: leftEntityBannerStyle),
             ),
           ),
         );
-        result.add(textButton);
+        textButtonList.add(temp);
       }
-      return result;
+      return AccordionSection(
+        isOpen: false,
+        leftIcon: Icon(icon, color: Color(0xff0090FF)),
+        headerBackgroundColor: Colors.white,
+        header: Text(header,
+            style:
+                currentWidth >= 1920 ? accordionStyle : accordionStyleLapTop),
+        content: Column(
+          children: [...textButtonList],
+        ),
+        contentHorizontalPadding: 20,
+        contentBorderWidth: 1,
+      );
     }
 
     return Container(
@@ -202,21 +90,19 @@ class _SideBarMenuState extends State<SideBarMenu> {
           alignment: Alignment.topLeft,
           child: Container(
               margin: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.0244,
+                  // left: MediaQuery.of(context).size.width * 0.0244,
                   top: MediaQuery.of(context).size.width * 0.133),
-              // margin: EdgeInsets.only(
-              //     top: MediaQuery.of(context).size.width * 0.133,
-              //     left: MediaQuery.of(context).size.width * 0.010),
-              child: Column(children: [...entityList()])
-
-              // Accordion(
-              //   contentBorderColor: Color(0xff0090FF),
-              //   headerBackgroundColor: Colors.white,
-              //   scaleWhenAnimating: false,
-              //   openAndCloseAnimation: true,
-              //   children: [temp1, temp2],
-              // ),
-              ),
+              child: Accordion(children: [
+                accordionSection(
+                    Icons.house, "고객관리", ["입주사", "입주고객", "계약", "세금계산서"]),
+                accordionSection(Icons.apartment, "공간관리",
+                    ["지점", "사무실", "사무실가격", "세금계산서", '센서', '센서측정값']),
+                accordionSection(
+                    Icons.manage_search, "인사관리", ["매니저", "매니저 권한", "운영사"]),
+                accordionSection(Icons.verified_user, "보안관리",
+                    ["출입문", "출입권한", "출입기", "세금계산서"]),
+                accordionSection(Icons.inventory, "재고관리", ["물품관리", "물품코드"])
+              ])),
         ),
       ]),
     );

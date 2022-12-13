@@ -1,7 +1,6 @@
-import 'package:clean_arch/model(DTO)/base_model.dart';
+import 'package:clean_arch/model/base_model.dart';
 
 abstract class IBaseTableRepository<M extends Base> {
-  void resetFilterQueryParameters();
   Future<List<M>?> getTableData();
   Future<List<M>?> getTableDataBySearchBar(
       String memberName, String queryValue);

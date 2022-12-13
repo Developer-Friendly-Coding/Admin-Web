@@ -1,5 +1,5 @@
 import 'package:clean_arch/common/constants/enum/office_type.dart';
-import 'package:clean_arch/model(DTO)/base_model.dart';
+import 'package:clean_arch/model/base_model.dart';
 import 'package:flutter/widgets.dart';
 
 class OfficeBranch implements Base {

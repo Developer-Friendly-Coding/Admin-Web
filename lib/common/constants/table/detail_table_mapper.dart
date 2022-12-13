@@ -1,11 +1,11 @@
-import 'package:clean_arch/model(DTO)/impl/contract.dart';
-import 'package:clean_arch/model(DTO)/impl/customer_memeber.dart';
-import 'package:clean_arch/model(DTO)/impl/gate_credential.dart';
-import 'package:clean_arch/model(DTO)/impl/manager.dart';
-import 'package:clean_arch/model(DTO)/impl/office.dart';
-import 'package:clean_arch/model(DTO)/impl/office_branch.dart';
-import 'package:clean_arch/model(DTO)/impl/sensor.dart';
-import 'package:clean_arch/model(DTO)/impl/tax_bill.dart';
+import 'package:clean_arch/model/impl/contract.dart';
+import 'package:clean_arch/model/impl/customer_memeber.dart';
+import 'package:clean_arch/model/impl/gate_credential.dart';
+import 'package:clean_arch/model/impl/manager.dart';
+import 'package:clean_arch/model/impl/office.dart';
+import 'package:clean_arch/model/impl/office_branch.dart';
+import 'package:clean_arch/model/impl/sensor.dart';
+import 'package:clean_arch/model/impl/tax_bill.dart';
 import 'package:clean_arch/view/widget/table/base_table_detail_view/detail__table_view.dart';
 
 List<DetailTableView>? detailTableMapper(String modelName, int id) {

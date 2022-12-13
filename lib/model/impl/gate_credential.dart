@@ -1,6 +1,6 @@
 import 'package:clean_arch/common/constants/enum/gate_credential_status.dart';
 import 'package:clean_arch/common/constants/enum/gate_credential_type.dart';
-import 'package:clean_arch/model(DTO)/base_model.dart';
+import 'package:clean_arch/model/base_model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 

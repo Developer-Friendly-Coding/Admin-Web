@@ -1,6 +1,6 @@
 import 'package:clean_arch/common/constants/enum/customer_member_status.dart';
 import 'package:clean_arch/common/constants/enum/customer_member_type.dart';
-import 'package:clean_arch/model(DTO)/base_model.dart';
+import 'package:clean_arch/model/base_model.dart';
 import 'package:flutter/widgets.dart';
 
 class CustomerMember implements Base {

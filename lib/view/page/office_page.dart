@@ -1,4 +1,4 @@
-import 'package:clean_arch/model(DTO)/impl/office.dart';
+import 'package:clean_arch/model/impl/office.dart';
 import 'package:clean_arch/provider/impl/signin_provider_impl.dart';
 import 'package:clean_arch/view/widget/table/base_table_search/base_table_container.dart';
 import 'package:provider/provider.dart';

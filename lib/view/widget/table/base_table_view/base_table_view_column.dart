@@ -1,5 +1,5 @@
 import 'package:clean_arch/common/constants/table/table_column_attributes_mapper.dart';
-import 'package:clean_arch/model(DTO)/base_model.dart';
+import 'package:clean_arch/model/base_model.dart';
 import 'package:clean_arch/provider/impl/base_table_provider_impl.dart';
 import 'package:clean_arch/view/widget/table/base_table_view/base_table_attributes.dart';
 import 'package:clean_arch/common/constants/text_style.dart';

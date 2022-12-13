@@ -1,7 +1,7 @@
 import 'package:clean_arch/common/constants/enum/contract_type.dart';
 import 'package:clean_arch/common/constants/enum/employee_type.dart';
 import 'package:clean_arch/common/constants/enum/job.dart';
-import 'package:clean_arch/model(DTO)/base_model.dart';
+import 'package:clean_arch/model/base_model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 

@@ -1,6 +1,6 @@
-import 'package:clean_arch/model(DTO)/impl/contract.dart';
-import 'package:clean_arch/model(DTO)/impl/customer.dart';
-import 'package:clean_arch/model(DTO)/impl/gate_credential.dart';
+import 'package:clean_arch/model/impl/contract.dart';
+import 'package:clean_arch/model/impl/customer.dart';
+import 'package:clean_arch/model/impl/gate_credential.dart';
 import 'package:clean_arch/provider/impl/signin_provider_impl.dart';
 import 'package:clean_arch/view/widget/table/base_table_search/base_table_container.dart';
 import 'package:provider/provider.dart';

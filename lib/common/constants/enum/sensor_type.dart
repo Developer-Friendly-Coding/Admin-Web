@@ -1,10 +1,7 @@
 enum SensorType {
-  LUMINOSITY('광도 센서'),
-  TEMPERATUREANDHUMIDITY("온습도 센서"),
-  THERMOHYGROMETER("온습도계");
+  TEMPERATURE('온도 센서'),
+  HUMIDITY("습도 센서");
 
-// SensorType enum 삭제 => TEMPERATURE, HUMIDITY
-// SensorType enum 추가 => TEMPERATUREANDHUMIDITY, THERMOHYGROMETER
   final String desc;
   const SensorType(this.desc); // 이넘생성자 blabla("desc") 꼴임
 
