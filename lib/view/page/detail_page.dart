@@ -1,9 +1,10 @@
-import 'package:clean_arch/common/constants/table/detail_table_mapper.dart';
-import 'package:clean_arch/common/constants/table/table_column_attributes_mapper.dart';
+import 'package:clean_arch/common/constants/mapper/related_table_mapper.dart';
+import 'package:clean_arch/common/constants/mapper/table_column_attributes_mapper.dart';
+import 'package:clean_arch/common/constants/mapper/table_name_mapper.dart';
 import 'package:clean_arch/model/base_model.dart';
 import 'package:clean_arch/provider/impl/signin_provider_impl.dart';
-import 'package:clean_arch/view/widget/table/base_table_detail_view/detail__table_view.dart';
-import 'package:clean_arch/view/widget/table/base_table_detail_view/detail_container.dart';
+import 'package:clean_arch/view/widget/table/base_table_detail_view/related_table_view.dart';
+import 'package:clean_arch/view/widget/table/base_table_detail_view/related_table_container.dart';
 import 'package:clean_arch/view/widget/table/base_table_detail_view/detail_info.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -18,12 +19,11 @@ class DetailPage<M extends Base> extends StatelessWidget {
   final double infoHeight;
   final double containerTableWidthRate;
   final double containerTableHeight;
-  late List<DetailTableView> detailTableViewList =
-      detailTableMapper(M.toString(), selectedId)!;
+  late List<RelatedTableView> detailTableViewList =
+      getRelatedTableList(M.toString(), selectedId)!;
   final List<ColumnAttributes> columnAttributesList =
       columnAttributesMapper[M.toString()]!;
   final String tableName = tableNameMapper[M.toString()]!;
-
   Color infoColor;
   Color containerTableColor;
 
@@ -111,7 +111,6 @@ class DetailPage<M extends Base> extends StatelessWidget {
                               ),
                               const SizedBox(height: 30),
                               DetailContainer<M>(
-                                selectedId: selectedId,
                                 detailTableViewList: detailTableViewList,
                                 widthRate: containerTableWidthRate,
                                 height: containerTableHeight,

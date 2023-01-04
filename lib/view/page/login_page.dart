@@ -43,7 +43,7 @@ class LoginPage extends StatelessWidget {
               return FlutterLogin(
                 title: 'Pathfinder Login',
                 userValidator: stringValidor,
-                passwordValidator: passWordValidator,
+                passwordValidator: intValidator,
                 // logo: AssetImage('assets/images/ecorp.png'),
                 theme: LoginTheme(
                   bodyStyle: TextStyle(color: Colors.blueGrey),

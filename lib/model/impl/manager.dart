@@ -76,7 +76,7 @@ class Manager implements Base {
   @override
   Map<String, dynamic> toJson(Manager manager) {
     Map<String, dynamic> json = {
-      'servicProviderId': manager._serviceProviderId,
+      'serviceProviderId': manager._serviceProviderId,
       'name': manager._name,
       'employeeType': manager._employeeType?.name,
       'expireDate': (manager._expireDate == null)
@@ -114,7 +114,28 @@ class Manager implements Base {
   }
 
   @override
-  int getId() {
-    return _id;
+  dynamic getMember(String member) {
+    switch (member) {
+      case "id":
+        return _id;
+      case "serviceProviderId":
+        return _serviceProviderId;
+      case "name":
+        return _name;
+      case "employeeType":
+        return _employeeType;
+      case "expireDate":
+        return _expireDate;
+      case "effectiveDate":
+        return _effectiveDate;
+      case "phoneNumber":
+        return _phoneNumber;
+      case "email":
+        return _email;
+      case "job":
+        return _job;
+
+      default:
+    }
   }
 }

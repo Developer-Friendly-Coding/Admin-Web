@@ -1,7 +1,7 @@
 import 'package:clean_arch/common/constants/color_list.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
 import 'package:clean_arch/provider/impl/dash_board_provider_impl.dart';
-import 'package:clean_arch/view/page/test_page.dart';
+import 'package:clean_arch/view/widget/table/base_data_grid.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
@@ -17,18 +17,17 @@ class MeasureContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ColorList.initColor();
     DashBoardProvider dashBoardProviderRead =
         Provider.of<DashBoardProvider>(context, listen: false);
 
     return FutureBuilder(
         future: Future.wait([
-          //type받아서 둘중하나 기다림
           sensorType == "습도"
               ? Provider.of<DashBoardProvider>(context, listen: false)
                   .getHumiditySensorValuesByOfficeBranchId()
               : Provider.of<DashBoardProvider>(context, listen: false)
                   .getTemperatureSensorValuesByOfficeBranchId(),
-          // dashBoardProviderRead.getTemperatureSensorValuesByOfficeBranchId()
         ]),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData == false) {
@@ -195,7 +194,7 @@ class MeasureContainer extends StatelessWidget {
                         ),
                         minX: double.parse(
                                 DateFormat('HH').format(DateTime.now())) -
-                            8,
+                            dashBoardProviderRead.duration,
                         maxX: double.parse(
                                 DateFormat('HH').format(DateTime.now())) +
                             1,
@@ -251,10 +250,11 @@ List<FlSpot> flSpots(List<Map<String, dynamic>> sensorValues) {
   sensorValues.forEach((value) {
     double timeValue;
     double measureValue;
-    String hourAndMinute =
+    String hourAndMinuteAndSecond =
         DateFormat('HH:mm').format(DateTime.parse(value["dateTime"]));
-    timeValue = double.parse(hourAndMinute.split(":")[0]) +
-        double.parse(hourAndMinute.split(":")[1]) * 0.01;
+    timeValue = double.parse(hourAndMinuteAndSecond.split(":")[0]) +
+        double.parse(hourAndMinuteAndSecond.split(":")[1]) * 0.01;
+
     measureValue = value["measureValue"];
 
     spots.add(FlSpot(timeValue, measureValue));

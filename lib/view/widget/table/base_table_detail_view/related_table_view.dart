@@ -7,7 +7,7 @@ import 'package:clean_arch/common/constants/text_style.dart';
 import 'package:clean_arch/view/widget/table/base_table_view/base_table_view_row.dart';
 import 'package:clean_arch/view/widget/table/base_table_view/base_table_view_column.dart';
 
-class DetailTableView<M extends Base> extends StatelessWidget {
+class RelatedTableView<M extends Base> extends StatelessWidget {
   final int id;
   final String modelName;
   final double widthRate;
@@ -18,7 +18,7 @@ class DetailTableView<M extends Base> extends StatelessWidget {
   final TextStyle? columnStyle;
   final TextStyle? rowStyle;
 
-  const DetailTableView(
+  const RelatedTableView(
       {required this.id,
       required this.modelName,
       this.widthRate = 0.65,
@@ -88,12 +88,14 @@ class DetailTableView<M extends Base> extends StatelessWidget {
                                       provider.initUpdateButtonTECList();
                                     },
                                     onDoubleTap: () {
+                                      provider.changeSelectedIndex(index);
+                                      provider.initUpdateButtonTECList();
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => (DetailPage<M>(
                                             selectedId: provider.dataList[index]
-                                                .getId(),
+                                                .getMember("id"),
                                           )),
                                         ),
                                       );

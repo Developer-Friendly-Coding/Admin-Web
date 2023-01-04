@@ -6,6 +6,7 @@ import 'package:clean_arch/common/constants/enum/customer_status.dart';
 import 'package:clean_arch/common/constants/enum/employee_type.dart';
 import 'package:clean_arch/common/constants/enum/job.dart';
 import 'package:clean_arch/common/constants/enum/office_type.dart';
+import 'package:clean_arch/common/constants/validator.dart';
 import 'package:clean_arch/model/impl/contract.dart';
 import 'package:clean_arch/model/impl/customer.dart';
 import 'package:clean_arch/model/impl/customer_memeber.dart';
@@ -14,10 +15,12 @@ import 'package:clean_arch/model/impl/office.dart';
 import 'package:clean_arch/model/impl/office_branch.dart';
 import 'package:clean_arch/model/impl/service_provider.dart';
 import 'package:clean_arch/view/widget/table/base_table_search/base_table_calendar.dart';
+import 'package:clean_arch/view/widget/table/base_table_search/base_table_cu_dialog.dart';
 import 'package:clean_arch/view/widget/table/base_table_search/base_table_radiobox.dart';
 import 'package:clean_arch/view/widget/table/base_table_search/base_table_rangebox.dart';
 import 'package:clean_arch/view/widget/table/base_table_search/base_table_search_bar.dart';
 import 'package:clean_arch/view/widget/table/base_table_search/base_table_search_child.dart';
+import 'package:flutter/widgets.dart';
 
 List<SearchChild> contractSearchChildList = [
   SearchChild(
@@ -158,12 +161,14 @@ List<SearchChild> customerMemberSearchChildList = [
     columnName: "입주사ID",
     child: BaseTableSearchBar<CustomerMember>(
       memberName: "customerId",
+      validator: idSearchValidator,
     ),
   ),
   SearchChild(
     columnName: "이름",
     child: BaseTableSearchBar<CustomerMember>(
       memberName: "name",
+      validator: stringValidor,
     ),
   ),
   SearchChild(
@@ -318,7 +323,6 @@ List<SearchChild> sensorSearchChildList = [
     ),
   ),
 ];
-
 List<SearchChild> gateCredentialSearchChildList = [
   SearchChild(
     columnName: "운영사 이름",
@@ -345,7 +349,6 @@ List<SearchChild> gateCredentialSearchChildList = [
     ),
   ),
 ];
-
 List<SearchChild> gateSearchChildList = [
   SearchChild(
     columnName: "운영사 이름",

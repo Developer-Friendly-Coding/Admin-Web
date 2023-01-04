@@ -1,23 +1,21 @@
-import 'package:clean_arch/common/constants/table/detail_table_mapper.dart';
+import 'package:clean_arch/common/constants/mapper/related_table_mapper.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
 import 'package:clean_arch/model/base_model.dart';
-import 'package:clean_arch/view/widget/table/base_table_detail_view/detail__table_view.dart';
+import 'package:clean_arch/view/widget/table/base_table_detail_view/related_table_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
 //ignore: must_be_immutable
 class DetailContainer<M extends Base> extends StatefulWidget {
-  int selectedId;
-  List<DetailTableView> detailTableViewList;
+  List<RelatedTableView> detailTableViewList;
   final double widthRate;
   final double height;
   Color color;
   int idx = 0;
-  List<String> buttonTextList = detailTableNameListMapper[M.toString()]!;
+  List<String> buttonTextList = relatedTableNameListMapper[M.toString()]!;
   bool isNothing = false;
   DetailContainer(
-      {required this.selectedId,
-      required this.detailTableViewList,
+      {required this.detailTableViewList,
       required this.widthRate,
       required this.height,
       required this.color,

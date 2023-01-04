@@ -10,6 +10,11 @@ import 'package:clean_arch/view/widget/table/base_table_crud_button/base_table_u
 import 'package:clean_arch/view/widget/table/base_table_crud_button/base_table_delete_button.dart';
 import 'package:clean_arch/view/widget/table/base_table_crud_button/base_table_create_button.dart';
 
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+GlobalKey<ScaffoldState> test22() {
+  return _scaffoldKey;
+}
+
 class CustomerMemberPage extends StatefulWidget {
   const CustomerMemberPage({Key? key}) : super(key: key);
 
@@ -18,8 +23,6 @@ class CustomerMemberPage extends StatefulWidget {
 }
 
 class _CustomerMemberPageState extends State<CustomerMemberPage> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   void initState() {
     super.initState();
@@ -82,7 +85,7 @@ class _CustomerMemberPageState extends State<CustomerMemberPage> {
                                               CustomerMember>(),
                                         ]),
                                     const SizedBox(height: 20),
-                                    BaseTableView<CustomerMember>(),
+                                    BaseTableView<CustomerMember>(test: true),
                                     const SizedBox(height: 50)
                                   ],
                                 ),

@@ -67,7 +67,16 @@ class SensorValue implements Base {
   }
 
   @override
-  int getId() {
-    return _id;
+  dynamic getMember(String member) {
+    switch (member) {
+      case "id":
+        return _id;
+      case "sensorId":
+        return _sensorId;
+      case "measureValue":
+        return _measureValue;
+
+      default:
+    }
   }
 }

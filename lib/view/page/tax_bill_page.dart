@@ -1,4 +1,4 @@
-import 'package:clean_arch/common/constants/table/detail_table_mapper.dart';
+import 'package:clean_arch/common/constants/mapper/related_table_mapper.dart';
 import 'package:clean_arch/model/impl/contract.dart';
 import 'package:clean_arch/model/impl/tax_bill.dart';
 import 'package:clean_arch/provider/impl/signin_provider_impl.dart';

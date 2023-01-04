@@ -89,7 +89,24 @@ class TaxBill implements Base {
   }
 
   @override
-  int getId() {
-    return _id;
+  dynamic getMember(String member) {
+    switch (member) {
+      case "id":
+        return _id;
+      case "contractId":
+        return _contractId;
+      case "issuedDate":
+        return _issuedDate;
+      case "subTotal":
+        return _subTotal;
+      case "tax":
+        return _tax;
+      case "total":
+        return _total;
+      case "status":
+        return _status;
+
+      default:
+    }
   }
 }

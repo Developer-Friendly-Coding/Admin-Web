@@ -35,10 +35,10 @@ class ServiceProvider implements Base {
   ServiceProvider fromTEC(List<TextEditingController> list) {
     return ServiceProvider(
       id: list[0].text == "" ? -1 : int.parse(list[0].text),
-      name: list[0].text,
-      registrationNumber: list[1].text,
-      companyRegistrationNumber: list[2].text,
-      hejhomeToken: list[3].text,
+      name: list[1].text,
+      registrationNumber: list[2].text,
+      companyRegistrationNumber: list[3].text,
+      hejhomeToken: list[4].text,
     );
   }
 
@@ -66,7 +66,20 @@ class ServiceProvider implements Base {
   }
 
   @override
-  int getId() {
-    return _id;
+  dynamic getMember(String member) {
+    switch (member) {
+      case "id":
+        return _id;
+      case "name":
+        return _name;
+      case "registrationNumber":
+        return _registrationNumber;
+      case "companyRegistrationNumber":
+        return _companyRegistrationNumber;
+      case "hejhomeToken":
+        return _hejhomeToken;
+
+      default:
+    }
   }
 }

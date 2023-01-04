@@ -73,7 +73,22 @@ class Office implements Base {
   }
 
   @override
-  int getId() {
-    return _id;
+  dynamic getMember(String member) {
+    switch (member) {
+      case "id":
+        return _id;
+      case "officeBranchId":
+        return _officeBranchId;
+      case "name":
+        return _name;
+      case "capacity":
+        return _capacity;
+      case "type":
+        return _type;
+      case "description":
+        return _description;
+
+      default:
+    }
   }
 }

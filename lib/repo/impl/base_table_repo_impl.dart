@@ -34,7 +34,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
         debugPrint("테이블 가져오기 statusCode가 200이 아님");
         return null;
       } else {
-        Map<String, dynamic> body = jsonDecode(res.body);
+        Map<String, dynamic> body = jsonDecode(utf8.decode(res.bodyBytes));
 
         Map<String, dynamic> data = body['data'];
         List<Map<String, dynamic>> rows =
@@ -56,18 +56,18 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
       'Content-Type': 'application/json',
     };
     _filterQueryParameters[memberName] = queryValue;
-
+    UriProvider.setGetTablePath<M>();
     UriProvider.setQuery(_filterQueryParameters);
     UriProvider.setUri();
     Uri url = UriProvider.getUri();
-
+    print(url);
     try {
       Response res = await _client.get(url, headers: headers);
       if (res.statusCode != 200) {
         debugPrint("검색바 필터 테이블 가져오기 statusCode가 200이 아님");
         return null;
       } else {
-        Map<String, dynamic> body = jsonDecode(res.body);
+        Map<String, dynamic> body = jsonDecode(utf8.decode(res.bodyBytes));
 
         Map<String, dynamic> data = body['data'];
         List<Map<String, dynamic>> rows =
@@ -101,7 +101,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
         debugPrint("id로 테이블특정로우 가져오기 statusCode가 200이 아님");
         return null;
       } else {
-        Map<String, dynamic> body = jsonDecode(res.body);
+        Map<String, dynamic> body = jsonDecode(utf8.decode(res.bodyBytes));
 
         Map<String, dynamic> data = body['data'];
         List<Map<String, dynamic>> rows =
@@ -135,7 +135,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
         debugPrint("id로 관련테이블 가져오기 statusCode가 200이 아님");
         return null;
       } else {
-        Map<String, dynamic> body = jsonDecode(res.body);
+        Map<String, dynamic> body = jsonDecode(utf8.decode(res.bodyBytes));
 
         Map<String, dynamic> data = body['data'];
         List<Map<String, dynamic>> rows =
@@ -158,7 +158,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
       'Content-Type': 'application/json',
     };
     _filterQueryParameters[memberName] = queryValue.name;
-
+    UriProvider.setGetTablePath<M>();
     UriProvider.setQuery(_filterQueryParameters);
     UriProvider.setUri();
     Uri url = UriProvider.getUri();
@@ -169,7 +169,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
         debugPrint("라디오박스 필터 테이블 가져오기 statusCode가 200이 아님");
         return null;
       } else {
-        Map<String, dynamic> body = jsonDecode(res.body);
+        Map<String, dynamic> body = jsonDecode(utf8.decode(res.bodyBytes));
 
         Map<String, dynamic> data = body['data'];
         List<Map<String, dynamic>> rows =
@@ -202,6 +202,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
 
     _filterQueryParameters[startMemberName] = startQueryValue;
     _filterQueryParameters[endMemberName] = endQueryValue;
+    UriProvider.setGetTablePath<M>();
     UriProvider.setQuery(_filterQueryParameters);
     UriProvider.setUri();
     Uri url = UriProvider.getUri();
@@ -212,7 +213,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
         debugPrint("범위 필터 테이블 가져오기 statusCode가 200이 아님");
         return null;
       } else {
-        Map<String, dynamic> body = jsonDecode(res.body);
+        Map<String, dynamic> body = jsonDecode(utf8.decode(res.bodyBytes));
 
         Map<String, dynamic> data = body['data'];
         List<Map<String, dynamic>> rows =
@@ -243,7 +244,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
 
     UriProvider.setUpdateTablePath<M>();
     Map<String, dynamic> updateQueryParameters = {
-      "id": selectedTableRow.getId().toString()
+      "id": selectedTableRow.getMember("id").toString()
     };
     UriProvider.setQuery(updateQueryParameters);
     UriProvider.setUri();
@@ -278,7 +279,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
 
     UriProvider.setDeleteTablePath<M>();
     Map<String, dynamic> deleteQueryParameters = {
-      "id": selectedTableRow.getId().toString()
+      "id": selectedTableRow.getMember("id").toString()
     };
     UriProvider.setQuery(deleteQueryParameters);
     UriProvider.setUri();
@@ -300,7 +301,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
   }
 
   @override
-  Future<int?> createTableRow(addedTableRow) async {
+  Future<List<dynamic>> createTableRow(addedTableRow) async {
     // FlutterSecureStorage storage = SecureStorage.storage;
     // String? storageValueJsonString = await storage.read(key: 'admin');
     // Map<String, dynamic> storageValueJson = jsonDecode(storageValueJsonString!);
@@ -323,14 +324,13 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
       Response res =
           await _client.post(url, headers: headers, body: jsonEncode(request));
       if (res.statusCode == 200) {
-        return res.statusCode;
+        return [res.statusCode, null, null];
       } else {
-        debugPrint("테이블 열 생성 statusCode가 200이아님");
-        return res.statusCode;
+        Map<String, dynamic> body = jsonDecode(res.body);
+        return [res.statusCode, body["code"], body["message"]];
       }
     } catch (e) {
-      debugPrint(e.toString());
-      return null;
+      return [null, e.toString(), null];
     }
   }
 }

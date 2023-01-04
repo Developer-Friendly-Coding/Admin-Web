@@ -24,7 +24,29 @@ class UriProvider {
         path: _path,
       );
     } else if (kReleaseMode) {
-      debugPrint("it is release mode");
+      _scheme = dotenv.env["SCHEMEM"];
+      _host = dotenv.env["HOST"];
+      _port =
+          dotenv.env["PORT"] == "null" ? null : int.parse(dotenv.env["PORT"]!);
+
+      _uri = Uri(
+        scheme: _scheme,
+        host: _host,
+        port: _port,
+        path: _path,
+      );
+    } else if (kProfileMode) {
+      _scheme = dotenv.env["SCHEMEM"];
+      _host = dotenv.env["HOST"];
+      _port =
+          dotenv.env["PORT"] == "null" ? null : int.parse(dotenv.env["PORT"]!);
+
+      _uri = Uri(
+        scheme: _scheme,
+        host: _host,
+        port: _port,
+        path: _path,
+      );
     }
   }
 

@@ -121,13 +121,13 @@ const TextStyle memberInfoElementStyleLapTop = TextStyle(
     fontWeight: FontWeight.w700,
     color: Color(0xff809FB8));
 
-const TextStyle memberInfoListTextStyle = TextStyle(
+const TextStyle tableMemberStyle = TextStyle(
     fontSize: 15,
     fontFamily: 'Source_Sans_Pro',
     fontWeight: FontWeight.w700,
     color: Color(0xff06152B));
 
-const TextStyle memberInfoListTextStyleLapTop = TextStyle(
+const TextStyle tableMemberStyleLapTop = TextStyle(
     fontSize: 12,
     fontFamily: 'Source_Sans_Pro',
     fontWeight: FontWeight.w700,
@@ -174,5 +174,21 @@ const TextStyle detailContainierIsNullStyle = TextStyle(
   fontSize: 50,
   fontFamily: 'Source_Sans_Pro',
   color: Color(0xff809FB8),
+  fontWeight: FontWeight.w700,
+);
+
+const TextStyle tableMemberHyperLinkStyleLapTop = TextStyle(
+  decoration: TextDecoration.underline,
+  color: Colors.blue,
+  fontSize: 12,
+  fontFamily: 'Source_Sans_Pro',
+  fontWeight: FontWeight.w700,
+);
+
+const TextStyle tableMemberHyperLinkStyle = TextStyle(
+  decoration: TextDecoration.underline,
+  color: Colors.blue,
+  fontSize: 12,
+  fontFamily: 'Source_Sans_Pro',
   fontWeight: FontWeight.w700,
 );

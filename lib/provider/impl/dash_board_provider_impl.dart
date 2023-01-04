@@ -51,6 +51,10 @@ class DashBoardProvider extends ChangeNotifier implements IDashBoardProvider {
   @override
   double get avgTemperatureMeasureValue => _avgTemperatureMeasureValue;
 
+  int _duration = 8;
+  @override
+  int get duration => _duration;
+
   @override
   void setOfficeBranch(OfficeBranch officeBranch) {
     _officeBranch = officeBranch;
@@ -74,8 +78,8 @@ class DashBoardProvider extends ChangeNotifier implements IDashBoardProvider {
   @override
   Future<String?> getHumiditySensorValuesByOfficeBranchId() async {
     try {
-      List<dynamic>? temp = await _repo
-          .getHumiditySensorValuesByOfficeBranchId(officeBranch.getId());
+      List<dynamic>? temp = await _repo.getHumiditySensorValuesByOfficeBranchId(
+          officeBranch.getMember("id"), duration);
       if (temp == null) {
         return "fail";
       }
@@ -94,10 +98,10 @@ class DashBoardProvider extends ChangeNotifier implements IDashBoardProvider {
   @override
   Future<String?> getTemperatureSensorValuesByOfficeBranchId() async {
     try {
-      print(444);
-      List<dynamic>? temp = await _repo
-          .getTemperatureSensorValuesByOfficeBranchId(officeBranch.getId());
-      print(222);
+      List<dynamic>? temp =
+          await _repo.getTemperatureSensorValuesByOfficeBranchId(
+              officeBranch.getMember("id"), duration);
+
       if (temp == null) {
         return "fail";
       }

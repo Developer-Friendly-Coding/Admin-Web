@@ -76,7 +76,22 @@ class Gate implements Base {
   }
 
   @override
-  int getId() {
-    return _id;
+  dynamic getMember(String member) {
+    switch (member) {
+      case "id":
+        return _id;
+      case "deviceIp":
+        return _deviceIp;
+      case "devicePort":
+        return _devicePort;
+      case "description":
+        return _description;
+      case "officeId":
+        return _officeId;
+      case "opened":
+        return _opened;
+
+      default:
+    }
   }
 }

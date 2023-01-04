@@ -1,14 +1,18 @@
 import 'package:clean_arch/common/constants/enum/business_type.dart';
-import 'package:clean_arch/common/constants/table/table_column_attributes_mapper.dart';
+import 'package:clean_arch/common/constants/enum/office_type.dart';
+import 'package:clean_arch/common/constants/mapper/table_column_attributes_mapper.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
 import 'package:clean_arch/model/base_model.dart';
+import 'package:clean_arch/model/impl/office.dart';
 import 'package:clean_arch/provider/impl/base_table_provider_impl.dart';
+import 'package:clean_arch/view/page/board_view_page.dart';
 import 'package:clean_arch/view/widget/table/base_table_view/base_table_attributes.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:clean_arch/common/constants/table/detail_table_mapper.dart';
+import 'package:clean_arch/common/constants/mapper/related_table_mapper.dart';
+import 'package:recase/recase.dart';
 import 'package:web_date_picker/web_date_picker.dart';
 
 //ignore: must_be_immutable
@@ -35,7 +39,6 @@ class _DetailInfoState<M extends Base> extends State<DetailInfo<M>> {
       columnAttributesMapper[M.toString()]!;
 
   List<Widget> detailComponentList(BaseTableProvider<M> providerRead) {
-    providerRead.initDetailUpdateButtonTECList();
     List<Widget> result = [];
 
     for (int i = 1; i < columnAttributesList.length; i++) {
@@ -47,7 +50,7 @@ class _DetailInfoState<M extends Base> extends State<DetailInfo<M>> {
             Container(
                 width: 100,
                 child: Text(
-                  columnAttributesList[i].columnName,
+                  columnAttributesList[i].name,
                   style: detailInfoStyle,
                 )),
             SizedBox(
@@ -163,7 +166,35 @@ class _DetailInfoState<M extends Base> extends State<DetailInfo<M>> {
                     },
                   ),
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 15),
+                //M이 office이고 type이 회ㅡ이실이면
+                M == Office &&
+                        providerRead.dataList[providerRead.selectedIndex]
+                                .toRow()[4] ==
+                            OfficeType.CONFERENCE_ROOM.toString()
+                    ? Container(
+                        margin: EdgeInsets.only(left: 30),
+                        alignment: Alignment.centerLeft,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              fixedSize: Size(150, 50),
+                              backgroundColor: Colors.blueGrey),
+                          child: Text("회의실 보드뷰"),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                settings: RouteSettings(
+                                    name:
+                                        "/${ReCase(M.toString()).camelCase}/${widget.selectedId.toString()}/BoardView"),
+                                builder: (context) => (BoardViewPage()),
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                    : SizedBox(),
+
                 Container(
                   alignment: Alignment.centerRight,
                   margin: EdgeInsets.only(right: 30),
@@ -208,6 +239,8 @@ class _DetailInfoState<M extends Base> extends State<DetailInfo<M>> {
               ],
             ),
           );
+
+          ////
         }
       },
     );

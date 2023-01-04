@@ -2,7 +2,11 @@ import 'package:flutter/animation.dart';
 
 class ColorList {
   static Color getColor() {
-    return colorList[count == 9 ? count = 0 : count++];
+    return colorList[count == 9 ? count = 0 : count];
+  }
+
+  static void initColor() {
+    count = 0;
   }
 
   static List<Color> colorList = [

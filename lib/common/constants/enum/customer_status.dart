@@ -1,5 +1,5 @@
 enum CustomerStatus {
-  EXPIRE('만료'),
+  EXPIRE('계약종료'),
   NOTHING("테스트"),
   ON("계약중");
 

@@ -29,8 +29,7 @@ class DashBoardRepository implements IDashBoardRepository {
         debugPrint("지점데이터 가져오기 statusCode가 200이 아님");
         return null;
       } else {
-        Map<String, dynamic> body = jsonDecode(res.body);
-
+        Map<String, dynamic> body = jsonDecode(utf8.decode(res.bodyBytes));
         Map<String, dynamic> data = body['data'];
         List<Map<String, dynamic>> rows =
             data['rows'].cast<Map<String, dynamic>>();
@@ -48,14 +47,16 @@ class DashBoardRepository implements IDashBoardRepository {
   }
 
   @override
-  Future<List<dynamic>?> getHumiditySensorValuesByOfficeBranchId(id) async {
+  Future<List<dynamic>?> getHumiditySensorValuesByOfficeBranchId(
+      id, duration) async {
     Map<String, String> headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     };
     Map<String, dynamic> sensorQueryParameters = {};
-    sensorQueryParameters["officeBranchId"] = "${id}";
+    sensorQueryParameters["officeBranchId"] = "$id";
     sensorQueryParameters["type"] = "HUMIDITY";
+    sensorQueryParameters["duration"] = "$duration";
     UriProvider.setDashBoardSensorPath();
     UriProvider.setQuery(sensorQueryParameters);
     UriProvider.setUri();
@@ -68,8 +69,7 @@ class DashBoardRepository implements IDashBoardRepository {
         debugPrint("습도 센서값 리스트 가져오기 statusCode가 200이 아님");
         return null;
       } else {
-        Map<String, dynamic> body = jsonDecode(res.body);
-
+        Map<String, dynamic> body = jsonDecode(utf8.decode(res.bodyBytes));
         Map<String, dynamic>? data = body['data'];
         if (data == null) {
           return null;
@@ -90,19 +90,21 @@ class DashBoardRepository implements IDashBoardRepository {
   }
 
   @override
-  Future<List<dynamic>?> getTemperatureSensorValuesByOfficeBranchId(id) async {
+  Future<List<dynamic>?> getTemperatureSensorValuesByOfficeBranchId(
+      id, duration) async {
     Map<String, String> headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     };
     Map<String, dynamic> sensorQueryParameters = {};
-    sensorQueryParameters["officeBranchId"] = id;
+    sensorQueryParameters["officeBranchId"] = "$id";
     sensorQueryParameters["type"] = "TEMPERATURE";
+    sensorQueryParameters["duration"] = "$duration";
     UriProvider.setDashBoardSensorPath();
     UriProvider.setQuery(sensorQueryParameters);
     UriProvider.setUri();
     Uri url = UriProvider.getUri();
-    print(url);
+
     try {
       Response res = await _client.get(url, headers: headers);
 
@@ -110,7 +112,7 @@ class DashBoardRepository implements IDashBoardRepository {
         debugPrint("온도 센서값 리스트 가져오기 statusCode가 200이 아님");
         return null;
       } else {
-        Map<String, dynamic> body = jsonDecode(res.body);
+        Map<String, dynamic> body = jsonDecode(utf8.decode(res.bodyBytes));
 
         Map<String, dynamic> data = body['data'];
 

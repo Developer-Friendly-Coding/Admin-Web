@@ -12,7 +12,7 @@ abstract class IDashBoardProvider extends ChangeNotifier {
   double get minTemperatureMeasureValue;
   double get maxTemperatureMeasureValue;
   double get avgTemperatureMeasureValue;
-
+  int get duration;
   void setOfficeBranch(OfficeBranch officeBranch);
   Future<List<OfficeBranch>?> getOfficeBranchData();
   Future<void> getHumiditySensorValuesByOfficeBranchId();

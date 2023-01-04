@@ -15,5 +15,5 @@ abstract class IBaseTableRepository<M extends Base> {
   );
   Future<int?> updateTableRow(M selectedTableRow);
   Future<int?> deleteTableRow(M selectedTableRow);
-  Future<int?> createTableRow(M addedTableRow);
+  Future<List<dynamic>> createTableRow(M addedTableRow);
 }

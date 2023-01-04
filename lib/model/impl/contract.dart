@@ -16,6 +16,7 @@ class Contract implements Base {
   final DateTime? _endDatetime;
   final ContractType? _type;
   final String? _description;
+  //final List<ContractOffice> contractOfficList;
 
   Contract({
     int id = -1,
@@ -138,7 +139,25 @@ class Contract implements Base {
   }
 
   @override
-  int getId() {
-    return _id;
+  dynamic getMember(String member) {
+    switch (member) {
+      case "id":
+        return _id;
+      case "customerId":
+        return _customerId;
+      case "deposit":
+        return _deposit;
+      case "rent":
+        return _rent;
+      case "contractRepId":
+        return _contractRepId;
+      case "contactRepId":
+        return _contactRepId;
+      case "managerId":
+        return _managerId;
+      case "contractDatetime":
+        return _contractDatetime;
+      default:
+    }
   }
 }

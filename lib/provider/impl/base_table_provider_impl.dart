@@ -1,18 +1,14 @@
-import 'package:clean_arch/common/constants/enum/search.dart';
-import 'package:clean_arch/common/constants/table/table_column_attributes_mapper.dart';
+import 'package:clean_arch/common/constants/mapper/cu_dialog_mapper.dart';
+import 'package:clean_arch/common/constants/mapper/table_column_attributes_mapper.dart';
 import 'package:clean_arch/model/base_model.dart';
 import 'package:clean_arch/provider/base_table_provider.dart';
 import 'package:clean_arch/view/widget/table/base_table_view/base_table_attributes.dart';
 import 'package:flutter/material.dart';
 import 'package:clean_arch/repo/impl/base_table_repo_impl.dart';
-
 import 'package:clean_arch/common/util/class_builder.dart';
 
 class BaseTableProvider<M extends Base> extends ChangeNotifier
     implements IBaseTableProvider {
-  final List<ColumnAttributes> columnAttributesList =
-      columnAttributesMapper[M.toString()]!;
-
   final BaseTableRepository<M> _repo;
 
   final M _model = ClassBuilder.fromString(M.toString()) as M;
@@ -32,6 +28,8 @@ class BaseTableProvider<M extends Base> extends ChangeNotifier
   @override
   int get selectedIndex => _selectedIndex;
 
+  List<int> multiCuDialogSelectedIndexList = [];
+
   late List<TextEditingController> _updateButtonTECList;
   @override
   List<TextEditingController> get updateButtonTECList => _updateButtonTECList;
@@ -40,26 +38,36 @@ class BaseTableProvider<M extends Base> extends ChangeNotifier
   @override
   List<TextEditingController> get addButtonTECList => _addButtonTECList;
 
-  Map<int, Enum> createEnumValuesMapper = {};
+  Map<int, Enum> _createEnumValuesMapper = {};
+  @override
+  Map<int, Enum> get createEnumValuesMapper => _createEnumValuesMapper;
+
+  Map<int, Enum> _updateEnumValuesMapper = {};
+  @override
+  Map<int, Enum> get updateEnumValuesMapper => _updateEnumValuesMapper;
+
+  @override
   bool initCreateEnumValue(Enum value, int idx) {
     createEnumValuesMapper[idx] = value;
     addButtonTECList[idx].text = value.toString();
     return true;
   }
 
+  @override
   bool setCreateEnumValue(Enum value, int idx) {
     createEnumValuesMapper[idx] = value;
     notifyListeners();
     return true;
   }
 
-  Map<int, Enum> updateEnumValuesMapper = {};
+  @override
   bool initUpdateEnumValue(Enum value, int idx) {
     updateEnumValuesMapper[idx] = value;
     updateButtonTECList[idx].text = value.toString();
     return true;
   }
 
+  @override
   bool setUpdateEnumValue(Enum value, int idx) {
     updateEnumValuesMapper[idx] = value;
     notifyListeners();
@@ -179,30 +187,16 @@ class BaseTableProvider<M extends Base> extends ChangeNotifier
     _updateButtonTECList = [];
     for (int i = 0; i < modelMemberList.length; i++) {
       updateButtonTECList.add(TextEditingController());
+
       updateButtonTECList[i].text = modelMemberList[i]!;
     }
   }
 
   @override
-  void initDetailUpdateButtonTECList() {
-    try {
-      List<String?> modelMemberList = selectedRow.toRow();
-      _updateButtonTECList = [];
-      for (int i = 0; i < modelMemberList.length; i++) {
-        updateButtonTECList.add(TextEditingController());
-        updateButtonTECList[i].text = modelMemberList[i]!;
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-    } finally {}
-  }
-
-  @override
   void initAddButtonTECList() {
-    print('ee');
-    List<String?> modelMemberList = dataList[0].toRow();
+    int length = _model.toRow().length;
     _addButtonTECList = [];
-    for (int i = 0; i < modelMemberList.length; i++) {
+    for (int i = 0; i < length; i++) {
       addButtonTECList.add(TextEditingController());
       addButtonTECList[i].text = "";
     }
@@ -221,10 +215,41 @@ class BaseTableProvider<M extends Base> extends ChangeNotifier
   }
 
   @override
-  Future<int?> createTableRow() async {
+  Future<List<dynamic>> createTableRow() async {
     try {
-      addButtonTECList.forEach((tec) => print(tec.text));
       return await _repo.createTableRow(_model.fromTEC(addButtonTECList));
     } finally {}
+  }
+
+  @override
+  void setCuDialogTEC(Map<int, String> targetMapper,
+      BaseTableProvider cuDialogProvider, String mode) {
+    switch (mode) {
+      case "create":
+        targetMapper.forEach((key, value) {
+          cuDialogProvider.addButtonTECList[key].text =
+              dataList[selectedIndex].getMember(value).toString();
+        });
+        break;
+      case "update":
+        targetMapper.forEach((key, value) {
+          cuDialogProvider.updateButtonTECList[key].text = value;
+        });
+        break;
+      default:
+    }
+  }
+
+  @override
+  void setMultiCuDialogSelectedIndex(int idx) {
+    multiCuDialogSelectedIndexList.contains(idx)
+        ? multiCuDialogSelectedIndexList.remove(idx)
+        : multiCuDialogSelectedIndexList.add(idx);
+    notifyListeners();
+  }
+
+  @override
+  bool isMultiCuDialogContainIndex(int idx) {
+    return multiCuDialogSelectedIndexList.contains(idx) ? true : false;
   }
 }

@@ -1,7 +1,8 @@
-import 'package:clean_arch/common/constants/table/detail_table_mapper.dart';
+import 'package:clean_arch/common/constants/mapper/related_table_mapper.dart';
 import 'package:clean_arch/model/impl/contract.dart';
 import 'package:clean_arch/provider/impl/signin_provider_impl.dart';
 import 'package:clean_arch/responsive.dart';
+import 'package:clean_arch/view/widget/table/base_data_grid.dart';
 import 'package:clean_arch/view/widget/table/base_table_search/base_table_container.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -77,9 +78,7 @@ class _ContractPageState extends State<ContractPage> {
                                         const BaseTableDeleteButton<Contract>(),
                                       ]),
                                   const SizedBox(height: 20),
-                                  BaseTableView<Contract>(
-                                      // widthRate: 0.7,
-                                      ),
+                                  BaseTableView<Contract>(),
                                   const SizedBox(height: 50)
                                 ],
                               ),

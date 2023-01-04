@@ -13,9 +13,11 @@ import 'package:clean_arch/model/impl/service_provider.dart';
 import 'package:clean_arch/model/impl/tax_bill.dart';
 import 'package:clean_arch/provider/impl/dash_board_provider_impl.dart';
 import 'package:clean_arch/responsive.dart';
+import 'package:clean_arch/view/page/board_view_page.dart';
 import 'package:clean_arch/view/page/customer_member_page.dart';
 import 'package:clean_arch/view/page/customer_page.dart';
 import 'package:clean_arch/view/page/dash_board_page.dart';
+import 'package:clean_arch/view/page/detail_page.dart';
 import 'package:clean_arch/view/page/gate_credential_page.dart';
 import 'package:clean_arch/view/page/gate_page.dart';
 import 'package:clean_arch/view/page/manager_page.dart';
@@ -23,7 +25,10 @@ import 'package:clean_arch/view/page/office_branch_page.dart';
 import 'package:clean_arch/view/page/office_page.dart';
 import 'package:clean_arch/view/page/sensor_page.dart';
 import 'package:clean_arch/view/page/service_provider_page.dart';
+import 'package:clean_arch/view/page/table_create_page.dart';
 import 'package:clean_arch/view/page/tax_bill_page.dart';
+import 'package:clean_arch/view/page/test.dart';
+import 'package:clean_arch/view/widget/table/base_data_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -31,26 +36,18 @@ import 'package:clean_arch/view/page/login_page.dart';
 import 'package:clean_arch/provider/impl/signin_provider_impl.dart';
 import 'package:clean_arch/provider/impl/base_table_provider_impl.dart';
 import 'package:clean_arch/view/page/contract_page.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 
 Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await dotenv.load(fileName: ".env");
   UriProvider.init();
-  ClassBuilder.register<Contract>(Contract());
-  ClassBuilder.register<CustomerMember>(CustomerMember());
-  ClassBuilder.register<Customer>(Customer());
-  ClassBuilder.register<Manager>(Manager());
-  ClassBuilder.register<OfficeBranch>(OfficeBranch());
-  ClassBuilder.register<Office>(Office());
-  ClassBuilder.register<ServiceProvider>(ServiceProvider());
-  ClassBuilder.register<TaxBill>(TaxBill());
-  ClassBuilder.register<Sensor>(Sensor());
-  ClassBuilder.register<GateCredential>(GateCredential());
-  ClassBuilder.register<Gate>(Gate());
-
+  ClassBuilder.init();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => SignInProvider()),
     ChangeNotifierProvider(create: (_) => DashBoardProvider()),
-    ChangeNotifierProvider(create: (_) => (BaseTableProvider())),
     ChangeNotifierProvider(create: (_) => (BaseTableProvider<Contract>())),
     ChangeNotifierProvider(
         create: (_) => (BaseTableProvider<CustomerMember>())),
@@ -71,12 +68,11 @@ Future main() async {
 class PfAdmin extends StatelessWidget {
   const PfAdmin({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     final routes = {
       '/login': (BuildContext context) => const LoginPage(),
-      '/main': (BuildContext context) => DashBoardPage(),
+      '/main': (BuildContext context) => const DashBoardPage(),
       '/contract': (BuildContext context) => const ContractPage(),
       '/customerMember': (BuildContext context) => const CustomerMemberPage(),
       '/customer': (BuildContext context) => const CustomerPage(),
@@ -88,14 +84,25 @@ class PfAdmin extends StatelessWidget {
       '/sensor': (BuildContext context) => const SensorPage(),
       '/gateCredential': (BuildContext context) => const GateCredentialPage(),
       '/gate': (BuildContext context) => const GatePage(),
+      '/test': (BuildContext context) => const MyWidget(),
     };
     return MaterialApp(
+      scrollBehavior: MyCustomScrollBehavior(),
       title: 'Pathfinder Admin',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       routes: routes,
-      initialRoute: '/main',
+      initialRoute: '/login',
     );
   }
+}
+
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  // Override behavior methods and getters like dragDevices
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      };
 }

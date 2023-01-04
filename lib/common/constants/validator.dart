@@ -1,58 +1,83 @@
-import 'package:clean_arch/common/constants/enum/business_type.dart';
-import 'package:clean_arch/common/constants/enum/customer_status.dart';
-
 String? Function(String?) stringValidor = (value) {
   if (value == null || value.isEmpty) {
-    return '이필드를 반드시 입력해주세요';
+    return '반드시 입력해주세요';
   }
 
   return null;
 };
-//리턴값이 함수고 매
-String? Function(String?) passWordValidator = (value) {
+
+String? Function(String?) idValidator = (value) {
   if (value == null || value.isEmpty) {
-    return '이 필드를 반드시 입력해주세요';
-  } else if (!(RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$')
-      .hasMatch(value))) {
-    return '영어, 숫자 포함 8자 이상의 구성으로 작성해주세용';
+    return 'ID를 입력해주세요';
+  } else if (!(RegExp(r'^[0-9]+$').hasMatch(value))) {
+    return '정수만 입력해주세요';
   }
 
+  return null;
+};
+
+String? Function(String?) idSearchValidator = (value) {
+  if (value == null || value.isEmpty) {
+    return null;
+  } else if (!(RegExp(r'^[0-9]+$').hasMatch(value))) {
+    return '정수만 입력해주세요';
+  }
+
+  return null;
+};
+
+String? Function(String?) intValidator = (value) {
+  if (value == null || value.isEmpty) {
+    return '반드시 입력해주세요';
+  } else if (!(RegExp(r'^[0-9]+$').hasMatch(value))) {
+    return '정수만 입력해주세요';
+  }
+
+  return null;
+};
+
+String? Function(String?) floatValidator = (value) {
+  if (value == null || value.isEmpty) {
+    return '비워놓지 마세요';
+  } else if (!(RegExp(r'^[0-9]*\.?[0-9]+$').hasMatch(value))) {
+    return '실수만 입력해주세요';
+  }
+
+  return null;
+};
+
+String? Function(String?) emailValidator = (value) {
+  if (value == null || value.isEmpty) {
+    return '이메일을 입력해주세요';
+  } else if (!(RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value))) {
+    return ' ex) name@example.com';
+  }
   return null;
 };
 
 String? Function(String?) phoneValidator = (value) {
   if (value == null || value.isEmpty) {
-    return '필수적으로 기입해야하는 항목입니다.';
+    return '휴대번호를 입력해주세요';
   } else if (!(RegExp(r'^[0-9]{3}[-]+[0-9]{4}[-]+[0-9]{4}$').hasMatch(value))) {
-    return '올바른 휴대번호 형식이 아닙니다. ex) 010-7777-7777';
+    return 'ex) 010-7777-7777';
   }
   return null;
 };
 
-String? Function(String?) businessTypeValidator = (value) {
-  List<String> check = [];
-  List<BusinessType> valueList = BusinessType.values;
-  for (int i = 0; i < valueList.length; i++) {
-    check.add(valueList[i].toString());
-  }
+String? Function(String?) corporateRegistrationNumberValidator = (value) {
   if (value == null || value.isEmpty) {
-    return '필수적으로 기입해야하는 항목입니다.';
-  } else if (!(check.contains(value))) {
-    return '사업자 유형을 기입(ex: 개인사업자, 법인사업자, 개인이용)';
+    return '법인등록번호 필수 기입';
+  } else if (!(RegExp(r'^([0-9]{3})-([0-9]{2})-([0-9]{5})$').hasMatch(value))) {
+    return 'ex): 123-44-55555';
   }
   return null;
 };
 
-String? Function(String?) customerStatusValidator = (value) {
-  List<String> check = [];
-  List<CustomerStatus> valueList = CustomerStatus.values;
-  for (int i = 0; i < valueList.length; i++) {
-    check.add(valueList[i].toString());
-  }
+String? Function(String?) companyRegistrationNumberValidator = (value) {
   if (value == null || value.isEmpty) {
-    return '필수적으로 기입해야하는 항목입니다.';
-  } else if (!(check.contains(value))) {
-    return '고객 유형을 기입(ex: 만료, 테스트, 계약중)';
+    return '사업자등록번호 필수 기입';
+  } else if (!(RegExp(r'^[0-9]{3}-+[0-9]{4}-+[0-9]{4}$').hasMatch(value))) {
+    return 'ex): 123-4444-5555';
   }
   return null;
 };

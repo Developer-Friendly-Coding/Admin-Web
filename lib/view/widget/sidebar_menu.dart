@@ -1,4 +1,5 @@
-import 'package:clean_arch/common/constants/table/detail_table_mapper.dart';
+import 'package:clean_arch/common/constants/mapper/related_table_mapper.dart';
+import 'package:clean_arch/common/constants/mapper/table_name_mapper.dart';
 import 'package:flutter/material.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
 import 'package:accordion/accordion.dart';
@@ -96,11 +97,11 @@ class _SideBarMenuState extends State<SideBarMenu> {
                 accordionSection(
                     Icons.house, "고객관리", ["입주사", "입주고객", "계약", "세금계산서"]),
                 accordionSection(Icons.apartment, "공간관리",
-                    ["지점", "사무실", "사무실가격", "세금계산서", '센서', '센서측정값']),
+                    ["지점", "사무실", "사무실가격", '센서', '센서측정값']),
                 accordionSection(
                     Icons.manage_search, "인사관리", ["매니저", "매니저 권한", "운영사"]),
-                accordionSection(Icons.verified_user, "보안관리",
-                    ["출입문", "출입권한", "출입기", "세금계산서"]),
+                accordionSection(
+                    Icons.verified_user, "보안관리", ["출입문", "출입권한", "출입기록"]),
                 accordionSection(Icons.inventory, "재고관리", ["물품관리", "물품코드"])
               ])),
         ),

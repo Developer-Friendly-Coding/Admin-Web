@@ -1,4 +1,4 @@
-import 'package:clean_arch/common/constants/table/table_column_attributes_mapper.dart';
+import 'package:clean_arch/common/constants/mapper/table_column_attributes_mapper.dart';
 import 'package:clean_arch/model/base_model.dart';
 import 'package:clean_arch/provider/impl/base_table_provider_impl.dart';
 import 'package:clean_arch/view/widget/table/base_table_view/base_table_attributes.dart';
@@ -25,11 +25,11 @@ class BaseTableViewColumn<M extends Base> extends StatelessWidget {
           color: test == true ? Colors.blueGrey : null,
           margin: EdgeInsets.only(
               left: MediaQuery.of(context).size.width *
-                  columnAttributesList[i].columnLeftMarginRate),
+                  columnAttributesList[i].leftMarginRate),
           width: MediaQuery.of(context).size.width *
-              columnAttributesList[i].columntWidthRate,
+              columnAttributesList[i].widthRate,
           child: Text(
-            columnAttributesList[i].columnName,
+            columnAttributesList[i].name,
             style: MediaQuery.of(context).size.width < 1920
                 ? (columnStyle ?? memberInfoElementStyleLapTop)
                 : (columnStyle ?? memberInfoElementStyle),

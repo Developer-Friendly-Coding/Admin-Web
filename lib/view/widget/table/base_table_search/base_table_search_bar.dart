@@ -10,13 +10,15 @@ class BaseTableSearchBar<M extends Base> extends StatelessWidget {
   final double iconSize;
   final Color color;
   final String memberName;
-  final controller = TextEditingController();
+  final String? Function(String?)? validator;
+  TextEditingController controller = TextEditingController();
   BaseTableSearchBar(
       {required this.memberName,
       this.width = 250,
       this.paddingTopAndBottom = 0,
       this.iconSize = 20,
       this.color = Colors.transparent,
+      this.validator,
       super.key});
 
   @override
@@ -26,6 +28,7 @@ class BaseTableSearchBar<M extends Base> extends StatelessWidget {
     return SizedBox(
       width: width,
       child: TextFormField(
+        validator: validator,
         controller: controller,
         style: MediaQuery.of(context).size.width < 1920
             ? unifiedSearchStyleLapTop

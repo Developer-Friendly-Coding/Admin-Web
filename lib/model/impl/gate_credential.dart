@@ -77,13 +77,31 @@ class GateCredential implements Base {
       _csnCardData.toString(),
       _type.toString(),
       _status.toString(),
-      DateFormat('yyyy-MM-dd hh:mm:ss').format(_endTime!),
+      _endTime == null
+          ? _endTime.toString()
+          : DateFormat('yyyy-MM-dd hh:mm:ss').format(_endTime!),
       _customerMemberId.toString(),
     ];
   }
 
   @override
-  int getId() {
-    return _id;
+  dynamic getMember(String member) {
+    switch (member) {
+      case "id":
+        return _id;
+      case "gateId":
+        return _gateId;
+      case "csnCardData":
+        return _csnCardData;
+      case "type":
+        return _type;
+      case "status":
+        return _status;
+      case "endTime":
+        return _endTime;
+      case "customerMemberId":
+        return _customerMemberId;
+      default:
+    }
   }
 }

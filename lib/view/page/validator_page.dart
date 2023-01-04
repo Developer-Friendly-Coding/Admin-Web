@@ -38,7 +38,7 @@ class _ValidatorPageState extends State<ValidatorPage> {
                 labelText: 'Enter your name',
               ),
               // use the validator to return an error string (or null) based on the input text
-              validator: passWordValidator,
+              validator: intValidator,
               // update the state variable when the text changes
             ),
             TextFormField(

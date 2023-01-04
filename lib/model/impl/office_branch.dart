@@ -73,7 +73,22 @@ class OfficeBranch implements Base {
   }
 
   @override
-  int getId() {
-    return _id;
+  dynamic getMember(String member) {
+    switch (member) {
+      case "id":
+        return _id;
+      case "name":
+        return _name;
+      case "serviceProviderId":
+        return _serviceProviderId;
+      case "location":
+        return _location;
+      case "latitude":
+        return _latitude;
+      case "longitude":
+        return _longitude;
+
+      default:
+    }
   }
 }
