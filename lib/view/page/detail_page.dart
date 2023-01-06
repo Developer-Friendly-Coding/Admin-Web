@@ -3,12 +3,12 @@ import 'package:clean_arch/common/constants/mapper/table_column_attributes_mappe
 import 'package:clean_arch/common/constants/mapper/table_name_mapper.dart';
 import 'package:clean_arch/model/base_model.dart';
 import 'package:clean_arch/provider/impl/signin_provider_impl.dart';
-import 'package:clean_arch/view/widget/table/base_table_detail_view/related_table_view.dart';
-import 'package:clean_arch/view/widget/table/base_table_detail_view/related_table_container.dart';
-import 'package:clean_arch/view/widget/table/base_table_detail_view/detail_info.dart';
+import 'package:clean_arch/view/widget/table/table_detail_view/related_table_view.dart';
+import 'package:clean_arch/view/widget/table/table_detail_view/related_table_container.dart';
+import 'package:clean_arch/view/widget/table/table_detail_view/detail_info.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:clean_arch/view/widget/table/base_table_view/base_table_attributes.dart';
+import 'package:clean_arch/common/constants/column_attributes.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
 import 'package:clean_arch/view/widget/sidebar_menu.dart';
 
@@ -104,13 +104,12 @@ class DetailPage<M extends Base> extends StatelessWidget {
                               ),
                               const SizedBox(height: 20),
                               DetailInfo<M>(
-                                selectedId: selectedId,
                                 widthRate: infoWidthRate,
                                 height: infoHeight,
                                 color: infoColor,
                               ),
                               const SizedBox(height: 30),
-                              DetailContainer<M>(
+                              RelatedContainer<M>(
                                 detailTableViewList: detailTableViewList,
                                 widthRate: containerTableWidthRate,
                                 height: containerTableHeight,

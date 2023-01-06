@@ -1,31 +1,40 @@
 import 'package:clean_arch/common/constants/mapper/table_column_attributes_mapper.dart';
 import 'package:clean_arch/common/util/class_builder.dart';
 import 'package:clean_arch/model/base_model.dart';
-import 'package:clean_arch/provider/impl/base_table_provider_impl.dart';
+import 'package:clean_arch/provider/impl/table_provider_impl.dart';
 import 'package:clean_arch/view/page/customer_member_page.dart';
+import 'package:clean_arch/view/page/detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
-import 'package:clean_arch/view/widget/table/base_table_view/base_table_attributes.dart';
+import 'package:clean_arch/common/constants/column_attributes.dart';
 import 'package:provider/provider.dart';
 import 'package:recase/recase.dart';
 
-class BaseTableViewRow<M extends Base> extends StatelessWidget {
+class TableViewRow<M extends Base> extends StatelessWidget {
   final int index;
   final bool test;
   final TextStyle? rowStyle;
   final List<ColumnAttributes> columnAttributesList =
       columnAttributesMapper[M.toString()]!;
+  final bool isTableInCreate;
 
-  BaseTableViewRow(
-      {required this.index, this.test = false, this.rowStyle, Key? key})
+  TableViewRow(
+      {required this.index,
+      this.isTableInCreate = false,
+      this.test = false,
+      this.rowStyle,
+      Key? key})
       : super(key: key);
 
   List<Widget> alignElementsWidget(
-      BaseTableProvider<M> providerRead, int index, BuildContext context) {
-    List<String?> elements = providerRead.dataList[index].toRow();
+      TableProvider<M> providerRead, int index, BuildContext context) {
+    List<String?> elements = (isTableInCreate == true)
+        ? providerRead.dataListInCreate[index].toRow()
+        : providerRead.dataList![index].toRow();
     List<Widget> result = [];
+    int lastIndex = -1;
     for (int i = 0; i < elements.length; i++) {
-      var alignElement = Align(
+      Align alignElement = Align(
         alignment: Alignment.centerLeft,
         child: Container(
           constraints: BoxConstraints(
@@ -43,28 +52,31 @@ class BaseTableViewRow<M extends Base> extends StatelessWidget {
                             .toString())
                         .camelCase;
                     //target=customerMember
-                    String targetId = "${target}Id";
+                    String targetIdName = "${target}Id";
                     //targedId = customerMemberId
-                    int selectedId =
-                        providerRead.dataList[index].getMember(targetId);
-                    //targedId = 44
-                    providerRead.changeSelectedIndex(index);
-                    BaseTableProvider targetProvider =
-                        ClassBuilder.getBaseTableProvider(
+
+                    int targetId =
+                        providerRead.dataList![index].getMember(targetIdName);
+                    //selectedId = 44
+
+                    providerRead.setSelectedId(providerRead.dataList![index]);
+                    TableProvider targetProvider =
+                        ClassBuilder.getTableProvider(
                             columnAttributesList[i].hyperLinkTargetModel!,
                             false,
-                            context);
-                    await targetProvider.getTableData();
-                    targetProvider.changeSelectedIndex(index);
-                    targetProvider.initUpdateButtonTECList();
+                            context)!;
+
+                    targetProvider.setSelectedId(targetId);
+
+                    await targetProvider.initUpdateButtonTECList();
 
                     Navigator.push(
                       test22().currentContext!,
                       MaterialPageRoute(
-                          settings: RouteSettings(name: "/$target/$selectedId"),
+                          settings: RouteSettings(name: "/$target/$targetId"),
                           builder: (context) => (ClassBuilder.getDetailPage(
                               columnAttributesList[i].hyperLinkTargetModel!,
-                              int.parse(targetId)))),
+                              targetId)!)),
                     );
                   },
                   child: Text(elements[i]!,
@@ -86,14 +98,30 @@ class BaseTableViewRow<M extends Base> extends StatelessWidget {
       );
 
       result.add(alignElement);
+      lastIndex = i;
     }
+    isTableInCreate == true
+        ? result.add(Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              margin: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width *
+                      (columnAttributesList[lastIndex].leftMarginRate + 0.06)),
+              child: IconButton(
+                  onPressed: () {
+                    //해당
+                  },
+                  icon: Icon(Icons.cancel_outlined)),
+            ),
+          ))
+        : null;
     return result;
   }
 
   @override
   Widget build(BuildContext context) {
-    BaseTableProvider<M> providerRead =
-        Provider.of<BaseTableProvider<M>>(context, listen: false);
+    TableProvider<M> providerRead =
+        Provider.of<TableProvider<M>>(context, listen: false);
 
     return Stack(
       children: alignElementsWidget(providerRead, index, context),

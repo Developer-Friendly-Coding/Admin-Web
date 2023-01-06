@@ -1,10 +1,10 @@
-import 'package:clean_arch/provider/impl/base_table_provider_impl.dart';
+import 'package:clean_arch/provider/impl/table_provider_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
 import 'package:clean_arch/model/base_model.dart';
 import 'package:provider/provider.dart';
 
-class BaseTableSearchBar<M extends Base> extends StatelessWidget {
+class TableSearchBar<M extends Base> extends StatelessWidget {
   final double width;
   final double paddingTopAndBottom;
   final double iconSize;
@@ -12,7 +12,7 @@ class BaseTableSearchBar<M extends Base> extends StatelessWidget {
   final String memberName;
   final String? Function(String?)? validator;
   TextEditingController controller = TextEditingController();
-  BaseTableSearchBar(
+  TableSearchBar(
       {required this.memberName,
       this.width = 250,
       this.paddingTopAndBottom = 0,
@@ -23,8 +23,8 @@ class BaseTableSearchBar<M extends Base> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BaseTableProvider<M> providerRead =
-        Provider.of<BaseTableProvider<M>>(context, listen: false);
+    TableProvider<M> providerRead =
+        Provider.of<TableProvider<M>>(context, listen: false);
     return SizedBox(
       width: width,
       child: TextFormField(

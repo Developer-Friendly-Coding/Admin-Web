@@ -1,34 +1,28 @@
-import 'package:clean_arch/common/constants/mapper/cu_dialog_mapper.dart';
-import 'package:clean_arch/common/constants/mapper/table_column_attributes_mapper.dart';
 import 'package:clean_arch/model/base_model.dart';
-import 'package:clean_arch/provider/base_table_provider.dart';
-import 'package:clean_arch/view/widget/table/base_table_view/base_table_attributes.dart';
+import 'package:clean_arch/provider/table_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:clean_arch/repo/impl/base_table_repo_impl.dart';
 import 'package:clean_arch/common/util/class_builder.dart';
 
-class BaseTableProvider<M extends Base> extends ChangeNotifier
-    implements IBaseTableProvider {
+class TableProvider<M extends Base> extends ChangeNotifier {
   final BaseTableRepository<M> _repo;
 
   final M _model = ClassBuilder.fromString(M.toString()) as M;
 
-  BaseTableProvider({BaseTableRepository<M>? repo})
+  TableProvider({BaseTableRepository<M>? repo})
       : _repo = repo ?? BaseTableRepository<M>();
 
   List<M>? _dataList;
   @override
-  List<M> get dataList => _dataList!;
+  List<M>? get dataList => _dataList;
 
-  M? _selectedRow;
+  List<M> dataListInCreate = [];
+
+  int _selectedId = -1;
   @override
-  M get selectedRow => _selectedRow!;
+  int get selectedId => _selectedId;
 
-  int _selectedIndex = -1;
-  @override
-  int get selectedIndex => _selectedIndex;
-
-  List<int> multiCuDialogSelectedIndexList = [];
+  List<int> multiCuDialogIdList = [];
 
   late List<TextEditingController> _updateButtonTECList;
   @override
@@ -90,22 +84,20 @@ class BaseTableProvider<M extends Base> extends ChangeNotifier
   }
 
   @override
-  Future<M?> getDetailRowDataById(id) async {
-    try {
-      _selectedRow = await _repo.getDetailRowDataById(id);
-
-      return _selectedRow;
-    } catch (e) {
-      debugPrint(e.toString());
-
-      return null;
-    } finally {}
+  M? getDataById(id) {
+    M? data;
+    dataList!.forEach((element) {
+      if (element.getMember("id") == id) {
+        data = element;
+      }
+    });
+    return data;
   }
 
   @override
-  Future<List<M>?> getDetailTableDataById(modelName, id) async {
+  Future<List<M>?> getRelatedTableDataById(modelName, id) async {
     try {
-      _dataList = await _repo.getDetailTableDataById(modelName, id);
+      _dataList = await _repo.getRelatedTableDataById(modelName, id);
 
       return dataList;
     } catch (e) {
@@ -169,9 +161,20 @@ class BaseTableProvider<M extends Base> extends ChangeNotifier
   }
 
   @override
-  void changeSelectedIndex(index) {
-    _selectedIndex = index;
-    notifyListeners();
+  void setSelectedId(dynamic data) {
+    if (data.runtimeType == int) {
+      _selectedId = data;
+    } else if (data.runtimeType == M) {
+      _selectedId = data.getMember("id");
+      notifyListeners();
+    } else {
+      print("id값이나 model data를 입력해주세요");
+    }
+  }
+
+  @override
+  bool isSelectedId(M data) {
+    return _selectedId == data.getMember("id") ? true : false;
   }
 
   @override
@@ -181,9 +184,17 @@ class BaseTableProvider<M extends Base> extends ChangeNotifier
     }
   }
 
+  M? tempUpdateData;
+
   @override
-  void initUpdateButtonTECList() {
-    List<String?> modelMemberList = dataList[selectedIndex].toRow();
+  Future<void> initUpdateButtonTECList() async {
+    if (dataList == null) {
+      await getTableData();
+    }
+
+    tempUpdateData = getDataById(selectedId);
+
+    List<String?> modelMemberList = tempUpdateData!.toRow();
     _updateButtonTECList = [];
     for (int i = 0; i < modelMemberList.length; i++) {
       updateButtonTECList.add(TextEditingController());
@@ -210,7 +221,7 @@ class BaseTableProvider<M extends Base> extends ChangeNotifier
   @override
   Future<int?> deleteTableRow() async {
     try {
-      return await _repo.deleteTableRow(dataList[selectedIndex]);
+      return await _repo.deleteTableRow(selectedId);
     } finally {}
   }
 
@@ -223,12 +234,13 @@ class BaseTableProvider<M extends Base> extends ChangeNotifier
 
   @override
   void setCuDialogTEC(Map<int, String> targetMapper,
-      BaseTableProvider cuDialogProvider, String mode) {
+      TableProvider cuDialogProvider, String mode) async {
+    M? data = getDataById(selectedId);
     switch (mode) {
       case "create":
         targetMapper.forEach((key, value) {
           cuDialogProvider.addButtonTECList[key].text =
-              dataList[selectedIndex].getMember(value).toString();
+              data!.getMember(value).toString();
         });
         break;
       case "update":
@@ -241,15 +253,21 @@ class BaseTableProvider<M extends Base> extends ChangeNotifier
   }
 
   @override
-  void setMultiCuDialogSelectedIndex(int idx) {
-    multiCuDialogSelectedIndexList.contains(idx)
-        ? multiCuDialogSelectedIndexList.remove(idx)
-        : multiCuDialogSelectedIndexList.add(idx);
+  void setMultiCuDialogId(int id) {
+    multiCuDialogIdList.contains(id)
+        ? multiCuDialogIdList.remove(id)
+        : multiCuDialogIdList.add(id);
     notifyListeners();
   }
 
   @override
-  bool isMultiCuDialogContainIndex(int idx) {
-    return multiCuDialogSelectedIndexList.contains(idx) ? true : false;
+  bool isMultiCuDialogContainId(int id) {
+    return multiCuDialogIdList.contains(id) ? true : false;
+  }
+
+  @override
+  void clearMultiCuDialogIndexList() {
+    multiCuDialogIdList.clear();
+    notifyListeners();
   }
 }

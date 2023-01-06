@@ -3,11 +3,11 @@ import 'package:clean_arch/common/constants/mapper/table_name_mapper.dart';
 import 'package:clean_arch/common/constants/mapper/table_search_child_mapper.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
 import 'package:clean_arch/model/base_model.dart';
-import 'package:clean_arch/view/widget/table/base_table_search/base_table_search_child.dart';
+import 'package:clean_arch/view/widget/table/table_search/table_search_child.dart';
 import 'package:flutter/material.dart';
 
 //ignore: must_be_immutable
-class BaseTableSearchContainer<M extends Base> extends StatelessWidget {
+class TableSearchContainer<M extends Base> extends StatelessWidget {
   bool isCUdialog;
   final List<SearchChild> searchContainerChildList =
       searchChildMapper[M.toString()]!;
@@ -17,7 +17,7 @@ class BaseTableSearchContainer<M extends Base> extends StatelessWidget {
   final double nameLeftMargin;
   final Color color;
   final String tableName = tableNameMapper[M.toString()]!;
-  BaseTableSearchContainer(
+  TableSearchContainer(
       {this.width = 550,
       this.hegiht = 150,
       this.nameWidth = 100,

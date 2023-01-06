@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:clean_arch/model/base_model.dart';
 import 'package:provider/provider.dart';
-import 'package:clean_arch/provider/impl/base_table_provider_impl.dart';
+import 'package:clean_arch/provider/impl/table_provider_impl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class BaseTableDeleteButton<M extends Base> extends StatelessWidget {
+class TableDeleteButton<M extends Base> extends StatelessWidget {
   final double alertWidth;
   final double alertHeight;
 
-  const BaseTableDeleteButton(
+  const TableDeleteButton(
       {this.alertWidth = 900, this.alertHeight = 370, super.key});
 
   @override
   Widget build(BuildContext context) {
-    BaseTableProvider<M> providerRead =
-        Provider.of<BaseTableProvider<M>>(context, listen: false);
+    TableProvider<M> providerRead =
+        Provider.of<TableProvider<M>>(context, listen: false);
 
     return ElevatedButton(
         style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
         onPressed: () {
-          providerRead.selectedIndex == -1
+          providerRead.selectedId == -1
               ? Fluttertoast.showToast(
                   msg: "먼저 삭제할 열을 선택해 주세요",
                   toastLength: Toast.LENGTH_LONG,

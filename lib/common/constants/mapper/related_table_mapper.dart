@@ -6,7 +6,7 @@ import 'package:clean_arch/model/impl/office.dart';
 import 'package:clean_arch/model/impl/office_branch.dart';
 import 'package:clean_arch/model/impl/sensor.dart';
 import 'package:clean_arch/model/impl/tax_bill.dart';
-import 'package:clean_arch/view/widget/table/base_table_detail_view/related_table_view.dart';
+import 'package:clean_arch/view/widget/table/table_detail_view/related_table_view.dart';
 
 List<RelatedTableView>? getRelatedTableList(String modelName, int id) {
   switch (modelName) {

@@ -9,10 +9,11 @@ import 'package:clean_arch/model/impl/office_branch.dart';
 import 'package:clean_arch/model/impl/sensor.dart';
 import 'package:clean_arch/model/impl/service_provider.dart';
 import 'package:clean_arch/model/impl/tax_bill.dart';
-import 'package:clean_arch/provider/impl/base_table_provider_impl.dart';
+import 'package:clean_arch/provider/impl/table_provider_impl.dart';
 import 'package:clean_arch/view/page/detail_page.dart';
-import 'package:clean_arch/view/widget/table/base_table_search/base_table_container.dart';
-import 'package:clean_arch/view/widget/table/base_table_view/base_table_view.dart';
+import 'package:clean_arch/view/widget/table/table_search/table_container.dart';
+import 'package:clean_arch/view/widget/table/table_view/table_in_create.dart';
+import 'package:clean_arch/view/widget/table/table_view/table_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
@@ -42,93 +43,92 @@ class ClassBuilder {
     ClassBuilder.register<Gate>(Gate());
   }
 
-  static getBaseTableProvider(Type model, bool isListen, BuildContext context) {
+  static TableProvider? getTableProvider(
+      Type model, bool isListen, BuildContext context) {
     switch (model) {
       case Contract:
-        return Provider.of<BaseTableProvider<Contract>>(context,
-            listen: isListen);
+        return Provider.of<TableProvider<Contract>>(context, listen: isListen);
       case CustomerMember:
-        return Provider.of<BaseTableProvider<CustomerMember>>(context,
+        return Provider.of<TableProvider<CustomerMember>>(context,
             listen: isListen);
       case Customer:
-        return Provider.of<BaseTableProvider<Customer>>(context,
-            listen: isListen);
+        return Provider.of<TableProvider<Customer>>(context, listen: isListen);
       case Manager:
-        return Provider.of<BaseTableProvider<Manager>>(context,
-            listen: isListen);
+        return Provider.of<TableProvider<Manager>>(context, listen: isListen);
       case OfficeBranch:
-        return Provider.of<BaseTableProvider<OfficeBranch>>(context,
+        return Provider.of<TableProvider<OfficeBranch>>(context,
             listen: isListen);
       case Office:
-        return Provider.of<BaseTableProvider<Office>>(context,
-            listen: isListen);
+        return Provider.of<TableProvider<Office>>(context, listen: isListen);
       case ServiceProvider:
-        return Provider.of<BaseTableProvider<ServiceProvider>>(context,
+        return Provider.of<TableProvider<ServiceProvider>>(context,
             listen: isListen);
       case TaxBill:
-        return Provider.of<BaseTableProvider<TaxBill>>(context,
-            listen: isListen);
+        return Provider.of<TableProvider<TaxBill>>(context, listen: isListen);
       case Sensor:
-        return Provider.of<BaseTableProvider<Sensor>>(context,
-            listen: isListen);
+        return Provider.of<TableProvider<Sensor>>(context, listen: isListen);
       case GateCredential:
-        return Provider.of<BaseTableProvider<GateCredential>>(context,
+        return Provider.of<TableProvider<GateCredential>>(context,
             listen: isListen);
       case Gate:
-        return Provider.of<BaseTableProvider<Gate>>(context, listen: isListen);
+        return Provider.of<TableProvider<Gate>>(context, listen: isListen);
+      default:
+        return null;
     }
   }
 
-  static getBaseTableView(Type model, double? height) {
+  static TableView? getTableView(Type model, double? height) {
     switch (model) {
       case Contract:
-        return BaseTableView<Contract>(
+        return TableView<Contract>(
           height: height ?? 400,
         );
       case CustomerMember:
-        return BaseTableView<CustomerMember>(
+        return TableView<CustomerMember>(
           height: height ?? 400,
         );
       case Customer:
-        return BaseTableView<Customer>(
+        return TableView<Customer>(
           height: height ?? 400,
         );
       case Manager:
-        return BaseTableView<Manager>(
+        return TableView<Manager>(
           height: height ?? 400,
         );
       case OfficeBranch:
-        return BaseTableView<OfficeBranch>(
+        return TableView<OfficeBranch>(
           height: height ?? 400,
         );
       case Office:
-        return BaseTableView<Office>(
+        return TableView<Office>(
           height: height ?? 400,
         );
       case ServiceProvider:
-        return BaseTableView<ServiceProvider>(
+        return TableView<ServiceProvider>(
           height: height ?? 400,
         );
       case TaxBill:
-        return BaseTableView<TaxBill>(
+        return TableView<TaxBill>(
           height: height ?? 400,
         );
       case Sensor:
-        return BaseTableView<Sensor>(
+        return TableView<Sensor>(
           height: height ?? 400,
         );
       case GateCredential:
-        return BaseTableView<GateCredential>(
+        return TableView<GateCredential>(
           height: height ?? 400,
         );
       case Gate:
-        return BaseTableView<Gate>(
+        return TableView<Gate>(
           height: height ?? 400,
         );
+      default:
+        return null;
     }
   }
 
-  static getDetailPage(Type model, int selectedId) {
+  static DetailPage? getDetailPage(Type model, int selectedId) {
     switch (model) {
       case Contract:
         return DetailPage<Contract>(selectedId: selectedId);
@@ -152,33 +152,89 @@ class ClassBuilder {
         return DetailPage<GateCredential>(selectedId: selectedId);
       case Gate:
         return DetailPage<Gate>(selectedId: selectedId);
+      default:
+        return null;
     }
   }
 
-  static getBaseTableSearchContainer(Type model) {
+  static TableSearchContainer? getTableSearchContainer(Type model) {
     switch (model) {
       case Contract:
-        return BaseTableSearchContainer<Contract>();
+        return TableSearchContainer<Contract>();
       case CustomerMember:
-        return BaseTableSearchContainer<CustomerMember>();
+        return TableSearchContainer<CustomerMember>();
       case Customer:
-        return BaseTableSearchContainer<Customer>();
+        return TableSearchContainer<Customer>();
       case Manager:
-        return BaseTableSearchContainer<Manager>();
+        return TableSearchContainer<Manager>();
       case OfficeBranch:
-        return BaseTableSearchContainer<OfficeBranch>();
+        return TableSearchContainer<OfficeBranch>();
       case Office:
-        return BaseTableSearchContainer<Office>();
+        return TableSearchContainer<Office>();
       case ServiceProvider:
-        return BaseTableSearchContainer<ServiceProvider>();
+        return TableSearchContainer<ServiceProvider>();
       case TaxBill:
-        return BaseTableSearchContainer<TaxBill>();
+        return TableSearchContainer<TaxBill>();
       case Sensor:
-        return BaseTableSearchContainer<Sensor>();
+        return TableSearchContainer<Sensor>();
       case GateCredential:
-        return BaseTableSearchContainer<GateCredential>();
+        return TableSearchContainer<GateCredential>();
       case Gate:
-        return BaseTableSearchContainer<Gate>();
+        return TableSearchContainer<Gate>();
+      default:
+        return null;
+    }
+  }
+
+  static TableViewInCreatePage? getTableViewInCreate(
+      Type model, double? height) {
+    switch (model) {
+      case Contract:
+        return TableViewInCreatePage<Contract>(
+          height: height ?? 400,
+        );
+      case CustomerMember:
+        return TableViewInCreatePage<CustomerMember>(
+          height: height ?? 400,
+        );
+      case Customer:
+        return TableViewInCreatePage<Customer>(
+          height: height ?? 400,
+        );
+      case Manager:
+        return TableViewInCreatePage<Manager>(
+          height: height ?? 400,
+        );
+      case OfficeBranch:
+        return TableViewInCreatePage<OfficeBranch>(
+          height: height ?? 400,
+        );
+      case Office:
+        return TableViewInCreatePage<Office>(
+          height: height ?? 400,
+        );
+      case ServiceProvider:
+        return TableViewInCreatePage<ServiceProvider>(
+          height: height ?? 400,
+        );
+      case TaxBill:
+        return TableViewInCreatePage<TaxBill>(
+          height: height ?? 400,
+        );
+      case Sensor:
+        return TableViewInCreatePage<Sensor>(
+          height: height ?? 400,
+        );
+      case GateCredential:
+        return TableViewInCreatePage<GateCredential>(
+          height: height ?? 400,
+        );
+      case Gate:
+        return TableViewInCreatePage<Gate>(
+          height: height ?? 400,
+        );
+      default:
+        return null;
     }
   }
 }

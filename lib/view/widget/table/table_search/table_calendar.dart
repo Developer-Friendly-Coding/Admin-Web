@@ -1,5 +1,5 @@
 import 'package:clean_arch/model/base_model.dart';
-import 'package:clean_arch/provider/impl/base_table_provider_impl.dart';
+import 'package:clean_arch/provider/impl/table_provider_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +7,7 @@ import 'package:web_date_picker/web_date_picker.dart';
 import 'package:month_picker_dialog_2/month_picker_dialog_2.dart';
 
 //ignore: must_be_immutable
-class BaseTableCalendar<M extends Base> extends StatefulWidget {
+class TableCalendar<M extends Base> extends StatefulWidget {
   final Color color;
   final double width;
   final double height;
@@ -16,7 +16,7 @@ class BaseTableCalendar<M extends Base> extends StatefulWidget {
   final String startMemberName;
   final String endMemberName;
 
-  const BaseTableCalendar(
+  const TableCalendar(
       {required this.startMemberName,
       required this.endMemberName,
       this.buttonWidth = 70,
@@ -27,11 +27,10 @@ class BaseTableCalendar<M extends Base> extends StatefulWidget {
       super.key});
 
   @override
-  State<BaseTableCalendar<M>> createState() => _BaseTableCalendarState<M>();
+  State<TableCalendar<M>> createState() => _TableCalendarState<M>();
 }
 
-class _BaseTableCalendarState<M extends Base>
-    extends State<BaseTableCalendar<M>> {
+class _TableCalendarState<M extends Base> extends State<TableCalendar<M>> {
   final TextEditingController controller = TextEditingController();
   DateTime? selectedDate;
 
@@ -41,8 +40,8 @@ class _BaseTableCalendarState<M extends Base>
 
   @override
   Widget build(BuildContext context) {
-    BaseTableProvider<M> providerRead =
-        Provider.of<BaseTableProvider<M>>(context, listen: false);
+    TableProvider<M> providerRead =
+        Provider.of<TableProvider<M>>(context, listen: false);
     return Container(
       color: widget.color,
       child: Row(

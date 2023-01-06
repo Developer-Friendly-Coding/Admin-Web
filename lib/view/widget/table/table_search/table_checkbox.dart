@@ -1,9 +1,8 @@
-import 'package:clean_arch/provider/impl/base_table_provider_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:clean_arch/model/base_model.dart';
-import 'package:provider/provider.dart';
 
-class BaseTableRadioBox<M extends Base> extends StatefulWidget {
+//ignore: must_be_immutable
+class TableCheckBox<M extends Base> extends StatefulWidget {
   final double height;
   final double width;
   final Color color;
@@ -13,7 +12,12 @@ class BaseTableRadioBox<M extends Base> extends StatefulWidget {
   final double iconLeftMargin;
   final double textLeftMargin;
   final String memberName;
-  const BaseTableRadioBox(
+  late List<bool?> isCheckedList =
+      List<bool?>.generate(enumList.length, (int idx) {
+    return false;
+  }, growable: false);
+
+  TableCheckBox(
       {required this.enumList,
       required this.memberName,
       this.width = 110,
@@ -26,18 +30,14 @@ class BaseTableRadioBox<M extends Base> extends StatefulWidget {
       super.key});
 
   @override
-  State<BaseTableRadioBox<M>> createState() => _BaseTableRadioBoxState<M>();
+  State<TableCheckBox<M>> createState() => _TableCheckBoxState<M>();
 }
 
-class _BaseTableRadioBoxState<M extends Base>
-    extends State<BaseTableRadioBox<M>> {
+class _TableCheckBoxState<M extends Base> extends State<TableCheckBox<M>> {
   Enum? enumValue;
-  List<Widget> radioListTile(BuildContext context) {
-    BaseTableProvider<M> providerRead =
-        Provider.of<BaseTableProvider<M>>(context, listen: false);
 
+  List<Widget> checkListTile() {
     List<Widget> result = [];
-
     for (int i = 0; i < widget.enumList.length; i++) {
       Container radioListTile = Container(
         color: widget.test == true ? Colors.amber : null,
@@ -51,17 +51,13 @@ class _BaseTableRadioBoxState<M extends Base>
                 margin: EdgeInsets.only(left: widget.iconLeftMargin),
                 child: Transform.scale(
                   scale: widget.iconScale,
-                  child: Radio(
-                    value: widget.enumList[i],
-                    groupValue: enumValue,
-                    onChanged: (Enum? value) {
-                      setState(() {
-                        enumValue = value;
-                      });
-                      providerRead.getTableDataByRadioBox(
-                          widget.memberName, enumValue!);
-                    },
-                  ),
+                  child: Checkbox(
+                      value: widget.isCheckedList[i],
+                      onChanged: (value) {
+                        setState(() {
+                          widget.isCheckedList[i] = value;
+                        });
+                      }),
                 ),
               ),
             ),
@@ -85,7 +81,7 @@ class _BaseTableRadioBoxState<M extends Base>
       color: widget.color,
       child: Wrap(
         direction: Axis.horizontal,
-        children: radioListTile(context),
+        children: checkListTile(),
       ),
 
       //

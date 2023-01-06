@@ -1,10 +1,10 @@
 import 'package:clean_arch/common/constants/text_style.dart';
-import 'package:clean_arch/provider/impl/base_table_provider_impl.dart';
+import 'package:clean_arch/provider/impl/table_provider_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:clean_arch/model/base_model.dart';
 import 'package:provider/provider.dart';
 
-class BaseTableRangeBox<M extends Base> extends StatelessWidget {
+class TableRangeBox<M extends Base> extends StatelessWidget {
   final String prefix;
   final String suffix;
   final double textFieldWidth;
@@ -18,7 +18,7 @@ class BaseTableRangeBox<M extends Base> extends StatelessWidget {
   final TextEditingController startController = TextEditingController();
   final TextEditingController endController = TextEditingController();
 
-  BaseTableRangeBox(
+  TableRangeBox(
       {required this.startMemberName,
       required this.endMemberName,
       this.buttonWidth = 70,
@@ -69,8 +69,8 @@ class BaseTableRangeBox<M extends Base> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BaseTableProvider<M> providerRead =
-        Provider.of<BaseTableProvider<M>>(context, listen: false);
+    TableProvider<M> providerRead =
+        Provider.of<TableProvider<M>>(context, listen: false);
     return Row(
       children: [
         rangeTextField(context, startController),

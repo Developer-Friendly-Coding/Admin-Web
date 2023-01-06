@@ -49,14 +49,16 @@ class Customer implements Base {
   @override
   Customer fromTEC(List<TextEditingController> list) {
     Customer customer = Customer(
-        id: list[0].text == "" ? -1 : int.parse(list[0].text),
-        name: list[1].text,
-        type: BusinessType.fromString(list[2].text),
-        registrationNumber: list[3].text,
-        companyRegistrationNumber: list[4].text,
-        status: CustomerStatus.fromString(list[5].text),
-        description: list[6].text,
-        serviceProviderInCustomer: _serviceProviderInCustomer);
+      id: list[0].text == "" ? -1 : int.parse(list[0].text),
+      name: list[1].text,
+      type: BusinessType.fromString(list[2].text),
+      registrationNumber: list[3].text,
+      companyRegistrationNumber: list[4].text,
+      status: CustomerStatus.fromString(list[5].text),
+      description: list[6].text,
+      serviceProviderInCustomer:
+          _serviceProviderInCustomer ?? ServiceProviderInCustomer(),
+    );
 
     customer._serviceProviderInCustomer!.id = int.parse(list[7].text);
     return customer;

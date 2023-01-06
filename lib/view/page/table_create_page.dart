@@ -1,12 +1,14 @@
 import 'package:clean_arch/common/constants/mapper/cu_dialog_mapper.dart';
 import 'package:clean_arch/common/constants/mapper/table_column_attributes_mapper.dart';
+import 'package:clean_arch/common/util/class_builder.dart';
 import 'package:clean_arch/model/base_model.dart';
-import 'package:clean_arch/provider/impl/base_table_provider_impl.dart';
+import 'package:clean_arch/provider/impl/table_provider_impl.dart';
 import 'package:clean_arch/provider/impl/signin_provider_impl.dart';
 import 'package:clean_arch/view/widget/error_dialog.dart';
-import 'package:clean_arch/view/widget/table/base_table_search/base_table_cu_dialog.dart';
-import 'package:clean_arch/view/widget/table/base_table_search/base_table_multi_cu_dialog.dart';
-import 'package:clean_arch/view/widget/table/base_table_view/base_table_attributes.dart';
+import 'package:clean_arch/view/widget/table/table_search/table_cu_dialog.dart';
+import 'package:clean_arch/view/widget/table/table_search/table_multi_cu_dialog_button.dart';
+import 'package:clean_arch/common/constants/column_attributes.dart';
+import 'package:clean_arch/view/widget/table/table_view/table_in_create.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +25,7 @@ class TableCreatePage<M extends Base> extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
-  List<Widget> detailComponentList(BaseTableProvider<M> providerRead) {
+  List<Widget> detailComponentList(TableProvider<M> providerRead) {
     List<Widget> result = [];
 
     for (int i = 1; i < columnAttributesList.length; i++) {
@@ -52,7 +54,7 @@ class TableCreatePage<M extends Base> extends StatelessWidget {
                               border: Border.all(width: 0.3),
                             ),
                             child: DropdownButtonHideUnderline(
-                              child: Consumer<BaseTableProvider<M>>(
+                              child: Consumer<TableProvider<M>>(
                                 builder: (context, provider, child) {
                                   return DropdownButton(
                                     value: provider.createEnumValuesMapper[i],
@@ -104,10 +106,9 @@ class TableCreatePage<M extends Base> extends StatelessWidget {
     return result;
   }
 
-  BaseTableCUDialog<M> baseTableCUDialog(
-      int idx, BaseTableProvider<M> providerRead) {
+  TableCUDialog baseTableCUDialog(int idx, TableProvider<M> providerRead) {
     Map<String, dynamic> mapper = cuDialogMapper[M]![idx]!;
-    return BaseTableCUDialog<M>(
+    return TableCUDialog(
         targetMapper: mapper,
         validator: columnAttributesList[idx].validator,
         controller: providerRead.addButtonTECList[idx],
@@ -137,8 +138,8 @@ class TableCreatePage<M extends Base> extends StatelessWidget {
             );
           } else {
             if (snapshot.data == true) {
-              BaseTableProvider<M> providerRead =
-                  Provider.of<BaseTableProvider<M>>(context, listen: false);
+              TableProvider<M> providerRead =
+                  Provider.of<TableProvider<M>>(context, listen: false);
               List<Widget> detailCL = detailComponentList(providerRead);
 
               return Scaffold(
@@ -181,10 +182,28 @@ class TableCreatePage<M extends Base> extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    // BaseTableMultiCUDialog(
-                                    //   model: multipleCuDialogMapper[M]![
-                                    //       "targetModel"]!,
-                                    // ),
+                                    multipleCuDialogMapper[M] != null
+                                        ? Container(
+                                            margin: EdgeInsets.only(top: 50),
+                                            alignment: Alignment.centerLeft,
+                                            child: MultiCUDialogButton(
+                                                size: Size(140, 50),
+                                                model: multipleCuDialogMapper[
+                                                    M]!["targetModel"]!,
+                                                name: multipleCuDialogMapper[
+                                                    M]!["buttonName"]!),
+                                          )
+                                        : SizedBox(),
+                                    multipleCuDialogMapper[M] != null
+                                        ? SizedBox(height: 30)
+                                        : SizedBox(),
+                                    multipleCuDialogMapper[M] != null
+                                        ? ClassBuilder.getTableViewInCreate(
+                                            multipleCuDialogMapper[M]![
+                                                "targetModel"]!,
+                                            400)!
+                                        : SizedBox(),
+                                    SizedBox(height: 30),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [

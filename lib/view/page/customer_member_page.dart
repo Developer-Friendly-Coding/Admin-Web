@@ -1,14 +1,13 @@
 import 'package:clean_arch/model/impl/customer_memeber.dart';
 import 'package:clean_arch/provider/impl/signin_provider_impl.dart';
-import 'package:clean_arch/view/widget/table/base_table_search/base_table_container.dart';
+import 'package:clean_arch/view/widget/table/table_search/table_container.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
 import 'package:clean_arch/view/widget/sidebar_menu.dart';
-import 'package:clean_arch/view/widget/table/base_table_view/base_table_view.dart';
-import 'package:clean_arch/view/widget/table/base_table_crud_button/base_table_update_button.dart';
-import 'package:clean_arch/view/widget/table/base_table_crud_button/base_table_delete_button.dart';
-import 'package:clean_arch/view/widget/table/base_table_crud_button/base_table_create_button.dart';
+import 'package:clean_arch/view/widget/table/table_view/table_view.dart';
+import 'package:clean_arch/view/widget/table/table_crud_button/table_delete_button.dart';
+import 'package:clean_arch/view/widget/table/table_crud_button/table_create_button.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 GlobalKey<ScaffoldState> test22() {
@@ -69,7 +68,7 @@ class _CustomerMemberPageState extends State<CustomerMemberPage> {
                                     const SizedBox(height: 50),
                                     Align(
                                       alignment: Alignment.centerLeft,
-                                      child: BaseTableSearchContainer<
+                                      child: TableSearchContainer<
                                           CustomerMember>(),
                                     ),
                                     const SizedBox(height: 30),
@@ -78,14 +77,13 @@ class _CustomerMemberPageState extends State<CustomerMemberPage> {
                                             MainAxisAlignment.end,
                                         children: [
                                           const SizedBox(width: 15),
-                                          BaseTableCreateButton<
-                                              CustomerMember>(),
+                                          TableCreateButton<CustomerMember>(),
                                           const SizedBox(width: 15),
-                                          const BaseTableDeleteButton<
+                                          const TableDeleteButton<
                                               CustomerMember>(),
                                         ]),
                                     const SizedBox(height: 20),
-                                    BaseTableView<CustomerMember>(test: true),
+                                    TableView<CustomerMember>(test: true),
                                     const SizedBox(height: 50)
                                   ],
                                 ),

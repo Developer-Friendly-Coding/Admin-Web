@@ -14,71 +14,71 @@ import 'package:clean_arch/model/impl/manager.dart';
 import 'package:clean_arch/model/impl/office.dart';
 import 'package:clean_arch/model/impl/office_branch.dart';
 import 'package:clean_arch/model/impl/service_provider.dart';
-import 'package:clean_arch/view/widget/table/base_table_search/base_table_calendar.dart';
-import 'package:clean_arch/view/widget/table/base_table_search/base_table_cu_dialog.dart';
-import 'package:clean_arch/view/widget/table/base_table_search/base_table_radiobox.dart';
-import 'package:clean_arch/view/widget/table/base_table_search/base_table_rangebox.dart';
-import 'package:clean_arch/view/widget/table/base_table_search/base_table_search_bar.dart';
-import 'package:clean_arch/view/widget/table/base_table_search/base_table_search_child.dart';
+import 'package:clean_arch/view/widget/table/table_search/table_calendar.dart';
+import 'package:clean_arch/view/widget/table/table_search/table_cu_dialog.dart';
+import 'package:clean_arch/view/widget/table/table_search/table_radiobox.dart';
+import 'package:clean_arch/view/widget/table/table_search/table_rangebox.dart';
+import 'package:clean_arch/view/widget/table/table_search/table_search_bar.dart';
+import 'package:clean_arch/view/widget/table/table_search/table_search_child.dart';
 import 'package:flutter/widgets.dart';
 
 List<SearchChild> contractSearchChildList = [
   SearchChild(
     columnName: "입주사ID",
-    child: BaseTableSearchBar<Contract>(
+    child: TableSearchBar<Contract>(
       memberName: "customerId",
     ),
   ),
   SearchChild(
     columnName: "계약담당자ID",
-    child: BaseTableSearchBar<Contract>(
+    child: TableSearchBar<Contract>(
       memberName: "contractRepId",
     ),
   ),
   SearchChild(
     columnName: "알림담당자ID",
-    child: BaseTableSearchBar<Contract>(
+    child: TableSearchBar<Contract>(
       memberName: "contactRepId",
     ),
   ),
   SearchChild(
     columnName: "보증금",
-    child: BaseTableRangeBox<Contract>(
+    child: TableRangeBox<Contract>(
       startMemberName: "deposit",
       endMemberName: "deposit",
     ),
   ),
   SearchChild(
     columnName: "대여비",
-    child: BaseTableRangeBox<Contract>(
+    child: TableRangeBox<Contract>(
       startMemberName: "rent",
       endMemberName: "rent",
     ),
   ),
   SearchChild(
     columnName: "계약일시",
-    child: BaseTableCalendar<Contract>(
+    child: TableCalendar<Contract>(
       startMemberName: "contractDatetime",
       endMemberName: "contractDatetime",
     ),
   ),
   SearchChild(
     columnName: "시작&종료 일시",
-    child: BaseTableCalendar<Contract>(
+    child: TableCalendar<Contract>(
       startMemberName: "startDatetime",
       endMemberName: "endDatetime",
     ),
   ),
   SearchChild(
     columnName: "계약 상태",
-    child: const BaseTableRadioBox<Contract>(
+    child: const TableRadioBox<Contract>(
       memberName: "type",
       enumList: ContractType.values,
     ),
   ),
   SearchChild(
     columnName: "설명",
-    child: BaseTableSearchBar<Contract>(
+    child: TableSearchBar<Contract>(
       memberName: "description",
     ),
   ),
@@ -86,32 +86,32 @@ List<SearchChild> contractSearchChildList = [
 List<SearchChild> officeSearchChildList = [
   SearchChild(
     columnName: "호실",
-    child: BaseTableSearchBar<Office>(
+    child: TableSearchBar<Office>(
       memberName: "name",
     ),
   ),
   SearchChild(
     columnName: "지점ID",
-    child: BaseTableSearchBar<Office>(
+    child: TableSearchBar<Office>(
       memberName: "officeBranchId",
     ),
   ),
   SearchChild(
     columnName: "정원",
-    child: BaseTableSearchBar<Office>(
+    child: TableSearchBar<Office>(
       memberName: "capacity",
     ),
   ),
   SearchChild(
     columnName: "사무실 형태",
-    child: const BaseTableRadioBox<Office>(
+    child: const TableRadioBox<Office>(
       memberName: "type",
       enumList: OfficeType.values,
     ),
   ),
   SearchChild(
     columnName: "설명",
-    child: BaseTableSearchBar<Office>(
+    child: TableSearchBar<Office>(
       memberName: "description",
     ),
   ),
@@ -119,39 +119,39 @@ List<SearchChild> officeSearchChildList = [
 List<SearchChild> customerSearchChildList = [
   SearchChild(
     columnName: "이름",
-    child: BaseTableSearchBar<Customer>(
+    child: TableSearchBar<Customer>(
       memberName: "name",
     ),
   ),
   SearchChild(
     columnName: "사업자형태",
-    child: BaseTableRadioBox<Customer>(
+    child: TableRadioBox<Customer>(
       enumList: BusinessType.values,
       memberName: "type",
     ),
   ),
   SearchChild(
     columnName: "법인등록번호",
-    child: BaseTableSearchBar<Customer>(
+    child: TableSearchBar<Customer>(
       memberName: "registrationNumber",
     ),
   ),
   SearchChild(
     columnName: "회사등록번호",
-    child: BaseTableSearchBar<Customer>(
+    child: TableSearchBar<Customer>(
       memberName: "companyRegistrationNumber",
     ),
   ),
   SearchChild(
     columnName: "고객상태",
-    child: const BaseTableRadioBox<Customer>(
+    child: const TableRadioBox<Customer>(
       memberName: "status",
       enumList: CustomerStatus.values,
     ),
   ),
   SearchChild(
     columnName: "설명",
-    child: BaseTableSearchBar<Customer>(
+    child: TableSearchBar<Customer>(
       memberName: "description",
     ),
   ),
@@ -159,47 +159,47 @@ List<SearchChild> customerSearchChildList = [
 List<SearchChild> customerMemberSearchChildList = [
   SearchChild(
     columnName: "입주사ID",
-    child: BaseTableSearchBar<CustomerMember>(
+    child: TableSearchBar<CustomerMember>(
       memberName: "customerId",
       validator: idSearchValidator,
     ),
   ),
   SearchChild(
     columnName: "이름",
-    child: BaseTableSearchBar<CustomerMember>(
+    child: TableSearchBar<CustomerMember>(
       memberName: "name",
       validator: stringValidor,
     ),
   ),
   SearchChild(
     columnName: "이메일",
-    child: BaseTableSearchBar<CustomerMember>(
+    child: TableSearchBar<CustomerMember>(
       memberName: "email",
     ),
   ),
   SearchChild(
     columnName: "휴대번호",
-    child: BaseTableSearchBar<CustomerMember>(
+    child: TableSearchBar<CustomerMember>(
       memberName: "phoneNumber",
     ),
   ),
   SearchChild(
     columnName: "고객상태",
-    child: const BaseTableRadioBox<CustomerMember>(
+    child: const TableRadioBox<CustomerMember>(
       memberName: "status",
       enumList: CustomerMemberStatus.values,
     ),
   ),
   SearchChild(
     columnName: "입주형태",
-    child: const BaseTableRadioBox<CustomerMember>(
+    child: const TableRadioBox<CustomerMember>(
       enumList: CustomerMemberType.values,
       memberName: "type",
     ),
   ),
   SearchChild(
     columnName: "설명",
-    child: BaseTableSearchBar<CustomerMember>(
+    child: TableSearchBar<CustomerMember>(
       memberName: "description",
     ),
   ),
@@ -207,19 +207,19 @@ List<SearchChild> customerMemberSearchChildList = [
 List<SearchChild> officeBranchSearchChildList = [
   SearchChild(
     columnName: "지점명",
-    child: BaseTableSearchBar<OfficeBranch>(
+    child: TableSearchBar<OfficeBranch>(
       memberName: "name",
     ),
   ),
   SearchChild(
     columnName: "운영사ID",
-    child: BaseTableSearchBar<OfficeBranch>(
+    child: TableSearchBar<OfficeBranch>(
       memberName: "serviceProviderId",
     ),
   ),
   SearchChild(
     columnName: "위치",
-    child: BaseTableSearchBar<OfficeBranch>(
+    child: TableSearchBar<OfficeBranch>(
       memberName: "location",
     ),
   ),
@@ -227,45 +227,45 @@ List<SearchChild> officeBranchSearchChildList = [
 List<SearchChild> managerSearchChildList = [
   SearchChild(
     columnName: "운영사ID",
-    child: BaseTableSearchBar<Manager>(
+    child: TableSearchBar<Manager>(
       memberName: "serviceProviderId",
     ),
   ),
   SearchChild(
     columnName: "이름",
-    child: BaseTableSearchBar<Manager>(
+    child: TableSearchBar<Manager>(
       memberName: "name",
     ),
   ),
   SearchChild(
     columnName: "고용형태",
-    child: BaseTableRadioBox<Manager>(
+    child: TableRadioBox<Manager>(
       enumList: EmployeeType.values,
       memberName: "employeeType",
     ),
   ),
   SearchChild(
     columnName: "계약기간",
-    child: BaseTableCalendar<Manager>(
+    child: TableCalendar<Manager>(
       startMemberName: "effectiveDate",
       endMemberName: "expireDate",
     ),
   ),
   SearchChild(
     columnName: "휴대번호",
-    child: BaseTableSearchBar<Manager>(
+    child: TableSearchBar<Manager>(
       memberName: "phoneNumber",
     ),
   ),
   SearchChild(
     columnName: "이메일",
-    child: BaseTableSearchBar<Manager>(
+    child: TableSearchBar<Manager>(
       memberName: "email",
     ),
   ),
   SearchChild(
     columnName: "직업",
-    child: BaseTableRadioBox<Manager>(
+    child: TableRadioBox<Manager>(
       enumList: Job.values,
       memberName: "job",
     ),
@@ -274,25 +274,25 @@ List<SearchChild> managerSearchChildList = [
 List<SearchChild> serviceProviderSearchChildList = [
   SearchChild(
     columnName: "운영사 이름",
-    child: BaseTableSearchBar<ServiceProvider>(
+    child: TableSearchBar<ServiceProvider>(
       memberName: "name",
     ),
   ),
   SearchChild(
     columnName: "법인등록번호",
-    child: BaseTableSearchBar<ServiceProvider>(
+    child: TableSearchBar<ServiceProvider>(
       memberName: "registrationNumber",
     ),
   ),
   SearchChild(
     columnName: "사업자등록번호",
-    child: BaseTableSearchBar<ServiceProvider>(
+    child: TableSearchBar<ServiceProvider>(
       memberName: "companyRegistrationNumber",
     ),
   ),
   SearchChild(
     columnName: "헤이홈토큰",
-    child: BaseTableSearchBar<ServiceProvider>(
+    child: TableSearchBar<ServiceProvider>(
       memberName: "hejhomeToken",
     ),
   ),
@@ -300,25 +300,25 @@ List<SearchChild> serviceProviderSearchChildList = [
 List<SearchChild> sensorSearchChildList = [
   SearchChild(
     columnName: "운영사 이름",
-    child: BaseTableSearchBar<ServiceProvider>(
+    child: TableSearchBar<ServiceProvider>(
       memberName: "name",
     ),
   ),
   SearchChild(
     columnName: "법인등록번호",
-    child: BaseTableSearchBar<ServiceProvider>(
+    child: TableSearchBar<ServiceProvider>(
       memberName: "registrationNumber",
     ),
   ),
   SearchChild(
     columnName: "사업자등록번호",
-    child: BaseTableSearchBar<ServiceProvider>(
+    child: TableSearchBar<ServiceProvider>(
       memberName: "companyRegistrationNumber",
     ),
   ),
   SearchChild(
     columnName: "헤이홈토큰",
-    child: BaseTableSearchBar<ServiceProvider>(
+    child: TableSearchBar<ServiceProvider>(
       memberName: "hejhomeToken",
     ),
   ),
@@ -326,25 +326,25 @@ List<SearchChild> sensorSearchChildList = [
 List<SearchChild> gateCredentialSearchChildList = [
   SearchChild(
     columnName: "운영사 이름",
-    child: BaseTableSearchBar<ServiceProvider>(
+    child: TableSearchBar<ServiceProvider>(
       memberName: "name",
     ),
   ),
   SearchChild(
     columnName: "법인등록번호",
-    child: BaseTableSearchBar<ServiceProvider>(
+    child: TableSearchBar<ServiceProvider>(
       memberName: "registrationNumber",
     ),
   ),
   SearchChild(
     columnName: "사업자등록번호",
-    child: BaseTableSearchBar<ServiceProvider>(
+    child: TableSearchBar<ServiceProvider>(
       memberName: "companyRegistrationNumber",
     ),
   ),
   SearchChild(
     columnName: "헤이홈토큰",
-    child: BaseTableSearchBar<ServiceProvider>(
+    child: TableSearchBar<ServiceProvider>(
       memberName: "hejhomeToken",
     ),
   ),
@@ -352,25 +352,25 @@ List<SearchChild> gateCredentialSearchChildList = [
 List<SearchChild> gateSearchChildList = [
   SearchChild(
     columnName: "운영사 이름",
-    child: BaseTableSearchBar<ServiceProvider>(
+    child: TableSearchBar<ServiceProvider>(
       memberName: "name",
     ),
   ),
   SearchChild(
     columnName: "법인등록번호",
-    child: BaseTableSearchBar<ServiceProvider>(
+    child: TableSearchBar<ServiceProvider>(
       memberName: "registrationNumber",
     ),
   ),
   SearchChild(
     columnName: "사업자등록번호",
-    child: BaseTableSearchBar<ServiceProvider>(
+    child: TableSearchBar<ServiceProvider>(
       memberName: "companyRegistrationNumber",
     ),
   ),
   SearchChild(
     columnName: "헤이홈토큰",
-    child: BaseTableSearchBar<ServiceProvider>(
+    child: TableSearchBar<ServiceProvider>(
       memberName: "hejhomeToken",
     ),
   ),

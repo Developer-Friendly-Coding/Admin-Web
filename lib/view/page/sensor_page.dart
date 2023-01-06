@@ -1,15 +1,15 @@
 import 'package:clean_arch/model/impl/office.dart';
 import 'package:clean_arch/model/impl/sensor.dart';
 import 'package:clean_arch/provider/impl/signin_provider_impl.dart';
-import 'package:clean_arch/view/widget/table/base_table_search/base_table_container.dart';
+import 'package:clean_arch/view/widget/table/table_search/table_container.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
 import 'package:clean_arch/view/widget/sidebar_menu.dart';
-import 'package:clean_arch/view/widget/table/base_table_view/base_table_view.dart';
-import 'package:clean_arch/view/widget/table/base_table_crud_button/base_table_update_button.dart';
-import 'package:clean_arch/view/widget/table/base_table_crud_button/base_table_delete_button.dart';
-import 'package:clean_arch/view/widget/table/base_table_crud_button/base_table_create_button.dart';
+import 'package:clean_arch/view/widget/table/table_view/table_view.dart';
+
+import 'package:clean_arch/view/widget/table/table_crud_button/table_delete_button.dart';
+import 'package:clean_arch/view/widget/table/table_crud_button/table_create_button.dart';
 
 class SensorPage extends StatefulWidget {
   const SensorPage({Key? key}) : super(key: key);
@@ -67,7 +67,7 @@ class _SensorPageState extends State<SensorPage> {
                                     const SizedBox(height: 50),
                                     Align(
                                       alignment: Alignment.centerLeft,
-                                      child: BaseTableSearchContainer<Sensor>(),
+                                      child: TableSearchContainer<Sensor>(),
                                     ),
                                     const SizedBox(height: 30),
                                     Row(
@@ -75,12 +75,12 @@ class _SensorPageState extends State<SensorPage> {
                                             MainAxisAlignment.end,
                                         children: [
                                           const SizedBox(width: 15),
-                                          BaseTableCreateButton<Sensor>(),
+                                          TableCreateButton<Sensor>(),
                                           const SizedBox(width: 15),
-                                          const BaseTableDeleteButton<Sensor>(),
+                                          const TableDeleteButton<Sensor>(),
                                         ]),
                                     const SizedBox(height: 20),
-                                    BaseTableView<Sensor>(),
+                                    TableView<Sensor>(),
                                     const SizedBox(height: 50)
                                   ],
                                 ),

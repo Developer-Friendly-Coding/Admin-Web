@@ -7,7 +7,7 @@ import 'package:clean_arch/model/base_model.dart';
 import 'package:clean_arch/repo/base_table_repo.dart';
 import 'package:recase/recase.dart';
 
-class BaseTableRepository<M extends Base> implements IBaseTableRepository {
+class BaseTableRepository<M extends Base> {
   final Client _client;
   final M _model = ClassBuilder.fromString(M.toString()) as M;
   Map<String, dynamic> _queryParameters = {"size": "100"};
@@ -83,7 +83,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
   }
 
   @override
-  Future<M?> getDetailRowDataById(int id) async {
+  Future<M?> getDataById(int id) async {
     Map<String, String> headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
   }
 
   @override
-  Future<List<M>?> getDetailTableDataById(String modelName, int id) async {
+  Future<List<M>?> getRelatedTableDataById(String modelName, int id) async {
     Map<String, String> headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -266,7 +266,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
   }
 
   @override
-  Future<int?> deleteTableRow(selectedTableRow) async {
+  Future<int?> deleteTableRow(int id) async {
     // FlutterSecureStorage storage = SecureStorage.storage;
     // String? storageValueJsonString = await storage.read(key: 'admin');
     // Map<String, dynamic> storageValueJson = jsonDecode(storageValueJsonString!);
@@ -278,9 +278,7 @@ class BaseTableRepository<M extends Base> implements IBaseTableRepository {
     };
 
     UriProvider.setDeleteTablePath<M>();
-    Map<String, dynamic> deleteQueryParameters = {
-      "id": selectedTableRow.getMember("id").toString()
-    };
+    Map<String, dynamic> deleteQueryParameters = {"id": id.toString()};
     UriProvider.setQuery(deleteQueryParameters);
     UriProvider.setUri();
     Uri url = UriProvider.getUri();

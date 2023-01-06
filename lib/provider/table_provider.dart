@@ -1,10 +1,10 @@
 import 'package:clean_arch/model/base_model.dart';
 import 'package:flutter/material.dart';
 
-abstract class IBaseTableProvider<M extends Base> extends ChangeNotifier {
+abstract class ITableProvider<M extends Base> extends ChangeNotifier {
   List<M> get dataList;
-  int get selectedIndex;
   M get selectedRow;
+  int get selectedId;
   List<TextEditingController> get updateButtonTECList;
   List<TextEditingController> get addButtonTECList;
   Map<int, Enum> get createEnumValuesMapper;
@@ -56,8 +56,7 @@ abstract class IBaseTableProvider<M extends Base> extends ChangeNotifier {
     String endQueryValue,
   );
 
-  ///selectedIndex변수에 index를 대입하는 함수
-  void changeSelectedIndex(index);
+  void setSelectedId(M data);
 
   ///_updateButtonTECList 변수를 생성하고,원클릭이든 더블클릭이든 선택한 테이블의 row에 정보들을 String화 시켜서
   ///_updateButtonTECList.text에다가 넣어주는 함수

@@ -2,15 +2,15 @@ import 'package:clean_arch/model/impl/contract.dart';
 import 'package:clean_arch/model/impl/customer.dart';
 import 'package:clean_arch/model/impl/gate_credential.dart';
 import 'package:clean_arch/provider/impl/signin_provider_impl.dart';
-import 'package:clean_arch/view/widget/table/base_table_search/base_table_container.dart';
+import 'package:clean_arch/view/widget/table/table_search/table_container.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
 import 'package:clean_arch/view/widget/sidebar_menu.dart';
-import 'package:clean_arch/view/widget/table/base_table_view/base_table_view.dart';
-import 'package:clean_arch/view/widget/table/base_table_crud_button/base_table_update_button.dart';
-import 'package:clean_arch/view/widget/table/base_table_crud_button/base_table_delete_button.dart';
-import 'package:clean_arch/view/widget/table/base_table_crud_button/base_table_create_button.dart';
+import 'package:clean_arch/view/widget/table/table_view/table_view.dart';
+
+import 'package:clean_arch/view/widget/table/table_crud_button/table_delete_button.dart';
+import 'package:clean_arch/view/widget/table/table_crud_button/table_create_button.dart';
 
 class GateCredentialPage extends StatefulWidget {
   const GateCredentialPage({Key? key}) : super(key: key);
@@ -68,7 +68,7 @@ class _GateCredentialPageState extends State<GateCredentialPage> {
                                     const SizedBox(height: 50),
                                     Align(
                                       alignment: Alignment.centerLeft,
-                                      child: BaseTableSearchContainer<
+                                      child: TableSearchContainer<
                                           GateCredential>(),
                                     ),
                                     const SizedBox(height: 30),
@@ -77,14 +77,13 @@ class _GateCredentialPageState extends State<GateCredentialPage> {
                                             MainAxisAlignment.end,
                                         children: [
                                           const SizedBox(width: 15),
-                                          BaseTableCreateButton<
-                                              GateCredential>(),
+                                          TableCreateButton<GateCredential>(),
                                           const SizedBox(width: 15),
-                                          const BaseTableDeleteButton<
+                                          const TableDeleteButton<
                                               GateCredential>(),
                                         ]),
                                     const SizedBox(height: 20),
-                                    BaseTableView<GateCredential>(),
+                                    TableView<GateCredential>(),
                                     const SizedBox(height: 50)
                                   ],
                                 ),

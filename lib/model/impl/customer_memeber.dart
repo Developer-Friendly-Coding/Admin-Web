@@ -7,7 +7,6 @@ import 'package:flutter/widgets.dart';
 
 class CustomerMember implements Base {
   final int _id;
-
   final String? _name;
   final String? _email;
   final String? _phoneNumber;
@@ -89,6 +88,20 @@ class CustomerMember implements Base {
 
   @override
   List<String?> toRow() {
+    return [
+      _id.toString(),
+      _customerInCustomerMember?.name.toString(),
+      _name.toString(),
+      _email.toString(),
+      _phoneNumber.toString(),
+      _status.toString(),
+      _type.toString(),
+      _description.toString()
+    ];
+  }
+
+  @override
+  List<String?> forUpdate() {
     return [
       _id.toString(),
       _customerInCustomerMember?.name.toString(),

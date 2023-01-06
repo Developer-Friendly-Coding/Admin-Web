@@ -1,17 +1,16 @@
 import 'package:clean_arch/common/constants/mapper/table_column_attributes_mapper.dart';
 import 'package:clean_arch/model/base_model.dart';
-import 'package:clean_arch/provider/impl/base_table_provider_impl.dart';
-import 'package:clean_arch/view/widget/table/base_table_view/base_table_attributes.dart';
+import 'package:clean_arch/provider/impl/table_provider_impl.dart';
+import 'package:clean_arch/common/constants/column_attributes.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-class BaseTableViewColumn<M extends Base> extends StatelessWidget {
+class TableViewColumn<M extends Base> extends StatelessWidget {
   final bool test;
   final TextStyle? columnStyle;
   final List<ColumnAttributes> columnAttributesList =
       columnAttributesMapper[M.toString()]!;
-  BaseTableViewColumn({this.columnStyle, this.test = false, Key? key})
+  TableViewColumn({this.columnStyle, this.test = false, Key? key})
       : super(key: key);
 
   List<Widget> alignElementsWidget(BuildContext context) {

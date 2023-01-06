@@ -2,14 +2,14 @@ import 'package:clean_arch/common/constants/mapper/related_table_mapper.dart';
 import 'package:clean_arch/model/impl/contract.dart';
 import 'package:clean_arch/model/impl/tax_bill.dart';
 import 'package:clean_arch/provider/impl/signin_provider_impl.dart';
-import 'package:clean_arch/view/widget/table/base_table_search/base_table_container.dart';
+import 'package:clean_arch/view/widget/table/table_search/table_container.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
 import 'package:clean_arch/view/widget/sidebar_menu.dart';
-import 'package:clean_arch/view/widget/table/base_table_view/base_table_view.dart';
-import 'package:clean_arch/view/widget/table/base_table_crud_button/base_table_delete_button.dart';
-import 'package:clean_arch/view/widget/table/base_table_crud_button/base_table_create_button.dart';
+import 'package:clean_arch/view/widget/table/table_view/table_view.dart';
+import 'package:clean_arch/view/widget/table/table_crud_button/table_delete_button.dart';
+import 'package:clean_arch/view/widget/table/table_crud_button/table_create_button.dart';
 
 class TaxBillPage extends StatefulWidget {
   const TaxBillPage({Key? key}) : super(key: key);
@@ -67,8 +67,7 @@ class _TaxBillPageState extends State<TaxBillPage> {
                                     const SizedBox(height: 50),
                                     Align(
                                       alignment: Alignment.centerLeft,
-                                      child:
-                                          BaseTableSearchContainer<TaxBill>(),
+                                      child: TableSearchContainer<TaxBill>(),
                                     ),
                                     const SizedBox(height: 30),
                                     Row(
@@ -76,13 +75,12 @@ class _TaxBillPageState extends State<TaxBillPage> {
                                             MainAxisAlignment.end,
                                         children: [
                                           const SizedBox(width: 15),
-                                          BaseTableCreateButton<TaxBill>(),
+                                          TableCreateButton<TaxBill>(),
                                           const SizedBox(width: 15),
-                                          const BaseTableDeleteButton<
-                                              TaxBill>(),
+                                          const TableDeleteButton<TaxBill>(),
                                         ]),
                                     const SizedBox(height: 20),
-                                    BaseTableView<TaxBill>(),
+                                    TableView<TaxBill>(),
                                     const SizedBox(height: 50)
                                   ],
                                 ),

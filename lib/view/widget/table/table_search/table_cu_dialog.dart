@@ -1,12 +1,9 @@
 import 'package:clean_arch/common/util/class_builder.dart';
-import 'package:clean_arch/model/base_model.dart';
-import 'package:clean_arch/provider/impl/base_table_provider_impl.dart';
-import 'package:clean_arch/view/widget/table/base_table_search/base_table_container.dart';
-import 'package:clean_arch/view/widget/table/base_table_view/base_table_view.dart';
+import 'package:clean_arch/view/widget/table/table_search/table_container.dart';
+import 'package:clean_arch/view/widget/table/table_view/table_view.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-class BaseTableCUDialog<M extends Base> extends StatelessWidget {
+class TableCUDialog extends StatelessWidget {
   final double? width;
   final EdgeInsetsGeometry contentPadding;
   final double iconSize;
@@ -16,7 +13,7 @@ class BaseTableCUDialog<M extends Base> extends StatelessWidget {
   final String mode;
   final Map<String, dynamic> targetMapper;
 
-  BaseTableCUDialog(
+  TableCUDialog(
       {required this.controller,
       required this.validator,
       required this.mode,
@@ -29,10 +26,10 @@ class BaseTableCUDialog<M extends Base> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BaseTableView table =
-        ClassBuilder.getBaseTableView(targetMapper["targetModel"], 300);
-    final BaseTableSearchContainer search =
-        ClassBuilder.getBaseTableSearchContainer(targetMapper["targetModel"]);
+    final TableView table =
+        ClassBuilder.getTableView(targetMapper["targetModel"], 300)!;
+    final TableSearchContainer search =
+        ClassBuilder.getTableSearchContainer(targetMapper["targetModel"])!;
     return Container(
       width: width,
       child: TextFormField(

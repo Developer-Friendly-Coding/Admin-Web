@@ -13,7 +13,7 @@ import 'package:clean_arch/common/constants/enum/sensor_type.dart';
 import 'package:clean_arch/common/constants/enum/tax_bill_status.dart';
 import 'package:clean_arch/common/constants/validator.dart';
 import 'package:clean_arch/model/impl/customer.dart';
-import 'package:clean_arch/view/widget/table/base_table_view/base_table_attributes.dart';
+import 'package:clean_arch/common/constants/column_attributes.dart';
 
 List<ColumnAttributes> contractColumnAttributes = [
   ColumnAttributes(
@@ -23,10 +23,13 @@ List<ColumnAttributes> contractColumnAttributes = [
     validator: idValidator,
   ),
   ColumnAttributes(
-      name: '입주사ID',
-      widthRate: 0.07,
-      leftMarginRate: 0.038,
-      validator: idValidator),
+    name: '입주사',
+    widthRate: 0.07,
+    leftMarginRate: 0.038,
+    validator: idValidator,
+    isHyperLink: true,
+    hyperLinkTargetModel: Customer,
+  ),
   ColumnAttributes(
       name: '보증금',
       widthRate: 0.100,
@@ -151,13 +154,12 @@ List<ColumnAttributes> customerMemberColumnAttributes = [
       leftMarginRate: 0.03,
       validator: idValidator),
   ColumnAttributes(
-    name: '입주사',
-    widthRate: 0.03,
-    leftMarginRate: 0.08,
-    validator: idValidator,
-    isHyperLink: true,
-    hyperLinkTargetModel: Customer,
-  ),
+      name: '입주사',
+      widthRate: 0.03,
+      leftMarginRate: 0.08,
+      validator: idValidator,
+      isHyperLink: true,
+      hyperLinkTargetModel: Customer),
   ColumnAttributes(
       name: '이름',
       widthRate: 0.100,

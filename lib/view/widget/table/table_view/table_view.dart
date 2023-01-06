@@ -3,15 +3,15 @@ import 'package:clean_arch/common/util/class_builder.dart';
 import 'package:clean_arch/view/page/detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:clean_arch/provider/impl/base_table_provider_impl.dart';
+import 'package:clean_arch/provider/impl/table_provider_impl.dart';
 import 'package:clean_arch/model/base_model.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
-import 'package:clean_arch/view/widget/table/base_table_view/base_table_view_row.dart';
-import 'package:clean_arch/view/widget/table/base_table_view/base_table_view_column.dart';
-import 'package:clean_arch/view/widget/table/base_table_view/base_table_attributes.dart';
+import 'package:clean_arch/view/widget/table/table_view/table_view_row.dart';
+import 'package:clean_arch/view/widget/table/table_view/table_view_column.dart';
+import 'package:clean_arch/common/constants/column_attributes.dart';
 import 'package:recase/recase.dart';
 
-class BaseTableView<M extends Base> extends StatelessWidget {
+class TableView<M extends Base> extends StatelessWidget {
   // final double widthRate;
   final double height;
   final double rowHeight;
@@ -24,9 +24,9 @@ class BaseTableView<M extends Base> extends StatelessWidget {
   bool isMultiDialog;
   bool isCUdialog;
   String? cuDialogMode;
-  BaseTableProvider? cuDialogProvider;
+  TableProvider? cuDialogProvider;
   Map<int, String>? targetMapper;
-  BaseTableView(
+  TableView(
       {
       // this.widthRate = 0.65,
       this.height = 400,
@@ -42,7 +42,7 @@ class BaseTableView<M extends Base> extends StatelessWidget {
   void setCUdialogAttributes(
       String mode, Type model, Map<int, String> mapper, BuildContext context) {
     cuDialogMode = mode;
-    cuDialogProvider = ClassBuilder.getBaseTableProvider(model, false, context);
+    cuDialogProvider = ClassBuilder.getTableProvider(model, false, context);
     targetMapper = mapper;
   }
 
@@ -56,8 +56,8 @@ class BaseTableView<M extends Base> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BaseTableProvider<M> providerRead =
-        Provider.of<BaseTableProvider<M>>(context, listen: false);
+    TableProvider<M> providerRead =
+        Provider.of<TableProvider<M>>(context, listen: false);
 
     return FutureBuilder(
       future: providerRead.getTableData(),
@@ -90,11 +90,11 @@ class BaseTableView<M extends Base> extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(height: 24),
-                BaseTableViewColumn<M>(columnStyle: columnStyle),
+                TableViewColumn<M>(columnStyle: columnStyle),
                 const SizedBox(height: 30),
-                Consumer<BaseTableProvider<M>>(
+                Consumer<TableProvider<M>>(
                   builder: (context, provider, child) {
-                    return provider.dataList.isEmpty
+                    return provider.dataList!.isEmpty
                         ? Center(
                             child: Text(
                               "No Result",
@@ -104,7 +104,7 @@ class BaseTableView<M extends Base> extends StatelessWidget {
                         : Expanded(
                             child: ListView.separated(
                               scrollDirection: Axis.vertical,
-                              itemCount: provider.dataList.length,
+                              itemCount: provider.dataList!.length,
                               separatorBuilder: (context, index) =>
                                   const Divider(
                                 thickness: 1,
@@ -113,21 +113,18 @@ class BaseTableView<M extends Base> extends StatelessWidget {
                                 return InkWell(
                                   onTap: () {
                                     isMultiDialog
-                                        ? provider
-                                            .setMultiCuDialogSelectedIndex(
-                                                index)
-                                        : provider.changeSelectedIndex(index);
-
-                                    isMultiDialog
-                                        ? null
-                                        : provider.initUpdateButtonTECList();
+                                        ? provider.setMultiCuDialogId(provider
+                                            .dataList![index]
+                                            .getMember("id"))
+                                        : provider.setSelectedId(
+                                            provider.dataList![index]);
                                   },
                                   onDoubleTap: isMultiDialog
                                       ? null
                                       : isCUdialog
                                           ? () {
-                                              provider
-                                                  .changeSelectedIndex(index);
+                                              provider.setSelectedId(
+                                                  provider.dataList![index]);
                                               provider.setCuDialogTEC(
                                                   targetMapper!,
                                                   cuDialogProvider!,
@@ -135,8 +132,9 @@ class BaseTableView<M extends Base> extends StatelessWidget {
                                               Navigator.pop(context);
                                             }
                                           : () {
-                                              provider
-                                                  .changeSelectedIndex(index);
+                                              provider.setSelectedId(
+                                                  provider.dataList![index]);
+
                                               provider
                                                   .initUpdateButtonTECList();
                                               Navigator.push(
@@ -144,26 +142,26 @@ class BaseTableView<M extends Base> extends StatelessWidget {
                                                 MaterialPageRoute(
                                                   settings: RouteSettings(
                                                       name:
-                                                          "/${ReCase(M.toString()).camelCase}/${provider.dataList[index].getMember("id")}"),
+                                                          "/${ReCase(M.toString()).camelCase}/${provider.selectedId}"),
                                                   builder: (context) =>
                                                       (DetailPage<M>(
-                                                    selectedId: provider
-                                                        .dataList[index]
-                                                        .getMember("id"),
+                                                    selectedId:
+                                                        provider.selectedId,
                                                   )),
                                                 ),
                                               );
                                             },
                                   child: Container(
                                     color: (isMultiDialog
-                                            ? provider
-                                                .isMultiCuDialogContainIndex(
-                                                    index)
-                                            : provider.selectedIndex == index)
+                                            ? provider.isMultiCuDialogContainId(
+                                                provider.dataList![index]
+                                                    .getMember("id"))
+                                            : provider.isSelectedId(
+                                                provider.dataList![index]))
                                         ? const Color(0xFFf0f8ff)
                                         : null,
                                     height: rowHeight,
-                                    child: BaseTableViewRow<M>(
+                                    child: TableViewRow<M>(
                                       rowStyle: rowStyle,
                                       index: index,
                                       test: test,

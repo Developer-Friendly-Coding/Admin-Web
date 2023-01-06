@@ -1,11 +1,11 @@
 import 'package:clean_arch/view/page/detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:clean_arch/provider/impl/base_table_provider_impl.dart';
+import 'package:clean_arch/provider/impl/table_provider_impl.dart';
 import 'package:clean_arch/model/base_model.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
-import 'package:clean_arch/view/widget/table/base_table_view/base_table_view_row.dart';
-import 'package:clean_arch/view/widget/table/base_table_view/base_table_view_column.dart';
+import 'package:clean_arch/view/widget/table/table_view/table_view_row.dart';
+import 'package:clean_arch/view/widget/table/table_view/table_view_column.dart';
 
 class RelatedTableView<M extends Base> extends StatelessWidget {
   final int id;
@@ -32,11 +32,11 @@ class RelatedTableView<M extends Base> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BaseTableProvider<M> providerRead =
-        Provider.of<BaseTableProvider<M>>(context, listen: false);
+    TableProvider<M> providerRead =
+        Provider.of<TableProvider<M>>(context, listen: false);
 
     return FutureBuilder(
-        future: providerRead.getDetailTableDataById(modelName, id),
+        future: providerRead.getRelatedTableDataById(modelName, id),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Center(
@@ -61,13 +61,13 @@ class RelatedTableView<M extends Base> extends StatelessWidget {
               child: Column(
                 children: [
                   const SizedBox(height: 24),
-                  BaseTableViewColumn<M>(columnStyle: columnStyle),
+                  TableViewColumn<M>(columnStyle: columnStyle),
                   const SizedBox(height: 30),
 
                   Expanded(
-                    child: Consumer<BaseTableProvider<M>>(
+                    child: Consumer<TableProvider<M>>(
                       builder: (context, provider, child) {
-                        return provider.dataList.isEmpty
+                        return provider.dataList!.isEmpty
                             ? Center(
                                 child: Text(
                                   "No Result",
@@ -76,7 +76,7 @@ class RelatedTableView<M extends Base> extends StatelessWidget {
                               )
                             : ListView.separated(
                                 controller: ScrollController(),
-                                itemCount: provider.dataList.length,
+                                itemCount: provider.dataList!.length,
                                 separatorBuilder: (context, index) =>
                                     const Divider(
                                       thickness: 1,
@@ -84,28 +84,32 @@ class RelatedTableView<M extends Base> extends StatelessWidget {
                                 itemBuilder: (BuildContext context, int index) {
                                   return InkWell(
                                     onTap: () {
-                                      provider.changeSelectedIndex(index);
+                                      provider.setSelectedId(
+                                          provider.dataList![index]);
                                       provider.initUpdateButtonTECList();
                                     },
                                     onDoubleTap: () {
-                                      provider.changeSelectedIndex(index);
+                                      provider.setSelectedId(
+                                          provider.dataList![index]);
                                       provider.initUpdateButtonTECList();
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => (DetailPage<M>(
-                                            selectedId: provider.dataList[index]
+                                            selectedId: provider
+                                                .dataList![index]
                                                 .getMember("id"),
                                           )),
                                         ),
                                       );
                                     },
                                     child: Container(
-                                      color: provider.selectedIndex == index
+                                      color: provider.isSelectedId(
+                                              provider.dataList![index])
                                           ? const Color(0xFFf0f8ff)
                                           : null,
                                       height: rowHeight,
-                                      child: BaseTableViewRow<M>(
+                                      child: TableViewRow<M>(
                                         rowStyle: rowStyle,
                                         index: index,
                                         test: test,
