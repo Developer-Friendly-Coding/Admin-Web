@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 
 //ignore: must_be_immutable
 class TableSearchContainer<M extends Base> extends StatelessWidget {
-  bool isCUdialog;
   final List<SearchChild> searchContainerChildList =
       searchChildMapper[M.toString()]!;
   final double width;
@@ -16,19 +15,14 @@ class TableSearchContainer<M extends Base> extends StatelessWidget {
   final double nameWidth;
   final double nameLeftMargin;
   final Color color;
-  final String tableName = tableNameMapper[M.toString()]!;
+
   TableSearchContainer(
       {this.width = 550,
       this.hegiht = 150,
       this.nameWidth = 100,
       this.nameLeftMargin = 30,
       this.color = Colors.white,
-      this.isCUdialog = false,
       super.key});
-
-  void setIsCUdialog(bool iscudialog) {
-    isCUdialog = iscudialog;
-  }
 
   List<Widget> getChildren() {
     List<Widget> resultChildren = [];
@@ -59,23 +53,6 @@ class TableSearchContainer<M extends Base> extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        isCUdialog
-            ? SizedBox()
-            : Container(
-                width: 200,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: color,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Center(
-                  child: Text(
-                    "${tableName} 페이지",
-                    style: detailPageInfoStyle,
-                  ),
-                ),
-              ),
-        isCUdialog ? SizedBox() : const SizedBox(height: 30),
         Container(
           decoration: BoxDecoration(
             color: color,

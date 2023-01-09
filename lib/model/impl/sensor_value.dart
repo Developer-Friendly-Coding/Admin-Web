@@ -5,52 +5,53 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 class SensorValue implements Base {
-  final int _id; //
-  final int _sensorId; //
-  final DateTime? _dateTime; //낫널
-  final double _measureValue; //낫널
+  int _id; //
+  SensorInSensorValue _sensor; //
+  DateTime? _dateTime; //낫널
+  double _measureValue; //낫널
 
   SensorValue({
     int id = -1,
-    int sensorId = -1,
     DateTime? dateTime,
     double measureValue = 0.0,
+    SensorInSensorValue? sensor,
   })  : _id = id,
-        _sensorId = sensorId,
+        _sensor = sensor ?? SensorInSensorValue(),
         _dateTime = dateTime,
         _measureValue = measureValue;
-
-  get measureValue => _measureValue;
-  get dateTime => _dateTime;
+  @override
+  SensorValue getDummy() {
+    return SensorValue();
+  }
 
   @override
   SensorValue fromJson(Map<String, dynamic> data) {
     return SensorValue(
       id: data['id'],
-      sensorId: data['sensorId'],
-      dateTime: data['dateTime'],
+      sensor: SensorInSensorValue.fromJson(data['sensor']),
+      dateTime:
+          data['dateTime'] == null ? null : DateTime.parse(data['dateTime']),
       measureValue: data['measureValue'],
     );
   }
 
   @override
-  SensorValue fromTEC(List<TextEditingController> list) {
-    return SensorValue(
-      id: list[0].text == "" ? -1 : int.parse(list[0].text),
-      sensorId: int.parse(list[1].text),
-      dateTime: DateTime.parse(list[2].text),
-      measureValue: double.parse(list[1].text),
-    );
+  Map<String, dynamic> toJsonForCreate(SensorValue sensorValue) {
+    Map<String, dynamic> json = {
+      'sensorId': sensorValue.getMember("sensorId"),
+      'dateTime': sensorValue.getMember("dateTime"),
+      'measureValue': sensorValue.getMember("measureValue"),
+    };
+
+    return json;
   }
 
   @override
-  Map<String, dynamic> toJson(SensorValue sensorValue) {
+  Map<String, dynamic> toJsonForUpdate(SensorValue sensorValue) {
     Map<String, dynamic> json = {
-      'id': sensorValue._id,
-      'sensorId': sensorValue._sensorId,
-      'dateTime':
-          DateFormat("yyyy-MM-dd hh:mm:ss").format(sensorValue._dateTime!),
-      'measureValue': sensorValue._measureValue,
+      'sensorId': sensorValue.getMember("sensorId"),
+      'dateTime': sensorValue.getMember("dateTime"),
+      'measureValue': sensorValue.getMember("measureValue"),
     };
 
     return json;
@@ -59,10 +60,15 @@ class SensorValue implements Base {
   @override
   List<String?> toRow() {
     return [
-      _id.toString(),
-      _sensorId.toString(),
-      DateFormat('yyyy-MM-dd').format(_dateTime!),
-      _measureValue.toString(),
+      _id.toString(), _sensor.name.toString(),
+      _dateTime == null
+          ? null.toString()
+          : DateFormat('yyyy-MM-dd').format(_dateTime!),
+      _measureValue.toString()
+      // _id.toString(),
+      // _sensor.name.toString(),
+      // DateFormat('yyyy-MM-dd').format(_dateTime!),
+      // _measureValue.toString(),
     ];
   }
 
@@ -71,12 +77,84 @@ class SensorValue implements Base {
     switch (member) {
       case "id":
         return _id;
+      case "sensor":
+        return _sensor;
       case "sensorId":
-        return _sensorId;
+        return _sensor.id;
+      case "sensorName":
+        return _sensor.name;
       case "measureValue":
         return _measureValue;
 
       default:
     }
+  }
+
+  @override
+  void setMember(String member, dynamic value) {
+    switch (member) {
+      case "id":
+        _id = value;
+        break;
+      case "sensor":
+        _sensor = value;
+        break;
+      case "sensorId":
+        _sensor.id = value;
+        break;
+      case "sensorName":
+        _sensor.name = value;
+        break;
+      case "measureValue":
+        _measureValue = value;
+        break;
+
+      default:
+    }
+  }
+}
+
+class SensorInSensorValue {
+  int id; //
+  SensorType? type; //낫널
+  MeasureUnit? valueUnit; //낫널
+  int? measureInterval;
+  String? description; // final String? interval;
+  String? modelName; //
+  String? name; //
+  String hejhomeId;
+  String? token;
+
+  SensorInSensorValue({
+    int id = -1,
+    SensorType? type,
+    MeasureUnit? valueUnit,
+    int? measureInterval = -1,
+    String? description = "",
+    String? modelName = "",
+    String? name = "",
+    String hejhomeId = "",
+    String? token = "",
+  })  : id = id,
+        type = type,
+        valueUnit = valueUnit,
+        measureInterval = measureInterval,
+        description = description,
+        modelName = modelName,
+        name = name,
+        hejhomeId = hejhomeId,
+        token = token;
+
+  factory SensorInSensorValue.fromJson(Map<String, dynamic> data) {
+    return SensorInSensorValue(
+        id: data['id'],
+        type: SensorType.values.byName(data['type']),
+        valueUnit: MeasureUnit.values.byName(data['valueUnit']),
+        measureInterval: data['measureInterval'],
+        description: data['description'],
+        modelName: data['modelName'],
+        name: data['name'],
+        hejhomeId: data['hejhomeId'],
+        token: data['token']);
   }
 }

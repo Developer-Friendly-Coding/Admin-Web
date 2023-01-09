@@ -1,23 +1,23 @@
+import 'package:clean_arch/common/constants/column_attributes.dart';
 import 'package:clean_arch/common/util/class_builder.dart';
+import 'package:clean_arch/model/base_model.dart';
 import 'package:clean_arch/view/widget/table/table_search/table_container.dart';
 import 'package:clean_arch/view/widget/table/table_view/table_view.dart';
+import 'package:clean_arch/view/widget/table/table_view/table_view_for_cuDialog.dart';
 import 'package:flutter/material.dart';
 
-class TableCUDialog extends StatelessWidget {
+class TableCUDialog<M extends Base> extends StatelessWidget {
   final double? width;
   final EdgeInsetsGeometry contentPadding;
   final double iconSize;
   final InputBorder? border;
   final TextEditingController controller;
-  final String? Function(String?)? validator;
+  final ColumnAttributes columnAttributes;
   final String mode;
-  final Map<String, dynamic> targetMapper;
-
   TableCUDialog(
       {required this.controller,
-      required this.validator,
+      required this.columnAttributes,
       required this.mode,
-      required this.targetMapper,
       this.width,
       this.contentPadding = EdgeInsets.zero,
       this.iconSize = 25,
@@ -26,25 +26,20 @@ class TableCUDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TableView table =
-        ClassBuilder.getTableView(targetMapper["targetModel"], 300)!;
-    final TableSearchContainer search =
-        ClassBuilder.getTableSearchContainer(targetMapper["targetModel"])!;
+    final TableSearchContainer search = ClassBuilder.getTableSearchContainer(
+        columnAttributes.cuDialogTargetModel!)!;
+    final TableViewForCuDialog table = ClassBuilder.getTableViewForCuDialog(
+        columnAttributes.cuDialogTargetModel!, columnAttributes)!;
+    table.setFromAndMode(M, mode);
     return Container(
       width: width,
       child: TextFormField(
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        validator: validator,
         controller: controller,
         decoration: InputDecoration(
           border: border,
           contentPadding: contentPadding,
           suffixIcon: IconButton(
             onPressed: () {
-              table.setCUdialogAttributes(mode, targetMapper["targetModel"],
-                  targetMapper["targetMapper"], context);
-              table.setIsCUdialog(true);
-              search.setIsCUdialog(true);
               showDialog(
                 barrierColor: const Color.fromRGBO(0, 0, 0, 0.3),
                 context: context,

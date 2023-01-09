@@ -6,19 +6,17 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 class Manager implements Base {
-  final int _id;
-  final int _serviceProviderId;
-  final String _name;
-  final EmployeeType? _employeeType;
-  final DateTime? _expireDate;
-  final DateTime? _effectiveDate;
-  final String? _phoneNumber;
-  final String? _email;
-  final Job? _job;
-
+  int _id;
+  String _name;
+  EmployeeType? _employeeType;
+  DateTime? _expireDate;
+  DateTime? _effectiveDate;
+  String? _phoneNumber;
+  String? _email;
+  Job? _job;
+  ServiceProviderInManager _serviceProvider;
   Manager({
     int id = -1,
-    int serviceProviderId = -1,
     String name = "",
     EmployeeType? employeeType,
     DateTime? expireDate,
@@ -26,8 +24,9 @@ class Manager implements Base {
     String? phoneNumber,
     String? email,
     Job? job,
+    ServiceProviderInManager? serviceProvider,
   })  : _id = id,
-        _serviceProviderId = serviceProviderId,
+        _serviceProvider = serviceProvider ?? ServiceProviderInManager(),
         _name = name,
         _employeeType = employeeType,
         _expireDate = expireDate,
@@ -35,12 +34,15 @@ class Manager implements Base {
         _phoneNumber = phoneNumber,
         _email = email,
         _job = job;
+  @override
+  Manager getDummy() {
+    return Manager();
+  }
 
   @override
   Manager fromJson(Map<String, dynamic> data) {
     return Manager(
       id: data['id'],
-      serviceProviderId: data['serviceProviderId'],
       name: data['name'],
       employeeType: data['employeeType'] == null
           ? null
@@ -54,41 +56,38 @@ class Manager implements Base {
       phoneNumber: data['phoneNumber'],
       email: data['email'],
       job: data['job'] == null ? null : Job.values.byName(data['job']),
+      serviceProvider:
+          ServiceProviderInManager.fromJson(data['serviceProvider']),
     );
   }
 
   @override
-  Manager fromTEC(List<TextEditingController> list) {
-    return Manager(
-      id: list[0].text == "" ? -1 : int.parse(list[0].text),
-      serviceProviderId: int.parse(list[1].text),
-      name: list[2].text,
-      employeeType:
-          list[3].text == "" ? null : EmployeeType.fromString(list[3].text),
-      expireDate: list[4].text == "" ? null : DateTime.parse(list[4].text),
-      effectiveDate: list[5].text == "" ? null : DateTime.parse(list[5].text),
-      phoneNumber: list[6].text == "" ? null : list[6].text,
-      email: list[7].text == "" ? null : list[7].text,
-      job: list[8].text == "" ? null : Job.fromString(list[8].text),
-    );
-  }
-
-  @override
-  Map<String, dynamic> toJson(Manager manager) {
+  Map<String, dynamic> toJsonForCreate(Manager manager) {
     Map<String, dynamic> json = {
-      'serviceProviderId': manager._serviceProviderId,
-      'name': manager._name,
-      'employeeType': manager._employeeType?.name,
-      'expireDate': (manager._expireDate == null)
-          ? null
-          : DateFormat("yyyy-MM-dd hh:mm:ss").format(manager._expireDate!),
-      // manager._expireDate?.toString(),
-      'effectiveDate': (manager._effectiveDate == null)
-          ? null
-          : DateFormat("yyyy-MM-dd hh:mm:ss").format(manager._effectiveDate!),
-      'phoneNumber': manager._phoneNumber,
-      'email': manager._email,
-      'job': manager._job?.name,
+      'name': manager.getMember("name"),
+      'employeeType': manager.getMember("employeeType"),
+      'expireDate': manager.getMember("expireDate"),
+      'effectiveDate': manager.getMember("effectiveDate"),
+      'phoneNumber': manager.getMember("phoneNumber"),
+      'email': manager.getMember("email"),
+      'job': manager.getMember("job"),
+      'serviceProviderId': manager.getMember("serviceProviderId"),
+    };
+
+    return json;
+  }
+
+  @override
+  Map<String, dynamic> toJsonForUpdate(Manager manager) {
+    Map<String, dynamic> json = {
+      'name': manager.getMember("name"),
+      'employeeType': manager.getMember("employeeType"),
+      'expireDate': manager.getMember("expireDate"),
+      'effectiveDate': manager.getMember("effectiveDate"),
+      'phoneNumber': manager.getMember("phoneNumber"),
+      'email': manager.getMember("email"),
+      'job': manager.getMember("job"),
+      'serviceProviderId': manager.getMember("serviceProviderId"),
     };
 
     return json;
@@ -98,7 +97,7 @@ class Manager implements Base {
   List<String?> toRow() {
     return [
       _id.toString(),
-      _serviceProviderId.toString(),
+      _serviceProvider.name,
       _name.toString(),
       _employeeType.toString(),
       _expireDate == null
@@ -118,8 +117,12 @@ class Manager implements Base {
     switch (member) {
       case "id":
         return _id;
+      case "serviceProvider":
+        return _serviceProvider;
       case "serviceProviderId":
-        return _serviceProviderId;
+        return _serviceProvider.id;
+      case "serviceProviderName":
+        return _serviceProvider.name;
       case "name":
         return _name;
       case "employeeType":
@@ -137,5 +140,75 @@ class Manager implements Base {
 
       default:
     }
+  }
+
+  @override
+  void setMember(String member, dynamic value) {
+    switch (member) {
+      case "id":
+        _id = value;
+        break;
+      case "serviceProvider":
+        _serviceProvider = value;
+        break;
+      case "serviceProviderId":
+        _serviceProvider.id = value;
+        break;
+      case "serviceProviderName":
+        _serviceProvider.name = value;
+        break;
+      case "name":
+        _name = value;
+        break;
+      case "employeeType":
+        _employeeType = value;
+        break;
+      case "expireDate":
+        _expireDate = value;
+        break;
+      case "effectiveDate":
+        _effectiveDate = value;
+        break;
+      case "phoneNumber":
+        _phoneNumber = value;
+        break;
+      case "email":
+        _email = value;
+        break;
+      case "job":
+        _job = value;
+        break;
+      default:
+    }
+  }
+}
+
+class ServiceProviderInManager {
+  int id;
+  String name;
+  String registrationNumber;
+  String companyRegistrationNumber;
+  String hejhomeToken;
+
+  ServiceProviderInManager({
+    int id = -1,
+    String name = "",
+    String registrationNumber = "",
+    String companyRegistrationNumber = "",
+    String hejhomeToken = "",
+  })  : id = id,
+        name = name,
+        registrationNumber = registrationNumber,
+        companyRegistrationNumber = companyRegistrationNumber,
+        hejhomeToken = hejhomeToken;
+
+  factory ServiceProviderInManager.fromJson(Map<String, dynamic> data) {
+    return ServiceProviderInManager(
+      id: data['id'],
+      name: data['name'],
+      registrationNumber: data['registrationNumber'],
+      companyRegistrationNumber: data['companyRegistrationNumber'],
+      hejhomeToken: data['hejhomeToken'],
+    );
   }
 }

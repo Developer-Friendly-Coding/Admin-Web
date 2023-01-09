@@ -3,12 +3,12 @@ import 'package:clean_arch/model/base_model.dart';
 import 'package:flutter/widgets.dart';
 
 class Office implements Base {
-  final int _id; //
-  final OfficeType? _type;
-  final int _capacity; //
-  final String? _description;
-  final String _name; //
-  final int _officeBranchId; //
+  int _id; //
+  OfficeType? _type;
+  int _capacity; //
+  String? _description;
+  String _name; //
+  OfficeBranchInOffice _officeBranch; //
 
   Office({
     int id = -1,
@@ -16,13 +16,17 @@ class Office implements Base {
     int capacity = -1,
     String? description,
     String name = "",
-    int officeBranchId = -1,
+    OfficeBranchInOffice? officeBranch,
   })  : _id = id,
         _type = type,
         _capacity = capacity,
         _description = description,
         _name = name,
-        _officeBranchId = officeBranchId;
+        _officeBranch = officeBranch ?? OfficeBranchInOffice();
+  @override
+  Office getDummy() {
+    return Office();
+  }
 
   @override
   Office fromJson(Map<String, dynamic> data) {
@@ -32,29 +36,30 @@ class Office implements Base {
         capacity: data['capacity'],
         description: data['description'],
         name: data['name'],
-        officeBranchId: data['officeBranchId']);
+        officeBranch: OfficeBranchInOffice.fromJson(data['officeBranch']));
   }
 
   @override
-  Office fromTEC(List<TextEditingController> list) {
-    return Office(
-      id: list[0].text == "" ? -1 : int.parse(list[0].text),
-      officeBranchId: int.parse(list[1].text),
-      name: list[2].text,
-      capacity: int.parse(list[3].text),
-      type: OfficeType.fromString(list[4].text),
-      description: list[5].text == "" ? null : list[5].text,
-    );
-  }
-
-  @override
-  Map<String, dynamic> toJson(Office office) {
+  Map<String, dynamic> toJsonForCreate(Office office) {
     Map<String, dynamic> json = {
-      'type': office._type!.name,
-      'capacity': office._capacity,
-      'description': office._description,
-      'name': office._name,
-      'officeBranchId': office._officeBranchId,
+      'type': office.getMember("type"),
+      'capacity': office.getMember("capacity"),
+      'description': office.getMember("description"),
+      'name': office.getMember("name"),
+      'officeBranchId': office.getMember("officeBranchId"),
+    };
+
+    return json;
+  }
+
+  @override
+  Map<String, dynamic> toJsonForUpdate(Office office) {
+    Map<String, dynamic> json = {
+      'type': office.getMember("type"),
+      'capacity': office.getMember("capacity"),
+      'description': office.getMember("description"),
+      'name': office.getMember("name"),
+      'officeBranchId': office.getMember("officeBranchId"),
     };
 
     return json;
@@ -64,7 +69,7 @@ class Office implements Base {
   List<String?> toRow() {
     return [
       _id.toString(),
-      _officeBranchId.toString(),
+      _officeBranch.name,
       _name,
       _capacity.toString(),
       _type.toString(),
@@ -77,8 +82,12 @@ class Office implements Base {
     switch (member) {
       case "id":
         return _id;
+      case "officeBranch":
+        return _officeBranch;
       case "officeBranchId":
-        return _officeBranchId;
+        return _officeBranch.id;
+      case "officeBranchName":
+        return _officeBranch.name;
       case "name":
         return _name;
       case "capacity":
@@ -90,5 +99,64 @@ class Office implements Base {
 
       default:
     }
+  }
+
+  @override
+  void setMember(String member, dynamic value) {
+    switch (member) {
+      case "id":
+        _id = value;
+        break;
+      case "officeBranch":
+        _officeBranch = value;
+        break;
+      case "officeBranchId":
+        _officeBranch.id = value;
+        break;
+      case "officeBranchrName":
+        _officeBranch.name = value;
+        break;
+      case "name":
+        _name = value;
+        break;
+      case "type":
+        _type = value;
+        break;
+      case "description":
+        _description = value;
+        break;
+
+      default:
+    }
+  }
+}
+
+class OfficeBranchInOffice {
+  int id;
+  String name;
+  String location;
+  double longitude;
+  double latitude;
+
+  OfficeBranchInOffice({
+    int id = -1,
+    String name = "",
+    String location = "",
+    double longitude = -1.0,
+    double latitude = -1.0,
+  })  : id = id,
+        name = name,
+        location = location,
+        longitude = longitude,
+        latitude = latitude;
+
+  factory OfficeBranchInOffice.fromJson(Map<String, dynamic> data) {
+    return OfficeBranchInOffice(
+      id: data['id'],
+      name: data['name'],
+      location: data['location'],
+      longitude: data['longitude'],
+      latitude: data['latitude'],
+    );
   }
 }

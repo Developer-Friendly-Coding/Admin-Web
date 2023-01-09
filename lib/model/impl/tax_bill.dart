@@ -1,38 +1,43 @@
+import 'package:clean_arch/common/constants/enum/contract_type.dart';
 import 'package:clean_arch/common/constants/enum/tax_bill_status.dart';
 import 'package:clean_arch/model/base_model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 class TaxBill implements Base {
-  final int _id;
-  final int _contractId;
-  final DateTime? _issuedDate;
-  final double? _subTotal;
-  final double? _tax;
-  final double? _total;
-  final TaxBillStatus? _status;
+  int _id;
+  ContractInTaxBill _contract;
+  DateTime? _issuedDate;
+  double? _subTotal;
+  double? _tax;
+  double? _total;
+  TaxBillStatus? _status;
 
   TaxBill(
       {int id = -1,
-      int contractId = -1,
+      ContractInTaxBill? contract,
       DateTime? issuedDate,
       double? subTotal,
       double? tax,
       double? total,
       TaxBillStatus? status})
       : _id = id,
-        _contractId = contractId,
+        _contract = contract ?? ContractInTaxBill(),
         _issuedDate = issuedDate,
         _subTotal = subTotal,
         _tax = tax,
         _total = total,
         _status = status;
+  @override
+  TaxBill getDummy() {
+    return TaxBill();
+  }
 
   @override
   TaxBill fromJson(Map<String, dynamic> data) {
     return TaxBill(
         id: data['id'],
-        contractId: data['contractId'],
+        contract: ContractInTaxBill.fromJson(data['contract']),
         issuedDate: data['issuedDate'] == null
             ? null
             : DateTime.parse(data['issuedDate']),
@@ -45,29 +50,28 @@ class TaxBill implements Base {
   }
 
   @override
-  TaxBill fromTEC(List<TextEditingController> list) {
-    return TaxBill(
-        id: list[0].text == "" ? -1 : int.parse(list[0].text),
-        contractId: int.parse(list[1].text),
-        issuedDate: list[2].text == "" ? null : DateTime.parse(list[2].text),
-        subTotal: list[3].text == "" ? null : double.parse(list[3].text),
-        tax: list[4].text == "" ? null : double.parse(list[4].text),
-        total: list[5].text == "" ? null : double.parse(list[5].text),
-        status:
-            list[6].text == "" ? null : TaxBillStatus.fromString(list[6].text));
+  Map<String, dynamic> toJsonForCreate(TaxBill taxBill) {
+    Map<String, dynamic> json = {
+      'contractId': taxBill.getMember("contractId"),
+      'issuedDate': taxBill.getMember("issuedDate"),
+      "subTotal": taxBill.getMember("subTotal"),
+      'tax': taxBill.getMember("tax"),
+      'total': taxBill.getMember("total"),
+      'status': taxBill.getMember("status"),
+    };
+
+    return json;
   }
 
   @override
-  Map<String, dynamic> toJson(TaxBill taxBill) {
+  Map<String, dynamic> toJsonForUpdate(TaxBill taxBill) {
     Map<String, dynamic> json = {
-      'contractId': taxBill._contractId,
-      'issuedDate': (taxBill._issuedDate == null)
-          ? null
-          : DateFormat("yyyy-MM-dd hh:mm:ss").format(taxBill._issuedDate!),
-      "subTotal": taxBill._subTotal,
-      'tax': taxBill._tax,
-      'total': taxBill._total,
-      'status': taxBill._status?.name,
+      'contractId': taxBill.getMember("contractId"),
+      'issuedDate': taxBill.getMember("issuedDate"),
+      "subTotal": taxBill.getMember("subTotal"),
+      'tax': taxBill.getMember("tax"),
+      'total': taxBill.getMember("total"),
+      'status': taxBill.getMember("status"),
     };
 
     return json;
@@ -77,7 +81,7 @@ class TaxBill implements Base {
   List<String?> toRow() {
     return [
       _id.toString(),
-      _contractId.toString(),
+      _contract.contractDatetime.toString(),
       _issuedDate == null
           ? null.toString()
           : DateFormat('yyyy-MM-dd').format(_issuedDate!),
@@ -93,8 +97,12 @@ class TaxBill implements Base {
     switch (member) {
       case "id":
         return _id;
+      case "contract":
+        return _contract;
       case "contractId":
-        return _contractId;
+        return _contract.id;
+      case "contractDatetime":
+        return _contract.contractDatetime;
       case "issuedDate":
         return _issuedDate;
       case "subTotal":
@@ -108,5 +116,89 @@ class TaxBill implements Base {
 
       default:
     }
+  }
+
+  @override
+  void setMember(String member, dynamic value) {
+    switch (member) {
+      case "id":
+        _id = value;
+        break;
+      case "contract":
+        _contract = value;
+        break;
+      case "contractId":
+        _contract.id = value;
+        break;
+      case "contractDateTime":
+        _contract.contractDatetime = value;
+        break;
+      case "issuedDate":
+        _issuedDate = value;
+        break;
+      case "subTotal":
+        _subTotal = value;
+        break;
+      case "tax":
+        _tax = value;
+        break;
+      case "total":
+        _total = value;
+        break;
+      case "status":
+        _status = value;
+        break;
+
+      default:
+    }
+  }
+}
+
+class ContractInTaxBill {
+  int id;
+  double deposit;
+  double rent;
+  String? description;
+  DateTime? contractDatetime;
+  DateTime? startDatetime;
+  DateTime? endDatetime;
+  ContractType? type;
+
+  ContractInTaxBill({
+    int id = -1,
+    double deposit = -1.0,
+    double rent = -1.0,
+    String? description = "",
+    DateTime? contractDatetime,
+    DateTime? startDatetime,
+    DateTime? endDatetime,
+    ContractType? type,
+  })  : id = id,
+        deposit = deposit,
+        rent = rent,
+        description = description,
+        contractDatetime = contractDatetime,
+        startDatetime = startDatetime,
+        endDatetime = endDatetime,
+        type = type;
+
+  factory ContractInTaxBill.fromJson(Map<String, dynamic> data) {
+    return ContractInTaxBill(
+        id: data['id'],
+        deposit: data['deposit'],
+        rent: data['rent'],
+        description: data['description'],
+        contractDatetime: data['contractDatetime'] == null
+            ? null
+            : DateTime.parse(data['contractDatetime']),
+        startDatetime: data['startDatetime'] == null
+            ? null
+            : DateTime.parse(data['startDatetime']),
+        endDatetime: data['endDatetime'] == null
+            ? null
+            : DateTime.parse(data['endDatetime']),
+        type: data['type'] == null
+            ? null
+            : ContractType.values.byName(data['type']));
   }
 }

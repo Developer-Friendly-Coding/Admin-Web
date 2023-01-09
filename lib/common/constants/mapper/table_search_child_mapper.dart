@@ -375,7 +375,32 @@ List<SearchChild> gateSearchChildList = [
     ),
   ),
 ];
-
+List<SearchChild> sensorValueSearchChildList = [
+  SearchChild(
+    columnName: "운영사 이름",
+    child: TableSearchBar<ServiceProvider>(
+      memberName: "name",
+    ),
+  ),
+  SearchChild(
+    columnName: "법인등록번호",
+    child: TableSearchBar<ServiceProvider>(
+      memberName: "registrationNumber",
+    ),
+  ),
+  SearchChild(
+    columnName: "사업자등록번호",
+    child: TableSearchBar<ServiceProvider>(
+      memberName: "companyRegistrationNumber",
+    ),
+  ),
+  SearchChild(
+    columnName: "헤이홈토큰",
+    child: TableSearchBar<ServiceProvider>(
+      memberName: "hejhomeToken",
+    ),
+  ),
+];
 Map<String, List<SearchChild>> searchChildMapper = {
   "Contract": contractSearchChildList,
   "Office": officeSearchChildList,
@@ -386,6 +411,7 @@ Map<String, List<SearchChild>> searchChildMapper = {
   "ServiceProvider": serviceProviderSearchChildList,
   "TaxBill": serviceProviderSearchChildList,
   "Sensor": sensorSearchChildList,
+  "SensorValue": sensorValueSearchChildList,
   "GateCredential": gateCredentialSearchChildList,
   "Gate": gateSearchChildList
 };

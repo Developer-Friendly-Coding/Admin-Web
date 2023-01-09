@@ -7,6 +7,7 @@ import 'package:clean_arch/model/impl/office.dart';
 import 'package:clean_arch/provider/impl/table_provider_impl.dart';
 import 'package:clean_arch/view/page/board_view_page.dart';
 import 'package:clean_arch/common/constants/column_attributes.dart';
+import 'package:clean_arch/view/widget/table/table_search/table_cu_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +18,7 @@ import 'package:web_date_picker/web_date_picker.dart';
 
 //ignore: must_be_immutable
 class DetailInfo<M extends Base> extends StatefulWidget {
+  final int selectedId;
   final double widthRate;
   final double height;
   Color color;
@@ -26,6 +28,7 @@ class DetailInfo<M extends Base> extends StatefulWidget {
       {required this.widthRate,
       required this.height,
       required this.color,
+      required this.selectedId,
       super.key});
 
   @override
@@ -55,40 +58,36 @@ class _DetailInfoState<M extends Base> extends State<DetailInfo<M>> {
                 width: 170,
                 height: 50,
                 child: columnAttributesList[i].enumValus != null
-                    ? (providerRead.initUpdateEnumValue(
-                            columnAttributesList[i].enumValus![0], i)
-                        ? Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                              border: Border.all(width: 0.3),
-                            ),
-                            child: DropdownButtonHideUnderline(
-                              child: Consumer<TableProvider<M>>(
-                                builder: (context, provider, child) {
-                                  return DropdownButton(
-                                    value: provider.updateEnumValuesMapper[i],
-                                    items:
-                                        columnAttributesList[i].enumValus!.map(
-                                      (value) {
-                                        return DropdownMenuItem(
-                                            value: value,
-                                            child: Text(value.toString()));
-                                      },
-                                    ).toList(),
-                                    onChanged: ((value) {
-                                      provider.setUpdateEnumValue(value!, i);
-                                      providerRead.updateButtonTECList[i].text =
-                                          value.toString();
-                                    }),
-                                  );
-                                },
-                              ),
-                            ),
-                          )
-                        : null)
+                    ? Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          border: Border.all(width: 0.3),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: Consumer<TableProvider<M>>(
+                            builder: (context, provider, child) {
+                              return DropdownButton(
+                                value: provider.updateEnumValuesMapper[i],
+                                items: columnAttributesList[i].enumValus!.map(
+                                  (value) {
+                                    return DropdownMenuItem(
+                                        value: value,
+                                        child: Text(value.toString()));
+                                  },
+                                ).toList(),
+                                onChanged: ((value) {
+                                  provider.setUpdateEnumValue(value!, i);
+                                  providerRead.updateButtonTECList[i].text =
+                                      value.toString();
+                                }),
+                              );
+                            },
+                          ),
+                        ),
+                      )
                     : columnAttributesList[i].type == DateTime
                         ? WebDatePicker(
                             onChange: (value) {
@@ -97,15 +96,23 @@ class _DetailInfoState<M extends Base> extends State<DetailInfo<M>> {
                                       .format(value!);
                             },
                           )
-                        : TextFormField(
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            validator: columnAttributesList[i].validator,
-                            controller: providerRead.updateButtonTECList[i],
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                            ),
-                          )),
+                        : columnAttributesList[i].isCuDialog == true
+                            ? TableCUDialog<M>(
+                                mode: "update",
+                                columnAttributes: columnAttributesList[i],
+                                controller: providerRead.updateButtonTECList[i],
+                                border: OutlineInputBorder(),
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 10))
+                            : TextFormField(
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                validator: columnAttributesList[i].validator,
+                                controller: providerRead.updateButtonTECList[i],
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                ),
+                              )),
           ],
         ),
       );
@@ -118,6 +125,7 @@ class _DetailInfoState<M extends Base> extends State<DetailInfo<M>> {
   Widget build(BuildContext context) {
     TableProvider<M> providerRead =
         Provider.of<TableProvider<M>>(context, listen: false);
+
     List<Widget> detailCL = detailComponentList(providerRead);
     return Container(
       width: MediaQuery.of(context).size.width * widget.widthRate,
@@ -150,7 +158,7 @@ class _DetailInfoState<M extends Base> extends State<DetailInfo<M>> {
           //M이 office이고 type이 회ㅡ이실이면
           M == Office &&
                   providerRead
-                          .getDataById(providerRead.selectedId)!
+                          .getDataInDataListById(providerRead.selectedId)!
                           .toRow()[4] ==
                       OfficeType.CONFERENCE_ROOM.toString()
               ? Container(
@@ -186,6 +194,7 @@ class _DetailInfoState<M extends Base> extends State<DetailInfo<M>> {
               child: Text("수정"),
               onPressed: (() async {
                 try {
+                  providerRead.setDataForUpdate();
                   int? statusCode = await providerRead.updateTableRow();
                   if (statusCode == 200) {
                     await providerRead.getTableData();

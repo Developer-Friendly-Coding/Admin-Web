@@ -20,10 +20,10 @@ List<RelatedTableView>? getRelatedTableList(String modelName, int id) {
 
     case 'CustomerMember': //출입권한
       return [
-        RelatedTableView<GateCredential>(
-          id: id,
-          modelName: modelName,
-        ),
+        // RelatedTableView<GateCredential>(
+        //   id: id,
+        //   modelName: modelName,
+        // ),
       ];
 
     case 'Customer': // 계약, 입주멤버

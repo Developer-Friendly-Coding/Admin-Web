@@ -1,17 +1,18 @@
 import 'package:clean_arch/common/constants/enum/business_type.dart';
 import 'package:clean_arch/common/constants/enum/customer_status.dart';
+import 'package:clean_arch/common/constants/mapper/cu_dialog_mapper.dart';
 import 'package:clean_arch/model/base_model.dart';
 import 'package:flutter/widgets.dart';
 
 class Customer implements Base {
-  final int _id;
-  final String _name;
-  final BusinessType? _type;
-  final String _registrationNumber;
-  final String _companyRegistrationNumber;
-  final CustomerStatus? _status;
-  final String _description;
-  final ServiceProviderInCustomer? _serviceProviderInCustomer;
+  int _id;
+  String _name;
+  BusinessType? _type;
+  String _registrationNumber;
+  String _companyRegistrationNumber;
+  CustomerStatus? _status;
+  String _description;
+  ServiceProviderInCustomer _serviceProvider;
 
   Customer(
       {int id = -1,
@@ -21,7 +22,7 @@ class Customer implements Base {
       String companyRegistrationNumber = "",
       CustomerStatus? status,
       String description = "",
-      ServiceProviderInCustomer? serviceProviderInCustomer})
+      ServiceProviderInCustomer? serviceProvider})
       : _id = id,
         _name = name,
         _type = type,
@@ -29,7 +30,11 @@ class Customer implements Base {
         _companyRegistrationNumber = companyRegistrationNumber,
         _status = status,
         _description = description,
-        _serviceProviderInCustomer = serviceProviderInCustomer;
+        _serviceProvider = serviceProvider ?? ServiceProviderInCustomer();
+  @override
+  Customer getDummy() {
+    return Customer();
+  }
 
   @override
   Customer fromJson(Map<String, dynamic> data) {
@@ -41,39 +46,41 @@ class Customer implements Base {
       companyRegistrationNumber: data['companyRegistrationNumber'],
       status: CustomerStatus.values.byName(data['status']),
       description: data['description'],
-      serviceProviderInCustomer:
+      serviceProvider:
           ServiceProviderInCustomer.fromJson(data['serviceProvider']),
     );
   }
 
   @override
-  Customer fromTEC(List<TextEditingController> list) {
-    Customer customer = Customer(
-      id: list[0].text == "" ? -1 : int.parse(list[0].text),
-      name: list[1].text,
-      type: BusinessType.fromString(list[2].text),
-      registrationNumber: list[3].text,
-      companyRegistrationNumber: list[4].text,
-      status: CustomerStatus.fromString(list[5].text),
-      description: list[6].text,
-      serviceProviderInCustomer:
-          _serviceProviderInCustomer ?? ServiceProviderInCustomer(),
-    );
+  Map<String, dynamic> toJsonForCreate(Customer customer) {
+    BusinessType type = customer.getMember("type");
+    CustomerStatus status = customer.getMember("status");
+    Map<String, dynamic> json = {
+      'name': customer.getMember("name"),
+      'type': type.name,
+      'registrationNumber': customer.getMember("registrationNumber"),
+      'companyRegistrationNumber':
+          customer.getMember("companyRegistrationNumber"),
+      'status': status.name,
+      'description': customer.getMember("description"),
+      'serviceProviderId': customer.getMember("serviceProviderId"),
+    };
 
-    customer._serviceProviderInCustomer!.id = int.parse(list[7].text);
-    return customer;
+    return json;
   }
 
   @override
-  Map<String, dynamic> toJson(Customer customer) {
+  Map<String, dynamic> toJsonForUpdate(Customer customer) {
+    BusinessType type = customer.getMember("type");
+    CustomerStatus status = customer.getMember("status");
     Map<String, dynamic> json = {
-      'name': customer._name,
-      'type': customer._type!.name,
-      'registrationNumber': customer._registrationNumber,
-      'companyRegistrationNumber': customer._companyRegistrationNumber,
-      'status': customer._status!.name,
-      'description': customer._description,
-      'serviceProviderId': customer._serviceProviderInCustomer!.id,
+      'name': customer.getMember("name"),
+      'type': type.name,
+      'registrationNumber': customer.getMember("registrationNumber"),
+      'companyRegistrationNumber':
+          customer.getMember("companyRegistrationNumber"),
+      'status': status.name,
+      'description': customer.getMember("description"),
     };
 
     return json;
@@ -89,7 +96,7 @@ class Customer implements Base {
       _companyRegistrationNumber,
       _status.toString(),
       _description,
-      _serviceProviderInCustomer!.name.toString()
+      _serviceProvider.name.toString()
     ];
   }
 
@@ -110,10 +117,49 @@ class Customer implements Base {
         return _status;
       case "description":
         return _description;
+      case "serviceProvider":
+        return _serviceProvider;
       case "serviceProviderId":
-        return _serviceProviderInCustomer!.id;
+        return _serviceProvider.id;
       case "serviceProviderName":
-        return _serviceProviderInCustomer!.name;
+        return _serviceProvider.name;
+      default:
+    }
+  }
+
+  @override
+  void setMember(String member, dynamic value) {
+    switch (member) {
+      case "id":
+        _id = value;
+        break;
+      case "name":
+        _name = value;
+        break;
+      case "type":
+        _type = BusinessType.fromString(value);
+        break;
+      case "registrationNumber":
+        _registrationNumber = value;
+        break;
+      case "companyRegistrationNumber":
+        _companyRegistrationNumber = value;
+        break;
+      case "status":
+        _status = CustomerStatus.fromString(value);
+        break;
+      case "description":
+        _description = value;
+        break;
+      case "serviceProvider":
+        _serviceProvider = value;
+        break;
+      case "serviceProviderId":
+        _serviceProvider.id = value;
+        break;
+      case "serviceProviderName":
+        _serviceProvider.name = value;
+        break;
       default:
     }
   }

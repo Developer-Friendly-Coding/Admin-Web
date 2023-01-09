@@ -1,5 +1,7 @@
+import 'package:clean_arch/common/constants/mapper/table_name_mapper.dart';
 import 'package:clean_arch/common/constants/uri_provider.dart';
 import 'package:clean_arch/common/util/class_builder.dart';
+import 'package:clean_arch/model/base_model.dart';
 import 'package:clean_arch/model/impl/contract.dart';
 import 'package:clean_arch/model/impl/customer.dart';
 import 'package:clean_arch/model/impl/customer_memeber.dart';
@@ -9,18 +11,21 @@ import 'package:clean_arch/model/impl/manager.dart';
 import 'package:clean_arch/model/impl/office.dart';
 import 'package:clean_arch/model/impl/office_branch.dart';
 import 'package:clean_arch/model/impl/sensor.dart';
+import 'package:clean_arch/model/impl/sensor_value.dart';
 import 'package:clean_arch/model/impl/service_provider.dart';
 import 'package:clean_arch/model/impl/tax_bill.dart';
 import 'package:clean_arch/provider/impl/dash_board_provider_impl.dart';
 import 'package:clean_arch/view/page/customer_member_page.dart';
 import 'package:clean_arch/view/page/customer_page.dart';
 import 'package:clean_arch/view/page/dash_board_page.dart';
+import 'package:clean_arch/view/page/detail_page.dart';
 import 'package:clean_arch/view/page/gate_credential_page.dart';
 import 'package:clean_arch/view/page/gate_page.dart';
 import 'package:clean_arch/view/page/manager_page.dart';
 import 'package:clean_arch/view/page/office_branch_page.dart';
 import 'package:clean_arch/view/page/office_page.dart';
 import 'package:clean_arch/view/page/sensor_page.dart';
+import 'package:clean_arch/view/page/sensor_value_page.dart';
 import 'package:clean_arch/view/page/service_provider_page.dart';
 import 'package:clean_arch/view/page/tax_bill_page.dart';
 import 'package:clean_arch/view/page/test.dart';
@@ -51,8 +56,9 @@ Future main() async {
     ChangeNotifierProvider(create: (_) => (TableProvider<ServiceProvider>())),
     ChangeNotifierProvider(create: (_) => (TableProvider<TaxBill>())),
     ChangeNotifierProvider(create: (_) => (TableProvider<Sensor>())),
-    ChangeNotifierProvider(create: (_) => (TableProvider<GateCredential>())),
-    ChangeNotifierProvider(create: (_) => (TableProvider<Gate>())),
+    ChangeNotifierProvider(create: (_) => (TableProvider<SensorValue>())),
+    // ChangeNotifierProvider(create: (_) => (TableProvider<GateCredential>())),
+    // ChangeNotifierProvider(create: (_) => (TableProvider<Gate>())),
   ], child: const PfAdmin()));
 }
 
@@ -64,7 +70,7 @@ class PfAdmin extends StatelessWidget {
     final routes = {
       '/login': (BuildContext context) => const LoginPage(),
       '/main': (BuildContext context) => const DashBoardPage(),
-      '/contract': (BuildContext context) => const ContractPage(),
+      '/contract': (BuildContext context) => ContractPage(),
       '/customerMember': (BuildContext context) => const CustomerMemberPage(),
       '/customer': (BuildContext context) => const CustomerPage(),
       '/manager': (BuildContext context) => const ManagerPage(),
@@ -73,11 +79,30 @@ class PfAdmin extends StatelessWidget {
       '/serviceProvider': (BuildContext context) => const ServiceProviderPage(),
       '/taxBill': (BuildContext context) => const TaxBillPage(),
       '/sensor': (BuildContext context) => const SensorPage(),
-      '/gateCredential': (BuildContext context) => const GateCredentialPage(),
-      '/gate': (BuildContext context) => const GatePage(),
+      '/sensorValue': (BuildContext context) => const SensorValuePage(),
+      // '/gateCredential': (BuildContext context) => const GateCredentialPage(),
+      // '/gate': (BuildContext context) => const GatePage(),
       '/test': (BuildContext context) => const MyWidget(),
     };
+
     return MaterialApp(
+      onGenerateRoute: (settings) {
+        if (settings.name!.split("/").length >= 3) {
+          String modelName = settings.name!.split("/")[1];
+          String selectedId = settings.name!.split("/")[2];
+          bool isSubClass = modelNameToModelConstructor[modelName] is Base;
+          bool isId = int.parse(selectedId) != null;
+          if (isSubClass && isId) {
+            return MaterialPageRoute(
+              builder: (context) => ClassBuilder.getDetailPage(
+                      modelNameToModelMapper[modelName], int.parse(selectedId))
+                  as Widget,
+              // DetailPage<Contract>(selectedId: int.parse(selectedId)),
+            );
+          }
+        }
+        return null;
+      },
       scrollBehavior: MyCustomScrollBehavior(),
       title: 'Pathfinder Admin',
       theme: ThemeData(

@@ -3,17 +3,16 @@ import 'package:clean_arch/common/constants/enum/customer_member_status.dart';
 import 'package:clean_arch/common/constants/enum/customer_member_type.dart';
 import 'package:clean_arch/common/constants/enum/customer_status.dart';
 import 'package:clean_arch/model/base_model.dart';
-import 'package:flutter/widgets.dart';
 
 class CustomerMember implements Base {
-  final int _id;
-  final String? _name;
-  final String? _email;
-  final String? _phoneNumber;
-  final CustomerMemberStatus? _status;
-  final CustomerMemberType? _type;
-  final String? _description;
-  final CustomerInCustomerMember? _customerInCustomerMember;
+  int _id;
+  String? _name;
+  String? _email;
+  String? _phoneNumber;
+  CustomerMemberStatus? _status;
+  CustomerMemberType? _type;
+  String? _description;
+  CustomerInCustomerMember _customer;
   CustomerMember({
     int id = -1,
     String? name,
@@ -22,7 +21,7 @@ class CustomerMember implements Base {
     CustomerMemberStatus? status,
     CustomerMemberType? type,
     String? description,
-    CustomerInCustomerMember? customerInCustomerMember,
+    CustomerInCustomerMember? customer,
   })  : _id = id,
         _name = name,
         _email = email,
@@ -30,7 +29,11 @@ class CustomerMember implements Base {
         _status = status,
         _type = type,
         _description = description,
-        _customerInCustomerMember = customerInCustomerMember;
+        _customer = customer ?? CustomerInCustomerMember();
+  @override
+  CustomerMember getDummy() {
+    return CustomerMember();
+  }
 
   @override
   CustomerMember fromJson(Map<String, dynamic> data) {
@@ -46,43 +49,34 @@ class CustomerMember implements Base {
             ? null
             : CustomerMemberType.values.byName(data['type']),
         description: data['description'],
-        customerInCustomerMember:
-            CustomerInCustomerMember.fromJson(data['customer']));
+        customer: CustomerInCustomerMember.fromJson(data['customer']));
   }
 
   @override
-  CustomerMember fromTEC(List<TextEditingController> list) {
-    CustomerMember customerMember = CustomerMember(
-      id: list[0].text == "" ? -1 : int.parse(list[0].text),
-      customerInCustomerMember: _customerInCustomerMember,
-      name: list[2].text,
-      email: list[3].text,
-      phoneNumber: list[4].text,
-      status: list[5].text == ""
-          ? null
-          : CustomerMemberStatus.fromString(list[5].text),
-      type: list[6].text == ""
-          ? null
-          : CustomerMemberType.fromString(list[6].text),
-      description: list[7].text,
-    );
-
-    customerMember._customerInCustomerMember!.id = int.parse(list[1].text);
-    return customerMember;
-  }
-
-  @override
-  Map<String, dynamic> toJson(CustomerMember customer) {
+  Map<String, dynamic> toJsonForCreate(CustomerMember customerMember) {
     Map<String, dynamic> json = {
-      'customerId': customer._customerInCustomerMember!.id,
-      'name': customer._name,
-      'email': customer._email,
-      'phoneNumber': customer._phoneNumber,
-      'status': customer._status?.name,
-      'type': customer._type?.name,
-      'description': customer._description,
+      'name': customerMember.getMember("name"),
+      'email': customerMember.getMember("email"),
+      'phoneNumber': customerMember.getMember("phoneNumber"),
+      'status': customerMember.getMember("status"),
+      'type': customerMember.getMember("type"),
+      'description': customerMember.getMember("description"),
+      'customerId': customerMember.getMember("customerId"),
     };
+    return json;
+  }
 
+  @override
+  Map<String, dynamic> toJsonForUpdate(CustomerMember customerMember) {
+    Map<String, dynamic> json = {
+      'name': customerMember.getMember("name"),
+      'email': customerMember.getMember("email"),
+      'phoneNumber': customerMember.getMember("phoneNumber"),
+      'status': customerMember.getMember("status"),
+      'type': customerMember.getMember("type"),
+      'description': customerMember.getMember("description"),
+      'customerId': customerMember.getMember("customerId"),
+    };
     return json;
   }
 
@@ -90,21 +84,7 @@ class CustomerMember implements Base {
   List<String?> toRow() {
     return [
       _id.toString(),
-      _customerInCustomerMember?.name.toString(),
-      _name.toString(),
-      _email.toString(),
-      _phoneNumber.toString(),
-      _status.toString(),
-      _type.toString(),
-      _description.toString()
-    ];
-  }
-
-  @override
-  List<String?> forUpdate() {
-    return [
-      _id.toString(),
-      _customerInCustomerMember?.name.toString(),
+      _customer.name,
       _name.toString(),
       _email.toString(),
       _phoneNumber.toString(),
@@ -131,10 +111,49 @@ class CustomerMember implements Base {
         return _type;
       case "description":
         return _description;
+      case "customer":
+        return _customer;
       case "customerId":
-        return _customerInCustomerMember!.id;
+        return _customer.id;
       case "customerName":
-        return _customerInCustomerMember!.name;
+        return _customer.name;
+      default:
+    }
+  }
+
+  @override
+  void setMember(String member, dynamic value) {
+    switch (member) {
+      case "id":
+        _id = value;
+        break;
+      case "name":
+        _name = value;
+        break;
+      case "email":
+        _email = value;
+        break;
+      case "phoneNumber":
+        _phoneNumber = value;
+        break;
+      case "status":
+        _status = value;
+        break;
+      case "type":
+        _type = value;
+        break;
+      case "description":
+        _description = value;
+        break;
+      case "customer":
+        _customer = value;
+        break;
+      case "customerId":
+        _customer.id = value;
+        break;
+      case "customerName":
+        _customer.name = value;
+        break;
       default:
     }
   }

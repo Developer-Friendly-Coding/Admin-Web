@@ -1,4 +1,8 @@
+import 'package:clean_arch/common/constants/column_attributes.dart';
+import 'package:clean_arch/common/constants/mapper/cu_dialog_mapper.dart';
+import 'package:clean_arch/common/constants/mapper/table_column_attributes_mapper.dart';
 import 'package:clean_arch/model/base_model.dart';
+import 'package:clean_arch/model/impl/contract.dart';
 import 'package:clean_arch/provider/table_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:clean_arch/repo/impl/base_table_repo_impl.dart';
@@ -16,7 +20,7 @@ class TableProvider<M extends Base> extends ChangeNotifier {
   @override
   List<M>? get dataList => _dataList;
 
-  List<M> dataListInCreate = [];
+  late M tempDataForCU = _model.getDummy() as M;
 
   int _selectedId = -1;
   @override
@@ -84,7 +88,7 @@ class TableProvider<M extends Base> extends ChangeNotifier {
   }
 
   @override
-  M? getDataById(id) {
+  M? getDataInDataListById(int id) {
     M? data;
     dataList!.forEach((element) {
       if (element.getMember("id") == id) {
@@ -178,29 +182,29 @@ class TableProvider<M extends Base> extends ChangeNotifier {
   }
 
   @override
-  void clearAddButtonTECList() {
-    for (int i = 0; i < addButtonTECList.length; i++) {
-      addButtonTECList[i].text = "";
-    }
-  }
-
-  M? tempUpdateData;
-
-  @override
-  Future<void> initUpdateButtonTECList() async {
+  Future<bool> initUpdateButtonTECList() async {
     if (dataList == null) {
       await getTableData();
+      ;
     }
-
-    tempUpdateData = getDataById(selectedId);
-
-    List<String?> modelMemberList = tempUpdateData!.toRow();
+    tempDataForCU = getDataInDataListById(selectedId)!;
+    if (tempDataForCU == null) {
+      return false;
+    }
+    List<String?> modelMemberList = tempDataForCU.toRow();
     _updateButtonTECList = [];
+    List<ColumnAttributes> columnAttributesList =
+        columnAttributesMapper[M.toString()]!;
     for (int i = 0; i < modelMemberList.length; i++) {
       updateButtonTECList.add(TextEditingController());
+      if (columnAttributesList[i].enumValus != null) {
+        initUpdateEnumValue(
+            tempDataForCU.getMember(columnAttributesList[i].toJson!), i);
+      }
 
       updateButtonTECList[i].text = modelMemberList[i]!;
     }
+    return true;
   }
 
   @override
@@ -214,8 +218,45 @@ class TableProvider<M extends Base> extends ChangeNotifier {
   }
 
   @override
+  void clearAddButtonTECList() {
+    for (int i = 0; i < addButtonTECList.length; i++) {
+      addButtonTECList[i].text = "";
+    }
+  }
+
+  @override
+  void setDataForCreate() {
+    List<ColumnAttributes> columnAttributesList =
+        columnAttributesMapper[M.toString()]!;
+    int lenght = columnAttributesList.length;
+    for (int i = 1; i < lenght; i++) {
+      if (columnAttributesList[i].isCuDialog == true) {
+        continue;
+      }
+
+      tempDataForCU.setMember(
+          columnAttributesList[i].toJson!, addButtonTECList[i].text);
+    }
+  }
+
+  @override
+  void setDataForUpdate() {
+    List<ColumnAttributes> columnAttributesList =
+        columnAttributesMapper[M.toString()]!;
+    int lenght = columnAttributesList.length;
+    for (int i = 1; i < lenght; i++) {
+      if (columnAttributesList[i].isCuDialog == true) {
+        continue;
+      }
+
+      tempDataForCU.setMember(
+          columnAttributesList[i].toJson!, updateButtonTECList[i].text);
+    }
+  }
+
+  @override
   Future<int?> updateTableRow() async {
-    return await _repo.updateTableRow(_model.fromTEC(updateButtonTECList));
+    return await _repo.updateTableRow(tempDataForCU);
   }
 
   @override
@@ -228,28 +269,41 @@ class TableProvider<M extends Base> extends ChangeNotifier {
   @override
   Future<List<dynamic>> createTableRow() async {
     try {
-      return await _repo.createTableRow(_model.fromTEC(addButtonTECList));
+      return await _repo.createTableRow(tempDataForCU);
     } finally {}
   }
 
   @override
-  void setCuDialogTEC(Map<int, String> targetMapper,
-      TableProvider cuDialogProvider, String mode) async {
-    M? data = getDataById(selectedId);
+  void setCuDialog(ColumnAttributes columnAttributes, Type fromModel,
+      BuildContext context, String mode) {
+    TableProvider tableProvider =
+        ClassBuilder.getTableProvider(fromModel, false, context)!;
+
+    columnAttributes.cuDialogTextMapper!.forEach((key, value) {
+      tableProvider.addButtonTECList[key].text =
+          getDataInDataListById(selectedId)!.getMember(value);
+    });
+
     switch (mode) {
       case "create":
-        targetMapper.forEach((key, value) {
-          cuDialogProvider.addButtonTECList[key].text =
-              data!.getMember(value).toString();
+        columnAttributes.cuDialogTextMapper!.forEach((key, value) {
+          tableProvider.addButtonTECList[key].text =
+              getDataInDataListById(selectedId)!.getMember(value);
         });
         break;
       case "update":
-        targetMapper.forEach((key, value) {
-          cuDialogProvider.updateButtonTECList[key].text = value;
+        columnAttributes.cuDialogTextMapper!.forEach((key, value) {
+          tableProvider.updateButtonTECList[key].text =
+              getDataInDataListById(selectedId)!.getMember(value);
         });
         break;
       default:
     }
+
+    columnAttributes.cuDialogJsonMapper!.forEach((key, value) {
+      tableProvider.tempDataForCU
+          .setMember(key, getDataInDataListById(selectedId)!.getMember(value));
+    });
   }
 
   @override

@@ -28,8 +28,39 @@ class TableCreatePage<M extends Base> extends StatelessWidget {
   List<Widget> detailComponentList(TableProvider<M> providerRead) {
     List<Widget> result = [];
 
-    for (int i = 1; i < columnAttributesList.length; i++) {
-      Container component = Container(
+    for (int i = 0; i < columnAttributesList.length; i++) {
+      Container component;
+      if (i == 0) {
+        component = Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                  width: 100,
+                  child: Text(
+                    columnAttributesList[i].name,
+                    style: detailInfoStyle,
+                  )),
+              SizedBox(
+                  width: 170,
+                  height: 50,
+                  child: TextFormField(
+                    enabled: false,
+                    decoration: const InputDecoration(
+                      hintStyle: detailInfoStyle,
+                      hintText: '입력불가',
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                      border: OutlineInputBorder(),
+                    ),
+                  )),
+            ],
+          ),
+        );
+        result.add(component);
+        continue;
+      }
+
+      component = Container(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -81,12 +112,17 @@ class TableCreatePage<M extends Base> extends StatelessWidget {
                         ? WebDatePicker(
                             onChange: (value) {
                               providerRead.addButtonTECList[i].text =
-                                  DateFormat("yyyy-MM-dd hh:mm:ss")
-                                      .format(value!);
+                                  value.toString();
                             },
                           )
                         : columnAttributesList[i].isCuDialog == true
-                            ? baseTableCUDialog(i, providerRead)
+                            ? TableCUDialog<M>(
+                                mode: "create",
+                                columnAttributes: columnAttributesList[i],
+                                controller: providerRead.addButtonTECList[i],
+                                border: OutlineInputBorder(),
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 10))
                             : TextFormField(
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
@@ -104,17 +140,6 @@ class TableCreatePage<M extends Base> extends StatelessWidget {
       result.add(component);
     }
     return result;
-  }
-
-  TableCUDialog baseTableCUDialog(int idx, TableProvider<M> providerRead) {
-    Map<String, dynamic> mapper = cuDialogMapper[M]![idx]!;
-    return TableCUDialog(
-        targetMapper: mapper,
-        validator: columnAttributesList[idx].validator,
-        controller: providerRead.addButtonTECList[idx],
-        mode: "create",
-        border: OutlineInputBorder(),
-        contentPadding: EdgeInsets.symmetric(horizontal: 10));
   }
 
   @override
@@ -182,27 +207,19 @@ class TableCreatePage<M extends Base> extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    multipleCuDialogMapper[M] != null
-                                        ? Container(
-                                            margin: EdgeInsets.only(top: 50),
-                                            alignment: Alignment.centerLeft,
-                                            child: MultiCUDialogButton(
-                                                size: Size(140, 50),
-                                                model: multipleCuDialogMapper[
-                                                    M]!["targetModel"]!,
-                                                name: multipleCuDialogMapper[
-                                                    M]!["buttonName"]!),
-                                          )
-                                        : SizedBox(),
-                                    multipleCuDialogMapper[M] != null
-                                        ? SizedBox(height: 30)
-                                        : SizedBox(),
-                                    multipleCuDialogMapper[M] != null
-                                        ? ClassBuilder.getTableViewInCreate(
-                                            multipleCuDialogMapper[M]![
-                                                "targetModel"]!,
-                                            400)!
-                                        : SizedBox(),
+                                    // multipleCuDialogMapper[M] != null
+                                    //     ? Container(
+                                    //         margin: EdgeInsets.only(top: 50),
+                                    //         alignment: Alignment.centerLeft,
+                                    //         child: MultiCUDialogButton(
+                                    //             size: Size(140, 50),
+                                    //             model: multipleCuDialogMapper[
+                                    //                 M]!["targetModel"]!,
+                                    //             name: multipleCuDialogMapper[
+                                    //                 M]!["buttonName"]!),
+                                    //       )
+                                    //     : SizedBox(),
+
                                     SizedBox(height: 30),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
@@ -218,6 +235,7 @@ class TableCreatePage<M extends Base> extends StatelessWidget {
                                             if (_formKey.currentState!
                                                 .validate()) {
                                               try {
+                                                providerRead.setDataForCreate();
                                                 List<dynamic>?
                                                     statusAndErrorAndErrorContext =
                                                     await providerRead
@@ -235,6 +253,8 @@ class TableCreatePage<M extends Base> extends StatelessWidget {
                                                 if (statusCode == 200) {
                                                   await providerRead
                                                       .getTableData();
+                                                  providerRead
+                                                      .clearAddButtonTECList();
                                                   Navigator.of(context).pop();
                                                   Fluttertoast.showToast(
                                                       msg: "추가 성공!",

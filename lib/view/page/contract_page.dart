@@ -1,3 +1,4 @@
+import 'package:clean_arch/common/constants/mapper/table_name_mapper.dart';
 import 'package:clean_arch/model/impl/contract.dart';
 import 'package:clean_arch/provider/impl/signin_provider_impl.dart';
 import 'package:clean_arch/responsive.dart';
@@ -11,7 +12,8 @@ import 'package:clean_arch/view/widget/table/table_crud_button/table_delete_butt
 import 'package:clean_arch/view/widget/table/table_crud_button/table_create_button.dart';
 
 class ContractPage extends StatefulWidget {
-  const ContractPage({Key? key}) : super(key: key);
+  final String tableName = tableNameMapper['Contract']!;
+  ContractPage({Key? key}) : super(key: key);
 
   @override
   State<ContractPage> createState() => _ContractPageState();
@@ -63,6 +65,24 @@ class _ContractPageState extends State<ContractPage> {
                               width: MediaQuery.of(context).size.width * 0.65,
                               child: Column(
                                 children: [
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Container(
+                                      width: 200,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          "${widget.tableName} 페이지",
+                                          style: detailPageInfoStyle,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 30),
                                   Align(
                                       alignment: Alignment.centerLeft,
                                       child: TableSearchContainer<Contract>()),

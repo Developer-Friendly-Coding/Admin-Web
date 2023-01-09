@@ -3,58 +3,64 @@ import 'package:clean_arch/model/base_model.dart';
 import 'package:flutter/widgets.dart';
 
 class OfficeBranch implements Base {
-  final int _id;
-  final String _name;
-  final int _serviceProviderId;
-  final String? _location;
-  final double? _latitude;
-  final double? _longitude;
+  int _id;
+  String _name;
+  ServiceProviderInOfficeBranch _serviceProvider;
+  String? _location;
+  double? _latitude;
+  double? _longitude;
 
   OfficeBranch({
     int id = -1,
     String name = "",
-    int serviceProviderId = -1,
+    ServiceProviderInOfficeBranch? serviceProvider,
     String? location,
     double? latitude,
     double? longitude,
   })  : _id = id,
         _name = name,
-        _serviceProviderId = serviceProviderId,
+        _serviceProvider = serviceProvider ?? ServiceProviderInOfficeBranch(),
         _location = location,
         _latitude = latitude,
         _longitude = longitude;
+  @override
+  OfficeBranch getDummy() {
+    return OfficeBranch();
+  }
 
   @override
   OfficeBranch fromJson(Map<String, dynamic> data) {
     return OfficeBranch(
         id: data['id'],
         name: data['name'],
-        serviceProviderId: data['serviceProviderId'],
+        serviceProvider:
+            ServiceProviderInOfficeBranch.fromJson(data['serviceProvider']),
         location: data['location'],
         latitude: data['latitude'],
         longitude: data['longitude']);
   }
 
   @override
-  OfficeBranch fromTEC(List<TextEditingController> list) {
-    return OfficeBranch(
-      id: list[0].text == "" ? -1 : int.parse(list[0].text),
-      name: list[1].text,
-      serviceProviderId: int.parse(list[2].text),
-      location: list[3].text == "" ? null : list[3].text,
-      latitude: (list[4].text == "") ? null : double.parse(list[4].text),
-      longitude: (list[5].text == "") ? null : double.parse(list[5].text),
-    );
+  Map<String, dynamic> toJsonForCreate(OfficeBranch officeBranch) {
+    Map<String, dynamic> json = {
+      'name': officeBranch.getMember("name"),
+      'serviceProviderId': officeBranch.getMember("serviceProviderId"),
+      'location': officeBranch.getMember("location"),
+      'latitude': officeBranch.getMember("latitude"),
+      'longitude': officeBranch.getMember("longitude"),
+    };
+
+    return json;
   }
 
   @override
-  Map<String, dynamic> toJson(OfficeBranch officeBranch) {
+  Map<String, dynamic> toJsonForUpdate(OfficeBranch officeBranch) {
     Map<String, dynamic> json = {
-      'name': officeBranch._name,
-      'serviceProviderId': officeBranch._serviceProviderId,
-      'location': officeBranch._location,
-      'latitude': officeBranch._latitude,
-      'longitude': officeBranch._longitude,
+      'name': officeBranch.getMember("name"),
+      'serviceProviderId': officeBranch.getMember("serviceProviderId"),
+      'location': officeBranch.getMember("location"),
+      'latitude': officeBranch.getMember("latitude"),
+      'longitude': officeBranch.getMember("longitude"),
     };
 
     return json;
@@ -65,7 +71,7 @@ class OfficeBranch implements Base {
     return [
       _id.toString(),
       _name.toString(),
-      _serviceProviderId.toString(),
+      _serviceProvider.name,
       _location.toString(),
       _latitude.toString(),
       _longitude.toString(),
@@ -79,8 +85,12 @@ class OfficeBranch implements Base {
         return _id;
       case "name":
         return _name;
+      case "serviceProvider":
+        return _serviceProvider;
       case "serviceProviderId":
-        return _serviceProviderId;
+        return _serviceProvider.id;
+      case "serviceProviderName":
+        return _serviceProvider.name;
       case "location":
         return _location;
       case "latitude":
@@ -90,5 +100,66 @@ class OfficeBranch implements Base {
 
       default:
     }
+  }
+
+  @override
+  void setMember(String member, dynamic value) {
+    switch (member) {
+      case "id":
+        _id = value;
+        break;
+      case "serviceProvider":
+        _serviceProvider = value;
+        break;
+      case "serviceProviderId":
+        _serviceProvider.id = value;
+        break;
+      case "serviceProviderName":
+        _serviceProvider.name = value;
+        break;
+      case "name":
+        _name = value;
+        break;
+      case "location":
+        _location = value;
+        break;
+      case "latitude":
+        _latitude = value;
+        break;
+      case "longitude":
+        _longitude = value;
+        break;
+      default:
+    }
+  }
+}
+
+class ServiceProviderInOfficeBranch {
+  int id;
+  String name;
+  String registrationNumber;
+  String companyRegistrationNumber;
+  String hejhomeToken;
+
+  ServiceProviderInOfficeBranch({
+    int id = -1,
+    String name = "",
+    String registrationNumber = "",
+    String companyRegistrationNumber = "",
+    String hejhomeToken = "",
+  })  : id = id,
+        name = name,
+        registrationNumber = registrationNumber,
+        companyRegistrationNumber = companyRegistrationNumber,
+        hejhomeToken = hejhomeToken;
+
+  factory ServiceProviderInOfficeBranch.fromJson(Map<String, dynamic> data) {
+    return ServiceProviderInOfficeBranch(
+      id: data['id'],
+      name: data['name'],
+      registrationNumber: data['registrationNumber'],
+      companyRegistrationNumber: data['companyRegistrationNumber'],
+      hejhomeToken: data['hejhomeToken'],
+    );
   }
 }

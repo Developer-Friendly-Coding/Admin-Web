@@ -3,6 +3,7 @@ import 'package:clean_arch/common/constants/mapper/table_column_attributes_mappe
 import 'package:clean_arch/common/constants/mapper/table_name_mapper.dart';
 import 'package:clean_arch/model/base_model.dart';
 import 'package:clean_arch/provider/impl/signin_provider_impl.dart';
+import 'package:clean_arch/provider/impl/table_provider_impl.dart';
 import 'package:clean_arch/view/widget/table/table_detail_view/related_table_view.dart';
 import 'package:clean_arch/view/widget/table/table_detail_view/related_table_container.dart';
 import 'package:clean_arch/view/widget/table/table_detail_view/detail_info.dart';
@@ -43,17 +44,19 @@ class DetailPage<M extends Base> extends StatelessWidget {
   Widget build(BuildContext context) {
     SignInProvider providerRead =
         Provider.of<SignInProvider>(context, listen: false);
-
+    TableProvider<M> tableProviderRead =
+        Provider.of<TableProvider<M>>(context, listen: false);
+    tableProviderRead.setSelectedId(selectedId);
     return FutureBuilder(
-        future: providerRead.isLogined(),
+        future: Future.wait([
+          providerRead.isLogined(),
+          tableProviderRead.initUpdateButtonTECList()
+        ]),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
           if (snapshot.hasData == false) {
             return const Center(
                 child: Text("Loading...", style: snapShotStyle));
-          }
-          //error가 발생하게 될 경우 반환하게 되는 부분
-          else if (snapshot.hasError) {
+          } else if (snapshot.hasError) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
@@ -61,10 +64,21 @@ class DetailPage<M extends Base> extends StatelessWidget {
                 style: const TextStyle(fontSize: 15),
               ),
             );
+          } else if (snapshot.data[0] == true && snapshot.data[1] == false) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Text(
+                  'Error: 존재하지 않음',
+                  style: snapShotStyle,
+                ),
+              ),
+            );
           }
           // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
           else {
-            if (snapshot.data == true) {
+            if (snapshot.data[0] == true && snapshot.data[1] == true) {
+              print(snapshot.data);
               return Scaffold(
                 key: _scaffoldKey,
                 // drawer: PFAdminDrawer(),
@@ -104,6 +118,7 @@ class DetailPage<M extends Base> extends StatelessWidget {
                               ),
                               const SizedBox(height: 20),
                               DetailInfo<M>(
+                                selectedId: selectedId,
                                 widthRate: infoWidthRate,
                                 height: infoHeight,
                                 color: infoColor,
@@ -126,10 +141,16 @@ class DetailPage<M extends Base> extends StatelessWidget {
                   ),
                 ),
               );
-            } else {
+            } else if (snapshot.data[0] == false) {
               return const Center(
                   child: Text(
                 "Please Login First",
+                style: snapShotStyle,
+              ));
+            } else {
+              return const Center(
+                  child: Text(
+                "알수없는 에러, 개발자에게 문의하세요",
                 style: snapShotStyle,
               ));
             }

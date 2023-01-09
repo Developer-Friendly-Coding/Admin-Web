@@ -16,23 +16,16 @@ class TableViewRow<M extends Base> extends StatelessWidget {
   final TextStyle? rowStyle;
   final List<ColumnAttributes> columnAttributesList =
       columnAttributesMapper[M.toString()]!;
-  final bool isTableInCreate;
 
   TableViewRow(
-      {required this.index,
-      this.isTableInCreate = false,
-      this.test = false,
-      this.rowStyle,
-      Key? key})
+      {required this.index, this.test = false, this.rowStyle, Key? key})
       : super(key: key);
 
   List<Widget> alignElementsWidget(
       TableProvider<M> providerRead, int index, BuildContext context) {
-    List<String?> elements = (isTableInCreate == true)
-        ? providerRead.dataListInCreate[index].toRow()
-        : providerRead.dataList![index].toRow();
+    List<String?> elements = providerRead.dataList![index].toRow();
     List<Widget> result = [];
-    int lastIndex = -1;
+
     for (int i = 0; i < elements.length; i++) {
       Align alignElement = Align(
         alignment: Alignment.centerLeft,
@@ -53,30 +46,27 @@ class TableViewRow<M extends Base> extends StatelessWidget {
                         .camelCase;
                     //target=customerMember
                     String targetIdName = "${target}Id";
-                    //targedId = customerMemberId
-
+                    //targetIdName = customerMemberId
                     int targetId =
                         providerRead.dataList![index].getMember(targetIdName);
-                    //selectedId = 44
-
-                    providerRead.setSelectedId(providerRead.dataList![index]);
+                    //targetId = 44
                     TableProvider targetProvider =
                         ClassBuilder.getTableProvider(
                             columnAttributesList[i].hyperLinkTargetModel!,
                             false,
                             context)!;
-
                     targetProvider.setSelectedId(targetId);
-
+                    //target의 selectedId설정
+                    providerRead.setSelectedId(providerRead.dataList![index]);
+                    //오직 선택 색칠용
                     await targetProvider.initUpdateButtonTECList();
-
                     Navigator.push(
                       test22().currentContext!,
                       MaterialPageRoute(
                           settings: RouteSettings(name: "/$target/$targetId"),
-                          builder: (context) => (ClassBuilder.getDetailPage(
-                              columnAttributesList[i].hyperLinkTargetModel!,
-                              targetId)!)),
+                          builder: (context) => (DetailPage<M>(
+                                selectedId: targetId,
+                              ))),
                     );
                   },
                   child: Text(elements[i]!,
@@ -98,23 +88,8 @@ class TableViewRow<M extends Base> extends StatelessWidget {
       );
 
       result.add(alignElement);
-      lastIndex = i;
     }
-    isTableInCreate == true
-        ? result.add(Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              margin: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width *
-                      (columnAttributesList[lastIndex].leftMarginRate + 0.06)),
-              child: IconButton(
-                  onPressed: () {
-                    //해당
-                  },
-                  icon: Icon(Icons.cancel_outlined)),
-            ),
-          ))
-        : null;
+
     return result;
   }
 

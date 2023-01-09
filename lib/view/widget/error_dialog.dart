@@ -32,7 +32,7 @@ void errorDialog(
                   onPressed: () {},
                   child: Container(
                       width: 500,
-                      height: errorContext == null ? 300 : 450,
+                      height: errorContext == null ? 400 : 500,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         color: Colors.white,

@@ -12,8 +12,12 @@ import 'package:clean_arch/common/constants/enum/office_type.dart';
 import 'package:clean_arch/common/constants/enum/sensor_type.dart';
 import 'package:clean_arch/common/constants/enum/tax_bill_status.dart';
 import 'package:clean_arch/common/constants/validator.dart';
+import 'package:clean_arch/model/impl/contract.dart';
 import 'package:clean_arch/model/impl/customer.dart';
 import 'package:clean_arch/common/constants/column_attributes.dart';
+import 'package:clean_arch/model/impl/customer_memeber.dart';
+import 'package:clean_arch/model/impl/manager.dart';
+import 'package:clean_arch/model/impl/service_provider.dart';
 
 List<ColumnAttributes> contractColumnAttributes = [
   ColumnAttributes(
@@ -29,49 +33,94 @@ List<ColumnAttributes> contractColumnAttributes = [
     validator: idValidator,
     isHyperLink: true,
     hyperLinkTargetModel: Customer,
+    isCuDialog: true,
+    cuDialogTextMapper: {1: "name"},
+    cuDialogTargetModel: Customer,
+    cuDialogJsonMapper: {
+      "customerId": "id",
+    },
   ),
   ColumnAttributes(
       name: '보증금',
       widthRate: 0.100,
       leftMarginRate: 0.08,
-      validator: intValidator),
+      validator: intValidator,
+      toJson: "deposit"),
   ColumnAttributes(
       name: '대여비',
       widthRate: 0.0409,
       leftMarginRate: 0.12,
-      validator: intValidator),
+      validator: intValidator,
+      toJson: "rent"),
   ColumnAttributes(
-      name: '계약자ID',
-      widthRate: 0.07,
-      leftMarginRate: 0.16,
-      validator: idValidator,
-      isCuDialog: true),
+    name: '계약자',
+    widthRate: 0.07,
+    leftMarginRate: 0.16,
+    validator: idValidator,
+    isCuDialog: true,
+    cuDialogTextMapper: {1: "customerName", 4: "name", 5: "name"},
+    cuDialogTargetModel: CustomerMember,
+    cuDialogJsonMapper: {
+      "customerId": "customerId",
+      "contractRepId": "id",
+      "contactRepId": "id",
+    },
+  ),
   ColumnAttributes(
-      name: '알림수신자ID',
+    name: '알림수신자',
+    widthRate: 0.100,
+    leftMarginRate: 0.215,
+    validator: idValidator,
+    isCuDialog: true,
+    cuDialogTextMapper: {1: "customerName", 5: "name"},
+    cuDialogTargetModel: CustomerMember,
+    cuDialogJsonMapper: {
+      "customerId": "customerId",
+      "contactRepId": "id",
+    },
+  ),
+  ColumnAttributes(
+    name: '담당매니저',
+    widthRate: 0.100,
+    leftMarginRate: 0.27,
+    validator: idValidator,
+    isCuDialog: true,
+    cuDialogTextMapper: {6: "name"},
+    cuDialogTargetModel: Manager,
+    cuDialogJsonMapper: {
+      "managerId": "id",
+    },
+  ),
+  ColumnAttributes(
+      name: '계약일',
       widthRate: 0.100,
-      leftMarginRate: 0.215,
-      validator: idValidator),
+      leftMarginRate: 0.34,
+      type: DateTime,
+      toJson: "contractDatetime"),
   ColumnAttributes(
-      name: '담당매니저ID',
+      name: '시작일',
       widthRate: 0.100,
-      leftMarginRate: 0.27,
-      validator: idValidator),
+      leftMarginRate: 0.40,
+      type: DateTime,
+      toJson: "startDatetime"),
   ColumnAttributes(
-      name: '계약일', widthRate: 0.100, leftMarginRate: 0.34, type: DateTime),
-  ColumnAttributes(
-      name: '시작일', widthRate: 0.100, leftMarginRate: 0.40, type: DateTime),
-  ColumnAttributes(
-      name: '종료일', widthRate: 0.100, leftMarginRate: 0.46, type: DateTime),
+      name: '종료일',
+      widthRate: 0.100,
+      leftMarginRate: 0.46,
+      type: DateTime,
+      toJson: "endDatetime"),
   ColumnAttributes(
       name: '계약상태',
       widthRate: 0.100,
       leftMarginRate: 0.53,
-      enumValus: ContractType.values),
+      enumValus: ContractType.values,
+      toJson: "type"),
   ColumnAttributes(
       name: '설명',
       widthRate: 0.100,
       leftMarginRate: 0.59,
-      validator: stringValidor)
+      validator: stringValidor,
+      toJson: "description")
 ];
 List<ColumnAttributes> customerColumnAttributes = [
   ColumnAttributes(
@@ -83,37 +132,50 @@ List<ColumnAttributes> customerColumnAttributes = [
       name: '이름',
       widthRate: 0.07,
       leftMarginRate: 0.08,
-      validator: stringValidor),
+      validator: stringValidor,
+      toJson: "name"),
   ColumnAttributes(
       name: '사업자형태',
       widthRate: 0.100,
       leftMarginRate: 0.15,
-      enumValus: BusinessType.values),
+      enumValus: BusinessType.values,
+      toJson: "type"),
   ColumnAttributes(
       name: '법인등록번호',
       widthRate: 0.08,
       leftMarginRate: 0.24,
-      validator: corporateRegistrationNumberValidator),
+      validator: stringValidor,
+      toJson: "registrationNumber"),
   ColumnAttributes(
       name: '사업자등록번호',
       widthRate: 0.07,
       leftMarginRate: 0.35,
-      validator: companyRegistrationNumberValidator),
+      validator: stringValidor,
+      toJson: "companyRegistrationNumber"),
   ColumnAttributes(
       name: '고객상태',
       widthRate: 0.100,
       leftMarginRate: 0.45,
-      enumValus: CustomerStatus.values),
+      enumValus: CustomerStatus.values,
+      toJson: "status"),
   ColumnAttributes(
       name: '설명',
-      widthRate: 0.100,
-      leftMarginRate: 0.55,
-      validator: stringValidor),
+      widthRate: 0.05,
+      leftMarginRate: 0.50,
+      validator: stringValidor,
+      toJson: "description"),
   ColumnAttributes(
-      name: '운영사ID',
-      widthRate: 0.100,
-      leftMarginRate: 0.55,
-      validator: idValidator),
+    name: '운영사',
+    widthRate: 0.100,
+    leftMarginRate: 0.57,
+    validator: stringValidor,
+    isCuDialog: true,
+    cuDialogTextMapper: {7: "name"},
+    cuDialogTargetModel: ServiceProvider,
+    cuDialogJsonMapper: {
+      "serviceProviderId": "id",
+    },
+  ),
 ];
 List<ColumnAttributes> officeColumnAttributes = [
   ColumnAttributes(
@@ -155,7 +217,7 @@ List<ColumnAttributes> customerMemberColumnAttributes = [
       validator: idValidator),
   ColumnAttributes(
       name: '입주사',
-      widthRate: 0.03,
+      widthRate: 0.05,
       leftMarginRate: 0.08,
       validator: idValidator,
       isHyperLink: true,
@@ -270,27 +332,32 @@ List<ColumnAttributes> serviceProviderColumnAttributes = [
       name: 'id',
       widthRate: 0.07,
       leftMarginRate: 0.03,
-      validator: idValidator),
+      validator: idValidator,
+      toJson: "id"),
   ColumnAttributes(
       name: '운영사 이름',
       widthRate: 0.1,
       leftMarginRate: 0.08,
-      validator: stringValidor),
+      validator: stringValidor,
+      toJson: "name"),
   ColumnAttributes(
       name: '법인등록번호',
       widthRate: 0.100,
       leftMarginRate: 0.18,
-      validator: corporateRegistrationNumberValidator),
+      validator: corporateRegistrationNumberValidator,
+      toJson: "registrationNumber"),
   ColumnAttributes(
       name: '회사등록번호',
       widthRate: 0.08,
       leftMarginRate: 0.28,
-      validator: companyRegistrationNumberValidator),
+      validator: companyRegistrationNumberValidator,
+      toJson: "companyRegistrationNumber"),
   ColumnAttributes(
       name: '헤이홈토큰',
       widthRate: 0.2,
       leftMarginRate: 0.38,
-      validator: stringValidor),
+      validator: stringValidor,
+      toJson: "hejhomeToken"),
 ];
 List<ColumnAttributes> taxBillColumnAttributes = [
   ColumnAttributes(
@@ -324,7 +391,8 @@ List<ColumnAttributes> taxBillColumnAttributes = [
       name: '발행상태',
       widthRate: 0.2,
       leftMarginRate: 0.58,
-      enumValus: TaxBillStatus.values),
+      enumValus: TaxBillStatus.values,
+      toJson: 'status'),
 ];
 List<ColumnAttributes> sensorColumnAttributes = [
   ColumnAttributes(
@@ -444,6 +512,28 @@ List<ColumnAttributes> gateColumnAttributes = [
       leftMarginRate: 0.55,
       validator: stringValidor),
 ];
+List<ColumnAttributes> sensorValuseColumnAttributes = [
+  ColumnAttributes(
+      name: 'id',
+      widthRate: 0.07,
+      leftMarginRate: 0.03,
+      validator: idValidator),
+  ColumnAttributes(
+      name: '측정날짜',
+      widthRate: 0.1,
+      leftMarginRate: 0.08,
+      validator: stringValidor),
+  ColumnAttributes(
+      name: '측정값',
+      widthRate: 0.100,
+      leftMarginRate: 0.18,
+      validator: intValidator),
+  ColumnAttributes(
+      name: '센서이름',
+      widthRate: 0.19,
+      leftMarginRate: 0.25,
+      validator: stringValidor),
+];
 
 Map<String, List<ColumnAttributes>> columnAttributesMapper = {
   "Customer": customerColumnAttributes,
@@ -455,6 +545,7 @@ Map<String, List<ColumnAttributes>> columnAttributesMapper = {
   "ServiceProvider": serviceProviderColumnAttributes,
   "TaxBill": taxBillColumnAttributes,
   "Sensor": sensorColumnAttributes,
+  "SensorValue": sensorValuseColumnAttributes,
   "GateCredential": gateCredentialColumnAttributes,
   "Gate": gateColumnAttributes
 };

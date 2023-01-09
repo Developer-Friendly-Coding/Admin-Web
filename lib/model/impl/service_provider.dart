@@ -2,23 +2,27 @@ import 'package:clean_arch/model/base_model.dart';
 import 'package:flutter/widgets.dart';
 
 class ServiceProvider implements Base {
-  final int _id;
-  final String _name;
-  final String _registrationNumber;
-  final String _companyRegistrationNumber;
-  final String _hejhomeToken;
+  int _id;
+  String _name;
+  String _registrationNumber;
+  String _companyRegistrationNumber;
+  String? _hejhomeToken;
 
   ServiceProvider({
     id = -1,
     name = "",
     registrationNumber = "",
     companyRegistrationNumber = "",
-    hejhomeToken = "",
+    String? hejhomeToken = "",
   })  : _id = id,
         _name = name,
         _registrationNumber = registrationNumber,
         _companyRegistrationNumber = companyRegistrationNumber,
         _hejhomeToken = hejhomeToken;
+  @override
+  ServiceProvider getDummy() {
+    return ServiceProvider();
+  }
 
   @override
   ServiceProvider fromJson(Map<String, dynamic> data) {
@@ -32,23 +36,26 @@ class ServiceProvider implements Base {
   }
 
   @override
-  ServiceProvider fromTEC(List<TextEditingController> list) {
-    return ServiceProvider(
-      id: list[0].text == "" ? -1 : int.parse(list[0].text),
-      name: list[1].text,
-      registrationNumber: list[2].text,
-      companyRegistrationNumber: list[3].text,
-      hejhomeToken: list[4].text,
-    );
+  Map<String, dynamic> toJsonForCreate(ServiceProvider customer) {
+    Map<String, dynamic> json = {
+      'name': customer.getMember("name"),
+      'registrationNumber': customer.getMember("registrationNumber"),
+      'companyRegistrationNumber':
+          customer.getMember("companyRegistrationNumber"),
+      'hejhomeToken': customer.getMember("hejhomeToken"),
+    };
+
+    return json;
   }
 
   @override
-  Map<String, dynamic> toJson(ServiceProvider customer) {
+  Map<String, dynamic> toJsonForUpdate(ServiceProvider customer) {
     Map<String, dynamic> json = {
-      'name': customer._name,
-      'registrationNumber': customer._registrationNumber,
-      'companyRegistrationNumber': customer._companyRegistrationNumber,
-      'hejhomeToken': customer._hejhomeToken,
+      'name': customer.getMember("name"),
+      'registrationNumber': customer.getMember("registrationNumber"),
+      'companyRegistrationNumber':
+          customer.getMember("companyRegistrationNumber"),
+      'hejhomeToken': customer.getMember("hejhomeToken"),
     };
 
     return json;
@@ -61,7 +68,7 @@ class ServiceProvider implements Base {
       _name,
       _registrationNumber,
       _companyRegistrationNumber,
-      _hejhomeToken,
+      _hejhomeToken.toString(),
     ];
   }
 
@@ -78,6 +85,29 @@ class ServiceProvider implements Base {
         return _companyRegistrationNumber;
       case "hejhomeToken":
         return _hejhomeToken;
+
+      default:
+    }
+  }
+
+  @override
+  void setMember(String member, dynamic value) {
+    switch (member) {
+      case "id":
+        _id = value;
+        break;
+      case "name":
+        _name = value;
+        break;
+      case "registrationNumber":
+        _registrationNumber = value;
+        break;
+      case "companyRegistrationNumber":
+        _companyRegistrationNumber = value;
+        break;
+      case "hejhomeToken":
+        _hejhomeToken = value;
+        break;
 
       default:
     }

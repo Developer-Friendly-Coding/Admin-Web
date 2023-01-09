@@ -1,3 +1,4 @@
+import 'package:clean_arch/common/constants/column_attributes.dart';
 import 'package:clean_arch/model/impl/contract.dart';
 import 'package:clean_arch/model/impl/customer.dart';
 import 'package:clean_arch/model/impl/customer_memeber.dart';
@@ -7,6 +8,7 @@ import 'package:clean_arch/model/impl/manager.dart';
 import 'package:clean_arch/model/impl/office.dart';
 import 'package:clean_arch/model/impl/office_branch.dart';
 import 'package:clean_arch/model/impl/sensor.dart';
+import 'package:clean_arch/model/impl/sensor_value.dart';
 import 'package:clean_arch/model/impl/service_provider.dart';
 import 'package:clean_arch/model/impl/tax_bill.dart';
 import 'package:clean_arch/provider/impl/table_provider_impl.dart';
@@ -14,6 +16,7 @@ import 'package:clean_arch/view/page/detail_page.dart';
 import 'package:clean_arch/view/widget/table/table_search/table_container.dart';
 import 'package:clean_arch/view/widget/table/table_view/table_in_create.dart';
 import 'package:clean_arch/view/widget/table/table_view/table_view.dart';
+import 'package:clean_arch/view/widget/table/table_view/table_view_for_cuDialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
@@ -39,8 +42,9 @@ class ClassBuilder {
     ClassBuilder.register<ServiceProvider>(ServiceProvider());
     ClassBuilder.register<TaxBill>(TaxBill());
     ClassBuilder.register<Sensor>(Sensor());
-    ClassBuilder.register<GateCredential>(GateCredential());
-    ClassBuilder.register<Gate>(Gate());
+    ClassBuilder.register<SensorValue>(SensorValue());
+    // ClassBuilder.register<GateCredential>(GateCredential());
+    // ClassBuilder.register<Gate>(Gate());
   }
 
   static TableProvider? getTableProvider(
@@ -67,62 +71,70 @@ class ClassBuilder {
         return Provider.of<TableProvider<TaxBill>>(context, listen: isListen);
       case Sensor:
         return Provider.of<TableProvider<Sensor>>(context, listen: isListen);
-      case GateCredential:
-        return Provider.of<TableProvider<GateCredential>>(context,
+      case SensorValue:
+        return Provider.of<TableProvider<SensorValue>>(context,
             listen: isListen);
-      case Gate:
-        return Provider.of<TableProvider<Gate>>(context, listen: isListen);
+      // case GateCredential:
+      //   return Provider.of<TableProvider<GateCredential>>(context,
+      //       listen: isListen);
+      // case Gate:
+      //   return Provider.of<TableProvider<Gate>>(context, listen: isListen);
       default:
         return null;
     }
   }
 
-  static TableView? getTableView(Type model, double? height) {
+  static TableViewForCuDialog? getTableViewForCuDialog(
+      Type model, ColumnAttributes columnAttributes) {
     switch (model) {
       case Contract:
-        return TableView<Contract>(
-          height: height ?? 400,
+        return TableViewForCuDialog<Contract>(
+          columnAttributes: columnAttributes,
         );
       case CustomerMember:
-        return TableView<CustomerMember>(
-          height: height ?? 400,
+        return TableViewForCuDialog<CustomerMember>(
+          columnAttributes: columnAttributes,
         );
       case Customer:
-        return TableView<Customer>(
-          height: height ?? 400,
+        return TableViewForCuDialog<Customer>(
+          columnAttributes: columnAttributes,
         );
       case Manager:
-        return TableView<Manager>(
-          height: height ?? 400,
+        return TableViewForCuDialog<Manager>(
+          columnAttributes: columnAttributes,
         );
       case OfficeBranch:
-        return TableView<OfficeBranch>(
-          height: height ?? 400,
+        return TableViewForCuDialog<OfficeBranch>(
+          columnAttributes: columnAttributes,
         );
       case Office:
-        return TableView<Office>(
-          height: height ?? 400,
+        return TableViewForCuDialog<Office>(
+          columnAttributes: columnAttributes,
         );
       case ServiceProvider:
-        return TableView<ServiceProvider>(
-          height: height ?? 400,
+        return TableViewForCuDialog<ServiceProvider>(
+          columnAttributes: columnAttributes,
         );
       case TaxBill:
-        return TableView<TaxBill>(
-          height: height ?? 400,
+        return TableViewForCuDialog<TaxBill>(
+          columnAttributes: columnAttributes,
         );
       case Sensor:
-        return TableView<Sensor>(
-          height: height ?? 400,
+        return TableViewForCuDialog<Sensor>(
+          columnAttributes: columnAttributes,
         );
-      case GateCredential:
-        return TableView<GateCredential>(
-          height: height ?? 400,
+      case SensorValue:
+        return TableViewForCuDialog<SensorValue>(
+          columnAttributes: columnAttributes,
         );
-      case Gate:
-        return TableView<Gate>(
-          height: height ?? 400,
-        );
+      // case GateCredential:
+      //   return TableView<GateCredential>(
+      //     height: height ?? 400,
+      //   );
+      // case Gate:
+      //   return TableView<Gate>(
+      //     height: height ?? 400,
+      //   );
       default:
         return null;
     }
@@ -148,10 +160,10 @@ class ClassBuilder {
         return DetailPage<TaxBill>(selectedId: selectedId);
       case Sensor:
         return DetailPage<Sensor>(selectedId: selectedId);
-      case GateCredential:
-        return DetailPage<GateCredential>(selectedId: selectedId);
-      case Gate:
-        return DetailPage<Gate>(selectedId: selectedId);
+      // case GateCredential:
+      //   return DetailPage<GateCredential>(selectedId: selectedId);
+      // case Gate:
+      //   return DetailPage<Gate>(selectedId: selectedId);
       default:
         return null;
     }
@@ -177,62 +189,12 @@ class ClassBuilder {
         return TableSearchContainer<TaxBill>();
       case Sensor:
         return TableSearchContainer<Sensor>();
-      case GateCredential:
-        return TableSearchContainer<GateCredential>();
-      case Gate:
-        return TableSearchContainer<Gate>();
-      default:
-        return null;
-    }
-  }
-
-  static TableViewInCreatePage? getTableViewInCreate(
-      Type model, double? height) {
-    switch (model) {
-      case Contract:
-        return TableViewInCreatePage<Contract>(
-          height: height ?? 400,
-        );
-      case CustomerMember:
-        return TableViewInCreatePage<CustomerMember>(
-          height: height ?? 400,
-        );
-      case Customer:
-        return TableViewInCreatePage<Customer>(
-          height: height ?? 400,
-        );
-      case Manager:
-        return TableViewInCreatePage<Manager>(
-          height: height ?? 400,
-        );
-      case OfficeBranch:
-        return TableViewInCreatePage<OfficeBranch>(
-          height: height ?? 400,
-        );
-      case Office:
-        return TableViewInCreatePage<Office>(
-          height: height ?? 400,
-        );
-      case ServiceProvider:
-        return TableViewInCreatePage<ServiceProvider>(
-          height: height ?? 400,
-        );
-      case TaxBill:
-        return TableViewInCreatePage<TaxBill>(
-          height: height ?? 400,
-        );
-      case Sensor:
-        return TableViewInCreatePage<Sensor>(
-          height: height ?? 400,
-        );
-      case GateCredential:
-        return TableViewInCreatePage<GateCredential>(
-          height: height ?? 400,
-        );
-      case Gate:
-        return TableViewInCreatePage<Gate>(
-          height: height ?? 400,
-        );
+      case SensorValue:
+        return TableSearchContainer<SensorValue>();
+      // case GateCredential:
+      //   return TableSearchContainer<GateCredential>();
+      // case Gate:
+      //   return TableSearchContainer<Gate>();
       default:
         return null;
     }

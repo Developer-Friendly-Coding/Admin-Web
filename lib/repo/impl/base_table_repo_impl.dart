@@ -240,7 +240,7 @@ class BaseTableRepository<M extends Base> {
       // 'Authorization': 'Bearer $accessToken',
     };
 
-    Map<String, dynamic> request = _model.toJson(selectedTableRow);
+    Map<String, dynamic> request = _model.toJsonForUpdate(selectedTableRow);
 
     UriProvider.setUpdateTablePath<M>();
     Map<String, dynamic> updateQueryParameters = {
@@ -299,7 +299,7 @@ class BaseTableRepository<M extends Base> {
   }
 
   @override
-  Future<List<dynamic>> createTableRow(addedTableRow) async {
+  Future<List<dynamic>> createTableRow(M tempDataForCU) async {
     // FlutterSecureStorage storage = SecureStorage.storage;
     // String? storageValueJsonString = await storage.read(key: 'admin');
     // Map<String, dynamic> storageValueJson = jsonDecode(storageValueJsonString!);
@@ -310,7 +310,7 @@ class BaseTableRepository<M extends Base> {
       // 'Authorization': 'Bearer $accessToken',
     };
 
-    Map<String, dynamic> request = _model.toJson(addedTableRow);
+    Map<String, dynamic> request = _model.toJsonForCreate(tempDataForCU);
 
     UriProvider.setCreateTablePath<M>();
     Map<String, dynamic>? addQueryParameters;
