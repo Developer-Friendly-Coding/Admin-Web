@@ -60,10 +60,12 @@ class Sensor implements Base {
 
   @override
   Map<String, dynamic> toJsonForCreate(Sensor sensor) {
+    SensorType type = sensor.getMember("type");
+    MeasureUnit valueUnit = sensor.getMember("valueUnit");
     Map<String, dynamic> json = {
       'officeId': sensor.getMember("officeId"),
-      'type': sensor.getMember("type"),
-      'valueUnit': sensor.getMember("valueUnit"),
+      'type': type.name,
+      'valueUnit': valueUnit.name,
       'measureInterval': sensor.getMember("measureInterval"),
       'description': sensor.getMember("description"),
       'modelName': sensor.getMember("modelName"),
@@ -77,10 +79,12 @@ class Sensor implements Base {
 
   @override
   Map<String, dynamic> toJsonForUpdate(Sensor sensor) {
+    SensorType type = sensor.getMember("type");
+    MeasureUnit valueUnit = sensor.getMember("valueUnit");
     Map<String, dynamic> json = {
       'officeId': sensor.getMember("officeId"),
-      'type': sensor.getMember("type"),
-      'valueUnit': sensor.getMember("valueUnit"),
+      'type': type.name,
+      'valueUnit': valueUnit.name,
       'measureInterval': sensor.getMember("measureInterval"),
       'description': sensor.getMember("description"),
       'modelName': sensor.getMember("modelName"),
@@ -96,7 +100,7 @@ class Sensor implements Base {
   List<String?> toRow() {
     return [
       _id.toString(),
-      _office.id.toString(),
+      _office.name.toString(),
       _name.toString(),
       _type.toString(),
       _valueUnit.toString(),
@@ -159,13 +163,13 @@ class Sensor implements Base {
         _name = value;
         break;
       case "type":
-        _type = value;
+        _type = SensorType.fromString(value);
         break;
       case "valueUnit":
-        _valueUnit = value;
+        _valueUnit = MeasureUnit.fromString(value);
         break;
       case "measureInterval":
-        _measureInterval = value;
+        _measureInterval = int.parse(value);
         break;
       case "description":
         _description = value;

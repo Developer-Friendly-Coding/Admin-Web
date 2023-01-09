@@ -42,6 +42,8 @@ class OfficeBranch implements Base {
 
   @override
   Map<String, dynamic> toJsonForCreate(OfficeBranch officeBranch) {
+    print(officeBranch.getMember("latitude"));
+    print(officeBranch.getMember("longitude"));
     Map<String, dynamic> json = {
       'name': officeBranch.getMember("name"),
       'serviceProviderId': officeBranch.getMember("serviceProviderId"),
@@ -60,7 +62,7 @@ class OfficeBranch implements Base {
       'serviceProviderId': officeBranch.getMember("serviceProviderId"),
       'location': officeBranch.getMember("location"),
       'latitude': officeBranch.getMember("latitude"),
-      'longitude': officeBranch.getMember("longitude"),
+      'longitude': officeBranch.getMember("longitude")
     };
 
     return json;
@@ -124,10 +126,10 @@ class OfficeBranch implements Base {
         _location = value;
         break;
       case "latitude":
-        _latitude = value;
+        _latitude = double.parse(value);
         break;
       case "longitude":
-        _longitude = value;
+        _longitude = double.parse(value);
         break;
       default:
     }

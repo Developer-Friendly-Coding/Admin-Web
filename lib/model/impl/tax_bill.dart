@@ -51,13 +51,15 @@ class TaxBill implements Base {
 
   @override
   Map<String, dynamic> toJsonForCreate(TaxBill taxBill) {
+    TaxBillStatus status = taxBill.getMember("status");
     Map<String, dynamic> json = {
       'contractId': taxBill.getMember("contractId"),
-      'issuedDate': taxBill.getMember("issuedDate"),
+      'issuedDate': DateFormat("yyyy-MM-dd hh:mm:ss")
+          .format(taxBill.getMember("issuedDate")),
       "subTotal": taxBill.getMember("subTotal"),
       'tax': taxBill.getMember("tax"),
       'total': taxBill.getMember("total"),
-      'status': taxBill.getMember("status"),
+      'status': status.name,
     };
 
     return json;
@@ -65,13 +67,15 @@ class TaxBill implements Base {
 
   @override
   Map<String, dynamic> toJsonForUpdate(TaxBill taxBill) {
+    TaxBillStatus status = taxBill.getMember("status");
     Map<String, dynamic> json = {
       'contractId': taxBill.getMember("contractId"),
-      'issuedDate': taxBill.getMember("issuedDate"),
+      'issuedDate': DateFormat("yyyy-MM-dd hh:mm:ss")
+          .format(taxBill.getMember("issuedDate")),
       "subTotal": taxBill.getMember("subTotal"),
       'tax': taxBill.getMember("tax"),
       'total': taxBill.getMember("total"),
-      'status': taxBill.getMember("status"),
+      'status': status.name,
     };
 
     return json;
@@ -81,7 +85,7 @@ class TaxBill implements Base {
   List<String?> toRow() {
     return [
       _id.toString(),
-      _contract.contractDatetime.toString(),
+      _contract.description.toString(),
       _issuedDate == null
           ? null.toString()
           : DateFormat('yyyy-MM-dd').format(_issuedDate!),
@@ -101,8 +105,7 @@ class TaxBill implements Base {
         return _contract;
       case "contractId":
         return _contract.id;
-      case "contractDatetime":
-        return _contract.contractDatetime;
+
       case "issuedDate":
         return _issuedDate;
       case "subTotal":
@@ -130,23 +133,21 @@ class TaxBill implements Base {
       case "contractId":
         _contract.id = value;
         break;
-      case "contractDateTime":
-        _contract.contractDatetime = value;
-        break;
       case "issuedDate":
-        _issuedDate = value;
+        _issuedDate = DateTime.parse(value);
+
         break;
       case "subTotal":
-        _subTotal = value;
+        _subTotal = double.parse(value);
         break;
       case "tax":
-        _tax = value;
+        _tax = double.parse(value);
         break;
       case "total":
-        _total = value;
+        _total = double.parse(value);
         break;
       case "status":
-        _status = value;
+        _status = TaxBillStatus.fromString(value);
         break;
 
       default:

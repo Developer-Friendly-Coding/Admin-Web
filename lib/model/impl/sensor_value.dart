@@ -39,7 +39,8 @@ class SensorValue implements Base {
   Map<String, dynamic> toJsonForCreate(SensorValue sensorValue) {
     Map<String, dynamic> json = {
       'sensorId': sensorValue.getMember("sensorId"),
-      'dateTime': sensorValue.getMember("dateTime"),
+      'dateTime': DateFormat("yyyy-MM-dd hh:mm:ss")
+          .format(sensorValue.getMember("dateTime")),
       'measureValue': sensorValue.getMember("measureValue"),
     };
 
@@ -50,7 +51,8 @@ class SensorValue implements Base {
   Map<String, dynamic> toJsonForUpdate(SensorValue sensorValue) {
     Map<String, dynamic> json = {
       'sensorId': sensorValue.getMember("sensorId"),
-      'dateTime': sensorValue.getMember("dateTime"),
+      'dateTime': DateFormat("yyyy-MM-dd hh:mm:ss")
+          .format(sensorValue.getMember("dateTime")),
       'measureValue': sensorValue.getMember("measureValue"),
     };
 
@@ -60,15 +62,12 @@ class SensorValue implements Base {
   @override
   List<String?> toRow() {
     return [
-      _id.toString(), _sensor.name.toString(),
+      _id.toString(),
       _dateTime == null
           ? null.toString()
           : DateFormat('yyyy-MM-dd').format(_dateTime!),
-      _measureValue.toString()
-      // _id.toString(),
-      // _sensor.name.toString(),
-      // DateFormat('yyyy-MM-dd').format(_dateTime!),
-      // _measureValue.toString(),
+      _measureValue.toString(),
+      _sensor.name.toString(),
     ];
   }
 
@@ -85,6 +84,8 @@ class SensorValue implements Base {
         return _sensor.name;
       case "measureValue":
         return _measureValue;
+      case "dateTime":
+        return _dateTime;
 
       default:
     }
@@ -106,7 +107,10 @@ class SensorValue implements Base {
         _sensor.name = value;
         break;
       case "measureValue":
-        _measureValue = value;
+        _measureValue = double.parse(value);
+        break;
+      case "dateTime":
+        _dateTime = DateTime.parse(value);
         break;
 
       default:

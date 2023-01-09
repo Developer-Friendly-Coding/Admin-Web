@@ -59,7 +59,7 @@ class TableViewRow<M extends Base> extends StatelessWidget {
                     //target의 selectedId설정
                     providerRead.setSelectedId(providerRead.dataList![index]);
                     //오직 선택 색칠용
-                    await targetProvider.initUpdateButtonTECList();
+                    // await targetProvider.initUpdateButtonTECList();
                     Navigator.push(
                       test22().currentContext!,
                       MaterialPageRoute(

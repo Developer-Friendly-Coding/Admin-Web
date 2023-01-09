@@ -229,7 +229,7 @@ class BaseTableRepository<M extends Base> {
   }
 
   @override
-  Future<int?> updateTableRow(selectedTableRow) async {
+  Future<List<dynamic>> updateTableRow(selectedTableRow) async {
     // FlutterSecureStorage storage = SecureStorage.storage;
     // String? storageValueJsonString = await storage.read(key: 'admin');
     // Map<String, dynamic> storageValueJson = jsonDecode(storageValueJsonString!);
@@ -254,14 +254,13 @@ class BaseTableRepository<M extends Base> {
       Response res =
           await _client.post(url, headers: headers, body: jsonEncode(request));
       if (res.statusCode == 200) {
-        return res.statusCode;
+        return [res.statusCode, null, null];
       } else {
-        debugPrint("테이블 열 업데이트 statusCode가 200이아님");
-        return res.statusCode;
+        Map<String, dynamic> body = jsonDecode(res.body);
+        return [res.statusCode, body["code"], body["message"]];
       }
     } catch (e) {
-      debugPrint(e.toString());
-      return null;
+      return [null, e.toString(), null];
     }
   }
 

@@ -280,7 +280,17 @@ class TableCreatePage<M extends Base> extends StatelessWidget {
                                                 errorDialog(context, null,
                                                     e.toString(), null);
                                               }
-                                            } else {}
+                                            } else {
+                                              Fluttertoast.showToast(
+                                                  msg: "모든 유효성을 통과해주세요!",
+                                                  toastLength:
+                                                      Toast.LENGTH_LONG,
+                                                  gravity: ToastGravity.CENTER,
+                                                  timeInSecForIosWeb: 1,
+                                                  backgroundColor: Colors.red,
+                                                  textColor: Colors.white,
+                                                  fontSize: 35.0);
+                                            }
                                           }),
                                         ),
                                         SizedBox(width: 50),

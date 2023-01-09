@@ -54,12 +54,14 @@ class CustomerMember implements Base {
 
   @override
   Map<String, dynamic> toJsonForCreate(CustomerMember customerMember) {
+    CustomerMemberStatus status = customerMember.getMember("status");
+    CustomerMemberType type = customerMember.getMember("type");
     Map<String, dynamic> json = {
       'name': customerMember.getMember("name"),
       'email': customerMember.getMember("email"),
       'phoneNumber': customerMember.getMember("phoneNumber"),
-      'status': customerMember.getMember("status"),
-      'type': customerMember.getMember("type"),
+      'status': status.name,
+      'type': type.name,
       'description': customerMember.getMember("description"),
       'customerId': customerMember.getMember("customerId"),
     };
@@ -68,12 +70,14 @@ class CustomerMember implements Base {
 
   @override
   Map<String, dynamic> toJsonForUpdate(CustomerMember customerMember) {
+    CustomerMemberStatus status = customerMember.getMember("status");
+    CustomerMemberType type = customerMember.getMember("type");
     Map<String, dynamic> json = {
       'name': customerMember.getMember("name"),
       'email': customerMember.getMember("email"),
       'phoneNumber': customerMember.getMember("phoneNumber"),
-      'status': customerMember.getMember("status"),
-      'type': customerMember.getMember("type"),
+      'status': status.name,
+      'type': type.name,
       'description': customerMember.getMember("description"),
       'customerId': customerMember.getMember("customerId"),
     };
@@ -137,10 +141,10 @@ class CustomerMember implements Base {
         _phoneNumber = value;
         break;
       case "status":
-        _status = value;
+        _status = CustomerMemberStatus.fromString(value);
         break;
       case "type":
-        _type = value;
+        _type = CustomerMemberType.fromString(value);
         break;
       case "description":
         _description = value;

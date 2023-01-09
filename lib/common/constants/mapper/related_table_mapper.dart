@@ -73,6 +73,8 @@ List<RelatedTableView>? getRelatedTableList(String modelName, int id) {
       return [];
     case 'Sensor': //지점 사무실
       return [];
+    case 'SensorValue': //지점 사무실
+      return [];
     case 'GateCredential': //지점 사무실
       return [];
     case 'Gate': //지점 사무실
@@ -87,11 +89,14 @@ List<String> contractRelatedTableName = ["세금계산서"];
 List<String> customerRelatedTableName = ["계약", "입주멤버"];
 List<String> officeRelatedTableName = ["센서"];
 List<String> officeBranchRelatedTableName = ["사무실"];
-List<String> customerMemberRelatedTableName = ["출입권한"];
+List<String> customerMemberRelatedTableName = [
+  // "출입권한"
+];
 List<String> managerRelatedTableName = ["계약"];
 List<String> serviceProviderRelatedTableName = ["매니저", "지점"];
 List<String> taxBillRelatedTableName = [];
 List<String> sensorRelatedTableName = [];
+List<String> sensorValueRelatedTableName = [];
 List<String> gateCredentialRelatedTableName = [];
 List<String> gateRelatedTableName = [];
 Map<String, List<String>> relatedTableNameListMapper = {
@@ -104,6 +109,7 @@ Map<String, List<String>> relatedTableNameListMapper = {
   "ServiceProvider": serviceProviderRelatedTableName,
   "TaxBill": taxBillRelatedTableName,
   "Sensor": sensorRelatedTableName,
+  "SensorValue": sensorValueRelatedTableName,
   "GateCredential": gateCredentialRelatedTableName,
   "Gate": gateRelatedTableName
 };

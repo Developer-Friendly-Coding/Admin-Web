@@ -106,6 +106,7 @@ class Contract implements Base {
 
   @override
   Map<String, dynamic> toJsonForUpdate(Contract contract) {
+    ContractType type = contract.getMember("type");
     Map<String, dynamic> json = {
       'deposit': contract.getMember("deposit"),
       'rent': contract.getMember("rent"),
@@ -118,7 +119,7 @@ class Contract implements Base {
           .format(contract.getMember("endDatetime")),
       'contractRepId': contract.getMember("contractRepId"),
       'contactRepId': contract.getMember("contactRepId"),
-      'type': contract.getMember("type").name,
+      'type': type.name,
     };
 
     return json;

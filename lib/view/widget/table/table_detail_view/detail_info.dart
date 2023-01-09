@@ -7,6 +7,7 @@ import 'package:clean_arch/model/impl/office.dart';
 import 'package:clean_arch/provider/impl/table_provider_impl.dart';
 import 'package:clean_arch/view/page/board_view_page.dart';
 import 'package:clean_arch/common/constants/column_attributes.dart';
+import 'package:clean_arch/view/widget/error_dialog.dart';
 import 'package:clean_arch/view/widget/table/table_search/table_cu_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -17,13 +18,14 @@ import 'package:recase/recase.dart';
 import 'package:web_date_picker/web_date_picker.dart';
 
 //ignore: must_be_immutable
-class DetailInfo<M extends Base> extends StatefulWidget {
+class DetailInfo<M extends Base> extends StatelessWidget {
   final int selectedId;
   final double widthRate;
   final double height;
   Color color;
   final List<ColumnAttributes> columnAttributesList =
       columnAttributesMapper[M.toString()]!;
+  final _formKey = GlobalKey<FormState>();
   DetailInfo(
       {required this.widthRate,
       required this.height,
@@ -31,20 +33,12 @@ class DetailInfo<M extends Base> extends StatefulWidget {
       required this.selectedId,
       super.key});
 
-  @override
-  State<DetailInfo<M>> createState() => _DetailInfoState<M>();
-}
-
-class _DetailInfoState<M extends Base> extends State<DetailInfo<M>> {
-  final List<ColumnAttributes> columnAttributesList =
-      columnAttributesMapper[M.toString()]!;
-
   List<Widget> detailComponentList(TableProvider<M> providerRead) {
     List<Widget> result = [];
 
     for (int i = 1; i < columnAttributesList.length; i++) {
       Container component = Container(
-        color: widget.color,
+        color: color,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -128,8 +122,8 @@ class _DetailInfoState<M extends Base> extends State<DetailInfo<M>> {
 
     List<Widget> detailCL = detailComponentList(providerRead);
     return Container(
-      width: MediaQuery.of(context).size.width * widget.widthRate,
-      color: widget.color,
+      width: MediaQuery.of(context).size.width * widthRate,
+      color: color,
       child: Column(
         children: [
           Container(
@@ -141,17 +135,20 @@ class _DetailInfoState<M extends Base> extends State<DetailInfo<M>> {
             ),
             height: 40,
           ),
-          Container(
-            height: widget.height,
-            child: GridView.builder(
-              itemCount: detailCL.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3, //1 개의 행에 보여줄 item 개수
-                childAspectRatio: 4.5 / 1, //가로 대 세로 비율
+          Form(
+            key: _formKey,
+            child: Container(
+              height: height,
+              child: GridView.builder(
+                itemCount: detailCL.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3, //1 개의 행에 보여줄 item 개수
+                  childAspectRatio: 4.5 / 1, //가로 대 세로 비율
+                ),
+                itemBuilder: (BuildContext context, int index) {
+                  return detailCL[index];
+                },
               ),
-              itemBuilder: (BuildContext context, int index) {
-                return detailCL[index];
-              },
             ),
           ),
           SizedBox(height: 15),
@@ -193,32 +190,42 @@ class _DetailInfoState<M extends Base> extends State<DetailInfo<M>> {
               ),
               child: Text("수정"),
               onPressed: (() async {
-                try {
-                  providerRead.setDataForUpdate();
-                  int? statusCode = await providerRead.updateTableRow();
-                  if (statusCode == 200) {
-                    await providerRead.getTableData();
-                    Fluttertoast.showToast(
-                        msg: "수정 성공!",
-                        toastLength: Toast.LENGTH_LONG,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 35.0);
-                  } else {
-                    Fluttertoast.showToast(
-                        msg: "수정 실페...",
-                        toastLength: Toast.LENGTH_LONG,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 35.0);
+                if (_formKey.currentState!.validate()) {
+                  try {
+                    providerRead.setDataForUpdate();
+                    List<dynamic>? statusAndErrorAndErrorContext =
+                        await providerRead.updateTableRow();
+                    int? statusCode = statusAndErrorAndErrorContext[0];
+                    String? error = statusAndErrorAndErrorContext[1];
+                    String? errorContext = statusAndErrorAndErrorContext[2];
+                    if (statusCode == 200) {
+                      await providerRead.getTableData();
+                      Navigator.pop(context);
+                      Fluttertoast.showToast(
+                          msg: "수정 성공!",
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 35.0);
+                    } else {
+                      Navigator.of(context).pop();
+                      errorDialog(context, statusCode, error!, errorContext);
+                    }
+                  } catch (e) {
+                    Navigator.of(context).pop();
+                    errorDialog(context, null, e.toString(), null);
                   }
-                } catch (e) {
-                  debugPrint(e.toString());
-                  return null;
+                } else {
+                  Fluttertoast.showToast(
+                      msg: "모든 유효성을 통과해주세요!",
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 35.0);
                 }
               }),
             ),

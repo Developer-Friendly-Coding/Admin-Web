@@ -184,26 +184,32 @@ class TableProvider<M extends Base> extends ChangeNotifier {
   @override
   Future<bool> initUpdateButtonTECList() async {
     if (dataList == null) {
+      print(1111111);
       await getTableData();
-      ;
     }
     tempDataForCU = getDataInDataListById(selectedId)!;
     if (tempDataForCU == null) {
+      print(222222222222);
       return false;
     }
+    print(333333333333333);
     List<String?> modelMemberList = tempDataForCU.toRow();
+    print(44444444444444);
     _updateButtonTECList = [];
     List<ColumnAttributes> columnAttributesList =
         columnAttributesMapper[M.toString()]!;
+    print(5555555555);
     for (int i = 0; i < modelMemberList.length; i++) {
       updateButtonTECList.add(TextEditingController());
       if (columnAttributesList[i].enumValus != null) {
+        print(566666666666666);
         initUpdateEnumValue(
             tempDataForCU.getMember(columnAttributesList[i].toJson!), i);
       }
-
+      print(7777777777777777);
       updateButtonTECList[i].text = modelMemberList[i]!;
     }
+    print(88888888888888);
     return true;
   }
 
@@ -255,7 +261,7 @@ class TableProvider<M extends Base> extends ChangeNotifier {
   }
 
   @override
-  Future<int?> updateTableRow() async {
+  Future<List<dynamic>> updateTableRow() async {
     return await _repo.updateTableRow(tempDataForCU);
   }
 

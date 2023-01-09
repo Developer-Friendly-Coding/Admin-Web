@@ -41,8 +41,10 @@ class Office implements Base {
 
   @override
   Map<String, dynamic> toJsonForCreate(Office office) {
+    print(office.getMember("capacity"));
+    OfficeType type = office.getMember("type");
     Map<String, dynamic> json = {
-      'type': office.getMember("type"),
+      'type': type.name,
       'capacity': office.getMember("capacity"),
       'description': office.getMember("description"),
       'name': office.getMember("name"),
@@ -54,8 +56,9 @@ class Office implements Base {
 
   @override
   Map<String, dynamic> toJsonForUpdate(Office office) {
+    OfficeType type = office.getMember("type");
     Map<String, dynamic> json = {
-      'type': office.getMember("type"),
+      'type': type.name,
       'capacity': office.getMember("capacity"),
       'description': office.getMember("description"),
       'name': office.getMember("name"),
@@ -119,8 +122,11 @@ class Office implements Base {
       case "name":
         _name = value;
         break;
+      case "capacity":
+        _capacity = int.parse(value);
+        break;
       case "type":
-        _type = value;
+        _type = OfficeType.fromString(value);
         break;
       case "description":
         _description = value;

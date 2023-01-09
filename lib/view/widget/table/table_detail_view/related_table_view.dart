@@ -6,6 +6,7 @@ import 'package:clean_arch/model/base_model.dart';
 import 'package:clean_arch/common/constants/text_style.dart';
 import 'package:clean_arch/view/widget/table/table_view/table_view_row.dart';
 import 'package:clean_arch/view/widget/table/table_view/table_view_column.dart';
+import 'package:recase/recase.dart';
 
 class RelatedTableView<M extends Base> extends StatelessWidget {
   final int id;
@@ -86,19 +87,18 @@ class RelatedTableView<M extends Base> extends StatelessWidget {
                                     onTap: () {
                                       provider.setSelectedId(
                                           provider.dataList![index]);
-                                      provider.initUpdateButtonTECList();
                                     },
                                     onDoubleTap: () {
                                       provider.setSelectedId(
                                           provider.dataList![index]);
-                                      provider.initUpdateButtonTECList();
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
+                                          settings: RouteSettings(
+                                              name:
+                                                  "/${ReCase(M.toString()).camelCase}/${provider.selectedId}"), //이꼬르 serviceProvdier/1
                                           builder: (context) => (DetailPage<M>(
-                                            selectedId: provider
-                                                .dataList![index]
-                                                .getMember("id"),
+                                            selectedId: provider.selectedId,
                                           )),
                                         ),
                                       );

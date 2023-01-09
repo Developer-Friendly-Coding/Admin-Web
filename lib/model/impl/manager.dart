@@ -63,14 +63,18 @@ class Manager implements Base {
 
   @override
   Map<String, dynamic> toJsonForCreate(Manager manager) {
+    EmployeeType employeeType = manager.getMember("employeeType");
+    Job job = manager.getMember("job");
     Map<String, dynamic> json = {
       'name': manager.getMember("name"),
-      'employeeType': manager.getMember("employeeType"),
-      'expireDate': manager.getMember("expireDate"),
-      'effectiveDate': manager.getMember("effectiveDate"),
+      'employeeType': employeeType.name,
+      'expireDate': DateFormat("yyyy-MM-dd hh:mm:ss")
+          .format(manager.getMember("expireDate")),
+      'effectiveDate': DateFormat("yyyy-MM-dd hh:mm:ss")
+          .format(manager.getMember("effectiveDate")),
       'phoneNumber': manager.getMember("phoneNumber"),
       'email': manager.getMember("email"),
-      'job': manager.getMember("job"),
+      'job': job.name,
       'serviceProviderId': manager.getMember("serviceProviderId"),
     };
 
@@ -79,14 +83,18 @@ class Manager implements Base {
 
   @override
   Map<String, dynamic> toJsonForUpdate(Manager manager) {
+    EmployeeType employeeType = manager.getMember("employeeType");
+    Job job = manager.getMember("job");
     Map<String, dynamic> json = {
       'name': manager.getMember("name"),
-      'employeeType': manager.getMember("employeeType"),
-      'expireDate': manager.getMember("expireDate"),
-      'effectiveDate': manager.getMember("effectiveDate"),
+      'employeeType': employeeType.name,
+      'expireDate': DateFormat("yyyy-MM-dd hh:mm:ss")
+          .format(manager.getMember("expireDate")),
+      'effectiveDate': DateFormat("yyyy-MM-dd hh:mm:ss")
+          .format(manager.getMember("effectiveDate")),
       'phoneNumber': manager.getMember("phoneNumber"),
       'email': manager.getMember("email"),
-      'job': manager.getMember("job"),
+      'job': job.name,
       'serviceProviderId': manager.getMember("serviceProviderId"),
     };
 
@@ -161,13 +169,14 @@ class Manager implements Base {
         _name = value;
         break;
       case "employeeType":
-        _employeeType = value;
+        _employeeType = EmployeeType.fromString(value);
         break;
       case "expireDate":
-        _expireDate = value;
+        _expireDate = DateTime.parse(value);
+
         break;
       case "effectiveDate":
-        _effectiveDate = value;
+        _effectiveDate = DateTime.parse(value);
         break;
       case "phoneNumber":
         _phoneNumber = value;
@@ -176,7 +185,7 @@ class Manager implements Base {
         _email = value;
         break;
       case "job":
-        _job = value;
+        _job = Job.fromString(value);
         break;
       default:
     }
